@@ -1,0 +1,29 @@
+{
+  "name": "Moki-ROV2",
+  "version": "0.0.1",
+  "description": "Remote-control environment for a ROV, Raspberry PI powered.",
+  "main": "rov.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Moki38/Moki-ROV2.git"
+  },
+  "keywords": [
+    "ROV",
+    "Raspberry PI"
+  ],
+  "dependencies": {
+    "express": "> 4.6.1",
+    "jsonfile": "~2.3.1",
+    "socket.io": "> 1.0.6",
+    "shelljs": "> 0.3.0",
+    "adafruit-pca9685": "> 0.0.2",
+    "sleep": "> 1.1.8"
+  },
+  "author": {
+	"name": "Eric van Dijken <eric@team-moki.nl>"
+	},
+"scripts": {
+        "start": "node rov.js"
+    },
+  "license": "MIT"
+}
