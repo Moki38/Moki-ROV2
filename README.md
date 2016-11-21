@@ -1,8 +1,6 @@
-# Moki-ROV 
+# Moki-ROV2
 
-Pilot your ROV-PI directly from your browser, this will ofcourse only work if you have some kind of network connection to your ROV.
-In the setup, in which this software was writen, i am using 100Mb ethernet and Google Chrome as browser (as this one supports the Xpad)
-The browser screen will display a HUD, with all the sensor details you have on board your ROV.
+Pilot your ROV-PI directly from your browser.
 
 If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
 
@@ -11,25 +9,13 @@ This software was build on a Raspberry PI (Model B+)
 ## Currenty supported/tested 
 
 * Adafruit 16-Channel 12-bit PWM/Servo Driver - I2C interface - PCA9685 (http://www.adafruit.com/product/815)
-	•Pin 1/2 Camara movement x/y
-	•Pin 7/8 Light Relay (http://www.kiwi-electronics.nl/tweekanaals-relais-module-5v)
-	•Pin 12/13/14/15 ESC speed-controllers (brushless / brushed)
-
-* OpenROV Pressure sensor [MS5803-14BA] ** (http://store.openrov.com/products/openrov-imu-depth-module)
-	•Senses down up to 130m depth
-	•Precision to about 1cm of depth
-	•Integrated temperature sensor precise to about 0.1C
-
-* MPU-9150 9-axis IMU (http://store.openrov.com/products/openrov-imu-depth-module)
-	•3-axis magnetometer for detection of heading (regardless of orientation)
-	•3-axis accelerometer to detect roll and pitch
-	•3 axis gyroscope to detect rotational rate
-
+* BlueRobotics Depth/Pressure sensor [MS5837-30BA] ** (https://www.bluerobotics.com/store/electronics/bar30-sensor-r1/)
+* MPU-9250 9-axis IMU 
 * MCP3424 / ADC-Pi-Plus (https://www.abelectronics.co.uk/products/17/Raspberry-Pi-B/56/ADC-Pi-Plus---Raspberry-Pi-Analogue-to-Digital-converter)
-	8 Channel ADC digital converter.
-
 * attopilot (https://www.coolcomponents.co.uk/attopilot-voltage-and-current-sense-breakout-180a.html)
-	Voltage/Current sensor 0-60v 180A 
+* XBox One controller
+* Raspberry PI Camera Module v2 w/Wide Angle
+
 
 ## Install
 
@@ -48,8 +34,9 @@ cd ../..
 
 ## Usage
 
-4. ./rov start
-5. Point your browser to http://[ROV-IP]:3000/
+1. mjpg_streamer -b
+2. ./rov start
+3. Point your browser to http://[ROV-IP]:3000/
 
 ## Thanks
 
