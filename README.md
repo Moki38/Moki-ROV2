@@ -14,12 +14,13 @@ This software was build on a Raspberry PI (Model B+)
 * XBox One controller (bluetooth connected to PC)
 
 * Ardiono Mega2560
-* BlueRobotics Depth/Pressure sensor [MS5837-30BA] 
-* Pololu attopilot 180A 
+* BlueRobotics Depth/Pressure sensor [MS5837-30BA]
+* Pololu attopilot 180A
 * Adafruit BNO055 IMU
 
 ## Install
 
+# Raspberry PI
 Download "RASPBIAN JESSIE LITE" from https://www.raspberrypi.org/downloads/raspbian/
 Put the image on a SD card (ymmv)
 
@@ -30,9 +31,11 @@ sudo apt-get install -y locate htop git i2c-tools build-essential
 
 set fixed ip (sudo vi /etc/dhcpcd.conf)
 interface eth0
+'''
 static ip_address=172.16.10.20/24
 static routers=172.16.10.1
 static domain_name_servers=172.16.10.1
+'''
 
 sudo raspi-config (enable camera / i2c)
 
@@ -82,6 +85,7 @@ pip install -U platformio
 ######################################################################################
 #                   Arduino Pins
 ######################################################################################
+'''
 Pin 4    ESC 1    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)    
 Pin 5    ESC 2    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
 Pin 6    ESC 3    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
@@ -94,12 +98,15 @@ Pin 12   Servo 1  150 - 600   375 neutral
 
 Pin A0   V Attopilot 180A
 Pin A1   I Attopilot 180A
+'''
 
 # PlatformIO cli commands
+'''
 platformio init -b megaatmega2560
 platformio run
 platformio run --target upload
 platformio device monitor -p /dev/ttyACM0
+'''
 
 ## Thanks
 
