@@ -8,6 +8,7 @@ This software was build on a Raspberry PI (Model B+)
 
 ## Currenty supported/tested 
 
+```
 * Raspberry PI (Model B+)
 * Raspberry PI Camera Module v2 w/Wide Angle
 * Google Chrome browser on PC
@@ -17,7 +18,7 @@ This software was build on a Raspberry PI (Model B+)
 * BlueRobotics Depth/Pressure sensor [MS5837-30BA]
 * Pololu attopilot 180A
 * Adafruit BNO055 IMU
-
+```
 ## Install
 
 # Raspberry PI
@@ -55,15 +56,16 @@ tar --strip-components 1 -xJf /root/node-v6.9.1-linux-armv6l.tar.xz
 ## Arduino IDE
 wget https://downloads.arduino.cc/arduino-1.6.13-linuxarm.tar.xz
 cd /usr/share
-tar xvfJ ~/arduino-1.6.13-linuxarm.tar.xz
+tar xfJ ~/arduino-1.6.13-linuxarm.tar.xz
 ln -s arduino-1.6.13 arduino
 
 ## Arduino UDEV Rules
 cd /etc/udev/rules.d/
-https://raw.githubusercontent.com/platformio/platformio/develop/scripts/99-platformio-udev.rules
+wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/99-platformio-udev.rules
 systemctl restart udev
 
 # Moki-ROV2 Software
+cd
 git clone https://github.com/Moki38/Moki-ROV2.git
 cd Moki-ROV2
 npm install 
