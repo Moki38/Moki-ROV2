@@ -1,6 +1,6 @@
 # Moki-ROV2 (Non working software)
 
-Pilot your ROV-PI directly from your browser.
+Pilot your ROV-PI directly from your PC webbrowser browser.
 
 If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
 
@@ -26,7 +26,7 @@ Download "RASPBIAN JESSIE LITE" from https://www.raspberrypi.org/downloads/raspb
 Put the image on a SD card (ymmv)
 
 Boot, login using pi/raspberry
-change password
+change the password
 
 sudo apt-get install -y locate htop git i2c-tools build-essential
 
@@ -80,6 +80,23 @@ cd
 
 # PlatformIO (Arduino CLI)
 pip install -U platformio
+cd 
+cd Moki-ROV2/arduino
+platformio init -b megaatmega2560
+cd lib
+git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
+git clone https://github.com/adafruit/Adafruit_Sensor.git
+git clone https://github.com/adafruit/Adafruit_BNO055.git
+cd ..
+platformio run
+platformio run --target upload
+
+cd
+cd Moki-ROV2
+# Start the software
+mjpg_streamer -b -o "output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www" -i "input_raspicam.so -r 1024x768"
+node rov.js
+(Open browser to Raspberry PI IP adress, port 3000 => http://172.16.10.20:3000)
 ```
 
 ## Usage
@@ -100,6 +117,12 @@ Pin 12   Servo 1  150 - 600   375 neutral
 
 Pin A0   V Attopilot 180A
 Pin A1   I Attopilot 180A
+
+# Daisy chain your I2C sensors to the Arduino Pins.
+Pin 20   I2C SCL
+Pin 21   I2C SDA
+5V       I2C 5v
+GND      I2C GND
 ```
 
 # PlatformIO cli commands
@@ -109,6 +132,10 @@ platformio run
 platformio run --target upload
 platformio device monitor -p /dev/ttyACM0
 ```
+
+## Easy to mis mistakes
+```
+Are you sure, you are using the right IP adress?
 
 ## Thanks
 
