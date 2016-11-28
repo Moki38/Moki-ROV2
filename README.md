@@ -136,6 +136,7 @@ platformio device monitor -p /dev/ttyACM0
 ## Easy to mis mistakes
 ```
 Are you sure, you are using the right IP adress?
+```
 
 ## Thanks
 
