@@ -6,7 +6,7 @@ If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
 
 This software was build on a Raspberry PI (Model B+)
 
-## Currenty supported/tested 
+## Currenty supported/tested (aka, my setup)
 
 ```
 * Raspberry PI (Model B+)
