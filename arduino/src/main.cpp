@@ -10,6 +10,7 @@ int MOTOR_ARM = 0;
 int FOUND_BNO = 0;
 int FOUND_MS5837 = 0;
 int FOUND_A180 = 0;
+int READY = 0;
 
 Servo motor1;
 Servo motor2;
@@ -96,10 +97,10 @@ void displayCalStatus(void)
   bno.getCalibration(&system, &gyro, &accel, &mag);
 
   /* The data should be ignored until the system calibration is > 0 */
-  if (!system)
-  {
-    Serial.print("! ");
-  }
+//  if (!system)
+//  {
+//    Serial.print("! ");
+//  }
 
   /* Display the individual values */
   Serial.print("Sys:");
@@ -112,6 +113,13 @@ void displayCalStatus(void)
   Serial.println(mag, DEC);
 }
 
+void motor_stop() {
+  motor1.writeMicroseconds(1500);
+  motor2.writeMicroseconds(1500);
+  motor3.writeMicroseconds(1500);
+  motor4.writeMicroseconds(1500);
+}
+
 void setup() {
   Serial.begin(9600);
   while (!Serial) {
@@ -119,10 +127,8 @@ void setup() {
   }
   Wire.begin();
 
-  FOUND_MS5837 = sensor.init();
-  if (FOUND_MS5837) {
-    sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
-  }
+  sensor.init();
+  sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
  
   motor1.attach(4); 
   motor1.writeMicroseconds(1500);
@@ -158,105 +164,108 @@ void setup() {
   }
 
   Serial.println("Ready!");
+  READY = 1;
 }
 
 void loop() {
-  Serial.print("Time:");
-  time = millis();
-  Serial.println(time);
+  if (READY) {
+    Serial.print("Time:");
+    time = millis();
+    Serial.println(time);
 
-  VRaw = analogRead(A0);
-  IRaw = analogRead(A1);
+    VRaw = analogRead(A0);
+    IRaw = analogRead(A1);
 
-  if (VRaw < 400) {
-  //Conversion
-    VFinal = VRaw/12.99; //180 Amp board  
-    IFinal = IRaw/3.7; //180 Amp board
+    if (VRaw < 400) {
+    //Conversion
+      VFinal = VRaw/12.99; //180 Amp board  
+      IFinal = IRaw/3.7; //180 Amp board
 
-    Serial.print("Volt:");
-    Serial.println(VFinal);
-    Serial.print("Amps:");
-    Serial.println(IFinal);
-  }
+      Serial.print("Volt:");
+      Serial.println(VFinal);
+      Serial.print("Amps:");
+      Serial.println(IFinal);
+    }
 
-  if (FOUND_MS5837) {
-    sensor.read();
+      sensor.read();
 
-    Serial.print("Pressure:"); 
-    Serial.println(sensor.pressure()); 
+      Serial.print("Pressure:"); 
+      Serial.println(sensor.pressure()); 
     
-    Serial.print("Temperature:"); 
-    Serial.println(sensor.temperature()); 
+      Serial.print("Temperature:"); 
+      Serial.println(sensor.temperature()); 
     
-    Serial.print("Depth:"); 
-    Serial.println(sensor.depth()); 
+      Serial.print("Depth:"); 
+      Serial.println(sensor.depth()); 
   
-    Serial.print("Altitude:"); 
-    Serial.println(sensor.altitude()); 
-  }
+      Serial.print("Altitude:"); 
+      Serial.println(sensor.altitude()); 
 
 
-  Serial.setTimeout(100);
-  if (Serial.available() > 0)
-  {
-    String command = Serial.readStringUntil(':');
-    int value = Serial.readStringUntil('\n').toInt();
-    Serial.print("Command: ");
-    Serial.print(command);
-    Serial.print(" Value: ");
-    Serial.println(value);
-    if (command == "ARM") { 
-         MOTOR_ARM = 1;
-    } else if (command == "DISARM") {
-         MOTOR_ARM = 0;
-    } else if (command == "Motor1") {
+    Serial.setTimeout(100);
+    if (Serial.available() > 0)
+    {
+      String command = Serial.readStringUntil(':');
+      int value = Serial.readStringUntil('\n').toInt();
+      Serial.print("Command: ");
+      Serial.print(command);
+      Serial.print(" Value: ");
+      Serial.println(value);
+      if (command == "ARM") { 
+           MOTOR_ARM = 1;
+      } else if (command == "DISARM") {
+           MOTOR_ARM = 0;
+      } else if (command == "STOP") {
+           motor_stop();
+      } else if (command == "Motor1") {
          if (MOTOR_ARM) {
-           motor1.writeMicroseconds(value);  
-         }
-    } else if (command == "Motor2") {
-         if (MOTOR_ARM) {
-           motor2.writeMicroseconds(value);  
-         }
-    } else if (command == "Motor3") {
-         if (MOTOR_ARM) {
-           motor3.writeMicroseconds(value);  
-         }
-    } else if (command == "Motor4") {
-         if (MOTOR_ARM) {
-           motor4.writeMicroseconds(value);  
-         }
-    } else if (command == "Light1") {
-           light1.writeMicroseconds(value);  
-    } else if (command == "Light2") {
-           light2.writeMicroseconds(value);  
-    } else if (command == "Cam1") {
-           cam1.writeMicroseconds(value);  
+             motor1.writeMicroseconds(value);  
+           }
+      } else if (command == "Motor2") {
+           if (MOTOR_ARM) {
+             motor2.writeMicroseconds(value);  
+           }
+      } else if (command == "Motor3") {
+           if (MOTOR_ARM) {
+             motor3.writeMicroseconds(value);  
+           }
+      } else if (command == "Motor4") {
+           if (MOTOR_ARM) {
+             motor4.writeMicroseconds(value);  
+           }
+      } else if (command == "Light1") {
+             light1.writeMicroseconds(value);  
+      } else if (command == "Light2") {
+             light2.writeMicroseconds(value);  
+      } else if (command == "Cam1") {
+             cam1.writeMicroseconds(value);  
+      }
+    }
+    delay(500);
+
+    if (FOUND_BNO) {
+    /* Get a new sensor event */
+      sensors_event_t event;
+      bno.getEvent(&event);
+
+    /* Display the floating point data */
+      Serial.print("X:");
+      Serial.println(event.orientation.x, 4);
+      Serial.print("Y:");
+      Serial.println(event.orientation.y, 4);
+      Serial.print("Z:");
+      Serial.println(event.orientation.z, 4);
+
+      /* Optional: Display calibration status */
+      displayCalStatus();
+
+    /* Optional: Display sensor status (debug only) */
+      //displaySensorStatus();
+
+    /* Wait the specified delay before requesting nex data */
+ 
+       delay(BNO055_SAMPLERATE_DELAY_MS); 
     }
   }
-  delay(1000);
-
-  if (FOUND_BNO) {
-  /* Get a new sensor event */
-    sensors_event_t event;
-    bno.getEvent(&event);
-
-  /* Display the floating point data */
-    Serial.print("X:");
-    Serial.println(event.orientation.x, 4);
-    Serial.print("Y:");
-    Serial.println(event.orientation.y, 4);
-    Serial.print("Z:");
-    Serial.println(event.orientation.z, 4);
-
-    /* Optional: Display calibration status */
-    displayCalStatus();
-
-  /* Optional: Display sensor status (debug only) */
-    //displaySensorStatus();
-
-  /* Wait the specified delay before requesting nex data */
- 
-     delay(BNO055_SAMPLERATE_DELAY_MS); 
-  }
 }
-
+  

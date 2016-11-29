@@ -23,14 +23,52 @@ var port = new SerialPort('/dev/ttyACM0', {
 function parse_serial(line) {
   var res = line.split(":");
   switch(res[0]) {
-    case    'TIME':
-      rovdata.TIME = res[1];
+    case    'Time':
+      rovdata.Time = res[1];
+      break;
+    case    'Pressure':
+      rovdata.Pressure = res[1];
+      break;
+    case    'Temperature':
+      rovdata.Temperature = res[1];
+      break;
+    case    'Depth':
+      rovdata.Depth = res[1];
+      break;
+    case    'Altitude':
+      rovdata.Altitude = res[1];
+      break;
+    case    'X':
+      rovdata.X = res[1];
+      break;
+    case    'Y':
+      rovdata.Y = res[1];
+      break;
+    case    'Z':
+      rovdata.Z = res[1];
+      break;
+    case    'Sys':
+      rovdata.Sys = res[1];
+      break;
+    case    'Gyro':
+      rovdata.Gyro = res[1];
+      break;
+    case    'Accel':
+      rovdata.Accel = res[1];
+      break;
+    case    'Mag':
+      rovdata.Mag = res[1];
+      break;
+    case    'Volt':
+      rovdata.Volt = res[1];
+      break;
+    case    'Amps':
+      rovdata.Amps = res[1];
       break;
     default:
-//      console.log('Serial data: ' + line);
+      console.log('Serial data: ' + line);
   }
-  console.log('Serial data: ' + line);
-  port.write('SER1:100');
+//  port.write('SER1:100');
 }
 
 port.on('data', function(line) {
