@@ -77,6 +77,7 @@ git clone https://github.com/jacksonliam/mjpg-streamer.git
 cd mjpg-streamer/mjpg-streamer-experimental
 make install
 cd 
+echo "disable_camera_led=1" >> /boot/config.txt
 
 # PlatformIO (Arduino CLI)
 pip install -U platformio
