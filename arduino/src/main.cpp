@@ -5,6 +5,20 @@
 #include <utility/imumaths.h>
 #include "MS5837.h"
 
+unsigned long time;
+int MOTOR_ARM = 0;
+int FOUND_BNO = 0;
+int FOUND_MS5837 = 0;
+int FOUND_A180 = 0;
+
+Servo motor1;
+Servo motor2;
+Servo motor3;
+Servo motor4;
+Servo light1;
+Servo light2;
+Servo cam1;
+
 //
 // Attopilot 180
 //
@@ -15,17 +29,6 @@ float VFinal; //This will store the converted data
 float IFinal;
 
 MS5837 sensor;
-
-Servo esc_1; // create servo object to control a servo
-Servo esc_2; // create servo object to control a servo
-Servo esc_3; // create servo object to control a servo
-Servo esc_4; // create servo object to control a servo
-Servo lum_1; // create servo object to control a servo
-Servo lum_2; // create servo object to control a servo
-Servo ser_1; // create servo object to control a servo
-
-int pos = 0;    // variable to store the servo position
-int i = 0;    // variable to store the servo position
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
@@ -93,7 +96,6 @@ void displayCalStatus(void)
   bno.getCalibration(&system, &gyro, &accel, &mag);
 
   /* The data should be ignored until the system calibration is > 0 */
-  Serial.print("\t");
   if (!system)
   {
     Serial.print("! ");
@@ -101,126 +103,160 @@ void displayCalStatus(void)
 
   /* Display the individual values */
   Serial.print("Sys:");
-  Serial.print(system, DEC);
-  Serial.print(" G:");
-  Serial.print(gyro, DEC);
-  Serial.print(" A:");
-  Serial.print(accel, DEC);
-  Serial.print(" M:");
-  Serial.print(mag, DEC);
+  Serial.println(system, DEC);
+  Serial.print("Gyro:");
+  Serial.println(gyro, DEC);
+  Serial.print("Accel:");
+  Serial.println(accel, DEC);
+  Serial.print("Mag:");
+  Serial.println(mag, DEC);
 }
 
 void setup() {
   Serial.begin(9600);
-  
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB
+  }
   Wire.begin();
-  sensor.init();
-  sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
 
-  esc_1.attach(4);  // attaches the servo on pin 9 to the servo object
-  esc_1.writeMicroseconds(1500);  // attaches the servo on pin 9 to the servo object
-  esc_2.attach(5);  // attaches the servo on pin 9 to the servo object
-  esc_2.writeMicroseconds(1500);  // attaches the servo on pin 9 to the servo object
-  esc_3.attach(6);  // attaches the servo on pin 9 to the servo object
-  esc_3.writeMicroseconds(1500);  // attaches the servo on pin 9 to the servo object
-  esc_4.attach(7);  // attaches the servo on pin 9 to the servo object
-  esc_4.writeMicroseconds(1500);  // attaches the servo on pin 9 to the servo object
-  delay(1000); // delay to allow the ESC to recognize the stopped signal
-  lum_1.attach(8);  // attaches the servo on pin 9 to the servo object
-  lum_1.writeMicroseconds(1100);  // attaches the servo on pin 9 to the servo object
-  lum_2.attach(9);  // attaches the servo on pin 9 to the servo object
-  lum_2.writeMicroseconds(1100);  // attaches the servo on pin 9 to the servo object
-  delay(1000); // delay to allow the ESC to recognize the stopped signal
-  ser_1.attach(12);  // attaches the servo on pin 9 to the servo object
-  ser_1.writeMicroseconds(375);  // attaches the servo on pin 9 to the servo object
+  FOUND_MS5837 = sensor.init();
+  if (FOUND_MS5837) {
+    sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
+  }
  
-  Serial.println("Orientation Sensor Test"); Serial.println("");
+  motor1.attach(4); 
+  motor1.writeMicroseconds(1500);
+  motor2.attach(5); 
+  motor2.writeMicroseconds(1500);
+  motor3.attach(6); 
+  motor3.writeMicroseconds(1500);
+  motor4.attach(7); 
+  motor4.writeMicroseconds(1500);
+  
+  light1.attach(8); 
+  light1.writeMicroseconds(1000);
+  light2.attach(9); 
+  light2.writeMicroseconds(1000);
+
+  cam1.attach(12); 
+  cam1.writeMicroseconds(375);
 
   /* Initialise the sensor */
-  if(!bno.begin())
+  if(bno.begin())
   {
-    /* There was a problem detecting the BNO055 ... check your connections */
-    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-    while(1);
+     FOUND_BNO = 1; 
   }
 
-  delay(1000); // delay to allow the ESC to recognize the stopped signal
-
+  delay(1000);
   /* Display some basic information on this sensor */
-  displaySensorDetails();
-
+  if (FOUND_BNO) {
+    displaySensorDetails();
   /* Optional: Display current status */
-  displaySensorStatus();
+    displaySensorStatus();
 
-  bno.setExtCrystalUse(true);
+    bno.setExtCrystalUse(true);
+  }
+
+  Serial.println("Ready!");
 }
 
 void loop() {
+  Serial.print("Time:");
+  time = millis();
+  Serial.println(time);
 
   VRaw = analogRead(A0);
   IRaw = analogRead(A1);
 
+  if (VRaw < 400) {
   //Conversion
-  VFinal = VRaw/12.99; //180 Amp board  
-  IFinal = IRaw/3.7; //180 Amp board
+    VFinal = VRaw/12.99; //180 Amp board  
+    IFinal = IRaw/3.7; //180 Amp board
 
-  sensor.read();
+    Serial.print("Volt:");
+    Serial.println(VFinal);
+    Serial.print("Amps:");
+    Serial.println(IFinal);
+  }
 
-  Serial.print("Pressure: "); 
-  Serial.print(sensor.pressure()); 
-  Serial.println(" mbar");
-  
-  Serial.print("Temperature: "); 
-  Serial.print(sensor.temperature()); 
-  Serial.println(" deg C");
-  
-  Serial.print("Depth: "); 
-  Serial.print(sensor.depth()); 
-  Serial.println(" m");
-  
-  Serial.print("Altitude: "); 
-  Serial.print(sensor.altitude()); 
-  Serial.println(" m above mean sea level");
+  if (FOUND_MS5837) {
+    sensor.read();
 
-  Serial.print(VFinal);
-  Serial.println("   Volts");
-  Serial.print(IFinal);
-  Serial.println("   Amps");
-  Serial.println("");
-  Serial.println("");
+    Serial.print("Pressure:"); 
+    Serial.println(sensor.pressure()); 
+    
+    Serial.print("Temperature:"); 
+    Serial.println(sensor.temperature()); 
+    
+    Serial.print("Depth:"); 
+    Serial.println(sensor.depth()); 
+  
+    Serial.print("Altitude:"); 
+    Serial.println(sensor.altitude()); 
+  }
+
+
+  Serial.setTimeout(100);
+  if (Serial.available() > 0)
+  {
+    String command = Serial.readStringUntil(':');
+    int value = Serial.readStringUntil('\n').toInt();
+    Serial.print("Command: ");
+    Serial.print(command);
+    Serial.print(" Value: ");
+    Serial.println(value);
+    if (command == "ARM") { 
+         MOTOR_ARM = 1;
+    } else if (command == "DISARM") {
+         MOTOR_ARM = 0;
+    } else if (command == "Motor1") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(value);  
+         }
+    } else if (command == "Motor2") {
+         if (MOTOR_ARM) {
+           motor2.writeMicroseconds(value);  
+         }
+    } else if (command == "Motor3") {
+         if (MOTOR_ARM) {
+           motor3.writeMicroseconds(value);  
+         }
+    } else if (command == "Motor4") {
+         if (MOTOR_ARM) {
+           motor4.writeMicroseconds(value);  
+         }
+    } else if (command == "Light1") {
+           light1.writeMicroseconds(value);  
+    } else if (command == "Light2") {
+           light2.writeMicroseconds(value);  
+    } else if (command == "Cam1") {
+           cam1.writeMicroseconds(value);  
+    }
+  }
   delay(1000);
 
-   /* Get a new sensor event */
-  sensors_event_t event;
-  bno.getEvent(&event);
+  if (FOUND_BNO) {
+  /* Get a new sensor event */
+    sensors_event_t event;
+    bno.getEvent(&event);
 
   /* Display the floating point data */
-  Serial.print("X: ");
-  Serial.print(event.orientation.x, 4);
-  Serial.print("\tY: ");
-  Serial.print(event.orientation.y, 4);
-  Serial.print("\tZ: ");
-  Serial.print(event.orientation.z, 4);
+    Serial.print("X:");
+    Serial.println(event.orientation.x, 4);
+    Serial.print("Y:");
+    Serial.println(event.orientation.y, 4);
+    Serial.print("Z:");
+    Serial.println(event.orientation.z, 4);
 
-  /* Optional: Display calibration status */
-  displayCalStatus();
+    /* Optional: Display calibration status */
+    displayCalStatus();
 
   /* Optional: Display sensor status (debug only) */
-  //displaySensorStatus();
-
-  /* New line for the next sample */
-  Serial.println("");
+    //displaySensorStatus();
 
   /* Wait the specified delay before requesting nex data */
-  delay(BNO055_SAMPLERATE_DELAY_MS); 
-//  for (pos = 45; pos <= 135; pos += 1) { // goes from 0 degrees to 180 degrees
-//    // in steps of 1 degree
-    ser_1.write(90);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-//  }
-//  for (pos = 135; pos >= 45; pos -= 1) { // goes from 180 degrees to 0 degrees
-//    ser_1.write(pos);              // tell servo to go to position in variable 'pos'
-//    //delay(15);                       // waits 15ms for the servo to reach the position
-//  }
+ 
+     delay(BNO055_SAMPLERATE_DELAY_MS); 
+  }
 }
 

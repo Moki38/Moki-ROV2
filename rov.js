@@ -6,11 +6,37 @@ var fs = require("fs")
 var shell = require("shelljs");
 var jsonfile = require('jsonfile')
 jsonfile.spaces = 4
+var serialport = require('serialport');
 
 var config_file = 'config.js'
 var config = {};
 
+var rovdata = {};
+
 var app = express();
+var SerialPort = require('serialport');
+var port = new SerialPort('/dev/ttyACM0', {
+  baudrate: 9600,
+  parser: SerialPort.parsers.readline('\n')
+});
+
+function parse_serial(line) {
+  var res = line.split(":");
+  switch(res[0]) {
+    case    'TIME':
+      rovdata.TIME = res[1];
+      break;
+    default:
+//      console.log('Serial data: ' + line);
+  }
+  console.log('Serial data: ' + line);
+  port.write('SER1:100');
+}
+
+port.on('data', function(line) {
+  parse_serial(line);
+});
+
 
 app.use(express.static('public'));
 

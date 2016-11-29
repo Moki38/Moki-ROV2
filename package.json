@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "express": "> 4.6.1",
+    "serialport": "~4.0.6",
     "jsonfile": "~2.3.1",
     "socket.io": "> 1.0.6",
     "shelljs": "> 0.3.0",
