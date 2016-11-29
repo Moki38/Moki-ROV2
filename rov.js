@@ -9,13 +9,13 @@ jsonfile.spaces = 4
 var serialport = require('serialport');
 
 var config_file = 'config.js'
-var config = {};
+var config = jsonfile.readFileSync(config_file)
 
 var rovdata = {};
 
 var app = express();
 var SerialPort = require('serialport');
-var port = new SerialPort('/dev/ttyACM0', {
+var port = new SerialPort(config.serial.device, {
   baudrate: 9600,
   parser: SerialPort.parsers.readline('\n')
 });
@@ -86,9 +86,11 @@ app.get('/config', function(req, res) {
   res.end(req.cookies);
 
   config.i2c = {device: '/dev/i2c-1'}
+  
+  config.serial = {device: '/dev/ttyACM0'}
+
   ipaddr = shell.exec('hostname -i', {silent:true}).stdout
   ipaddr = ipaddr.replace(/[\n$]/g, '');
-
   config.network = {ipaddr : ipaddr}
   jsonfile.writeFileSync( __dirname + '/' + config_file , config)
 })
