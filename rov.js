@@ -114,17 +114,73 @@ app.get('/config', function(req, res) {
 io.on('connection', function (socket) {
 //  console.log('connecting');
   socket.emit('connect');
+
+var gamepadctrl = function(gamepad) {
+  var event;
+  console.log ('Gamepad %s',gamepad);
+  var res = gamepad.split(" ");
+  console.log ('Gamepad res:'+res);
+  if (res[0] == "button") {
+// X Button
+    if ((res[1] == 2) && (res[3] == 1)) {
+    }
+//Y Button
+    if ((res[1] == 3) && (res[3] == 1)) {
+    }
+//Window (8) Button
+    if ((res[1] == 8) && (res[3] == 1)) {
+    }
+    if ((res[1] == 4) && (res[3] == 1)) {
+    }
+    if ((res[1] == 5) && (res[3] == 1)) {
+    }
+  };
+
+  if (res[0] == "axis") {
+    event = 'Stop All';
+    if ((res[1] == 0) && (res[3] > 50)) { event = 'right'; };
+    if ((res[1] == 0) && (res[3] < -50)) { event = 'left'; };
+    if ((res[1] == 1) && (res[3] > 50)) { event = 'reverse'; };
+    if ((res[1] == 1) && (res[3] < -50)) { event = 'forward'; };
+    if ((res[1] == 2) && (res[3] > 50)) { event = 'strafe_r'; };
+    if ((res[1] == 2) && (res[3] < -50)) { event = 'strafe_l'; };
+    if ((res[1] == 3) && (res[3] > 50)) { event = 'dive'; };
+    if ((res[1] == 3) && (res[3] < -50)) { event = 'up'; };
+  
+    socket.emit("command",event);
+
+    switch (event) {
+        case 'up':
+          break;
+        case 'dive':
+          break;
+        case 'left':
+          break;
+        case 'right':
+          break;
+        case 'forward':
+          break;
+        case 'reverse':
+          break;
+        case 'strafe_l':
+          break;
+        case 'strafe_r':
+          break;
+        default:
+          break; 
+     };
+  };
+}
   
 // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-  });
+socket.on('disconnect', function () {
+});
 
 var interval = setInterval(function () {
   socket.emit("rovdata", rovdata);
-  if (rovdata.hover) {
+  if (rovdata.Hover) {
     hover();
   };
-  lights();
 }, 500);
 
 socket.on('gamepad', function(gamepad) {
@@ -133,95 +189,60 @@ socket.on('gamepad', function(gamepad) {
 
 socket.on('power', function(data) {
   power = data;
-//  console.log('Power request: %d', data);
+  console.log('Power request: %d', data);
   if (power == 0) {
     motor_stop();
   }
 });
 
 var lights = function() {
-   if (rovdata.lights) {
-     console.log("LIGHTS: ON");
+  if (rovdata.Lights) {
+    console.log("LIGHTS: ON");
     if (arduino) {
       port.write('Light1:1600');
       port.write('Light2:1600');
     }
-     socket.emit("command","Light ON");
-   } else {
-     socket.emit("command","Light Off");
+    socket.emit("command","Light ON");
+  } else {
+    console.log("LIGHTS: OFF");
     if (arduino) {
-      port.write('Light1:1600');
-      port.write('Light2:1600');
+      port.write('Light1:1000');
+      port.write('Light2:1000');
     }
-   }
-   lightsonce = true;
+    socket.emit("command","Light Off");
+  }
 }
 
-var motor = function() {
-      if (!motoronce) {
-        if (rovdata.motor) {
-          console.log("MOTOR: ON");
-          port.write('ARM');
-          socket.emit("command","Motor ON");
-        } else {
-          console.log("Motor: OFF");
-          port.write('DISARM');
-          socket.emit("command","Motor Off");
-        }
-      motoronce = true;
-      }
+var armmotor = function() {
+  if (rovdata.Motor) {
+    console.log("MOTOR: ON");
+    port.write('ARM');
+    socket.emit("command","Motor ON");
+  } else {
+    console.log("Motor: OFF");
+    port.write('DISARM');
+    socket.emit("command","Motor Off");
+  }
 }
 
 var hover = function() {
-   if (hoverset < rovdata.depth) {
-      console.log("HOVER: UP");
+  if (hoverset < rovdata.depth) {
+    console.log("HOVER: UP");
   } 
-   if (hoverset > rovdata.depth) {
-      console.log("HOVER: DOWN");
+  if (hoverset > rovdata.depth) {
+    console.log("HOVER: DOWN");
   } 
 }
 
-
-var motor_stop = function() {
-  console.log("motor", "stopall");
-    if (arduino) {
-      port.write('STOP:1');
-    }
+var motor = function(m, position) {
+  console.log("motor, stopall");
+  if (arduino) {
+    port.write('STOP:1');
+  }
   socket.emit("motor", "stopall");
 }
 
-var motor_1 = function(position) {
-    if (arduino) {
-      port.write('Motor1:'+position);
-    }
-  console.log("motor1", position);
-  socket.emit("motor1", position);
-}
-
-var motor_2 = function(position) {
-    if (arduino) {
-      port.write('Motor2:'+position);
-    }
-  console.log("motor2", position);
-  socket.emit("motor2", position);
-}
-
-var motor_3 = function(position) {
-    if (arduino) {
-      port.write('Motor3:'+position);
-    }
-  console.log("motor3", position);
-  socket.emit("motor3", position);
-}
-
-var motor_4 = function(position) {
-    if (arduino) {
-      port.write('Motor4:'+position);
-    }
-  console.log("motor4", position);
-  socket.emit("motor4", position);
-}
-});
+}); /// END io.connection
 
 server.listen(3000, function () {
 
