@@ -14,7 +14,7 @@ This software was build on a Raspberry PI (Model B+)
 * Google Chrome browser on PC
 * XBox One controller (bluetooth connected to PC)
 
-* Ardiono Mega2560
+* Arduino Mega2560
 * BlueRobotics Depth/Pressure sensor [MS5837-30BA]
 * Pololu attopilot 180A
 * Adafruit BNO055 IMU
