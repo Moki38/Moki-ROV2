@@ -1,4 +1,4 @@
-# Moki-ROV2 (Non working software)
+# Moki-ROV2 (Almost working software)
 
 Pilot your ROV-PI directly from your PC webbrowser browser.
 

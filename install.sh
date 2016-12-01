@@ -1,10 +1,12 @@
-#!/bin./bash
+#!/bin/bash
 
 #
 # Moki-ROV2 (Non working software)
 #
 # If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
 # Copyright (c) 2016 by Eric van Dijken <rov-pi@team-moki.nl>
+
+HOST_IP=`hostname -I`
 
 #
 # NodeJS
@@ -16,6 +18,7 @@ rm -rf bin/node bin/npm include/node lib/node
 tar --strip-components 1 -xJf /root/node-v6.9.1-linux-armv6l.tar.xz
 
 ## Arduino IDE
+cd
 wget https://downloads.arduino.cc/arduino-1.6.13-linuxarm.tar.xz
 cd /usr/share
 tar xfJ ~/arduino-1.6.13-linuxarm.tar.xz
@@ -29,15 +32,16 @@ systemctl restart udev
 # Moki-ROV2 Software
 cd
 cd Moki-ROV2
+sed -i "s/172.16.10.20:8080/$HOST_IP:8080/g" public/index.html
+sed -i "s/ :8080/:8080/g" public/index.html
 npm install 
-cd 
 
 # MJPG-Streamer
+cd
 apt-get install -y subversion libjpeg8-dev imagemagick libav-tools cmake
 git clone https://github.com/jacksonliam/mjpg-streamer.git
 cd mjpg-streamer/mjpg-streamer-experimental
 make install
-cd 
 echo "disable_camera_led=1" >> /boot/config.txt
 
 # PlatformIO (Arduino CLI)
