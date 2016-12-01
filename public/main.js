@@ -43,10 +43,10 @@ function readgamepad() {
 //       socket.emit("gamepad","gamepad loop");
 // Init
     if (!gamepad_detected) { 
-       socket.emit("gamepad",gamepad.id);
-       socket.emit("gamepad","index "+gamepad.index);
-       socket.emit("gamepad",axes+" Axes" );
-       socket.emit("gamepad",buttons+" Buttons" );
+//       socket.emit("gamepad",gamepad.id);
+//       socket.emit("gamepad","index "+gamepad.index);
+//       socket.emit("gamepad",axes+" Axes" );
+//       socket.emit("gamepad",buttons+" Buttons" );
        for (i=0 ; i < axes ; i++) {
          axis_value[i] = 0.0;
        }
@@ -131,29 +131,32 @@ function display() {
   rov_context.lineWidth = 1;
   rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( today, 10, 20);
+  rov_context.fillText( "GPS: ", 10, 40);
   rov_context.fillText( "Moki ROV (Raspberry PI)", 10, 60);
   rov_context.fillText(constatus, 10, rov_canvas.height-20);
 
-  rov_context.fillText( "Main V", 290, 20);
-  rov_context.fillText( "Main A", 290, 40);
-  rov_context.fillText( ": "+volt, 370, 20);
-  rov_context.fillText( ": "+current, 370, 40);
+  rov_context.fillText( "Main V", (rov_canvas.width/4), 20);
+  rov_context.fillText( "Main A", (rov_canvas.width/4), 40);
+  rov_context.fillText( ": "+volt, (rov_canvas.width/4)+80, 20);
+  rov_context.fillText( ": "+current, (rov_canvas.width/4)+80, 40);
+  rov_context.fillText( "Power ", (rov_canvas.width/4) , 60);
+  rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
 
-  rov_context.fillText( "Heading", 470, 20);
-  rov_context.fillText( "Roll", 470, 40);
-  rov_context.fillText( "Pitch", 470, 60);
+  rov_context.fillText( "Heading", (rov_canvas.width/2), 20);
+  rov_context.fillText( "Roll", (rov_canvas.width/2), 40);
+  rov_context.fillText( "Pitch", (rov_canvas.width/2), 60);
 
-  rov_context.fillText( ": "+heading, 550, 20);
-  rov_context.fillText( ": "+roll, 550, 40);
-  rov_context.fillText( ": "+pitch, 550, 60);
+  rov_context.fillText( ": "+heading, (rov_canvas.width/2)+80, 20);
+  rov_context.fillText( ": "+roll, (rov_canvas.width/2)+80, 40);
+  rov_context.fillText( ": "+pitch, (rov_canvas.width/2)+80, 60);
 
-  rov_context.fillText( "Mbar", 650, 20);
-  rov_context.fillText( "Depth", 650, 40);
-  rov_context.fillText( "Temp", 650, 60);
+  rov_context.fillText( "Mbar", (rov_canvas.width/4)*3, 20);
+  rov_context.fillText( "Depth", (rov_canvas.width/4)*3, 40);
+  rov_context.fillText( "Temp", (rov_canvas.width/4)*3, 60);
 
-  rov_context.fillText( ": "+mbar, 720, 20);
-  rov_context.fillText( ": "+depth+" cm", 720, 40);
-  rov_context.fillText( ": "+temp+" C", 720, 60);
+  rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
+  rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
+  rov_context.fillText( ": "+temp+" °C", (rov_canvas.width/4)*3+80, 60);
 
 // Visual Gamepad Axis
   rov_context.beginPath();
@@ -237,13 +240,14 @@ function display() {
   rov_context.strokeStyle = "#00aa00";
   rov_context.lineWidth = 1;
   rov_context.beginPath();
-//  rov_context.fillText( heading, (rov_canvas.width/2) - 20, 130);
   for (i = -10; i <= 10; i++) {
       if ( Math.floor(heading+i) % 5) {
           rov_context.moveTo((rov_canvas.width/2)+(i*35),65);
           rov_context.lineTo((rov_canvas.width/2)+(i*35),75);
       } else {
-          rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-18, 100);
+          var heading_tmp = (heading+i).toString();
+          var heading_length = heading_tmp.length;
+          rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-(heading_length/2)*12, 100);
           rov_context.moveTo((rov_canvas.width/2)+(i*35), 65);
           rov_context.lineTo((rov_canvas.width/2)+(i*35), 85);
       }
@@ -307,27 +311,23 @@ function display() {
   rov_context.fillText("Motor", (rov_canvas.width/2) - 160, rov_canvas.height/2+205);
   rov_context.fillText("  1      2       3      4", (rov_canvas.width/2) - 100, rov_canvas.height/2+205);
   rov_context.stroke();
-  rov_context.fillStyle = "#aaaa55";
-  rov_context.fillText("Power :", (rov_canvas.width/2) + 160, rov_canvas.height/2+205);
-  rov_context.fillText(power+" %", (rov_canvas.width/2) + 240, rov_canvas.height/2+205);
-  rov_context.stroke();
   rov_context.fillStyle = "#aaaa00";
-  rov_context.fillText("LIGHTS:", 660, 200);
+  rov_context.fillText("LIGHTS:", (rov_canvas.width/4)*3, 200);
   if (lights) {
       rov_context.fillStyle = "#00aa00";
-      rov_context.fillText( "ON", 750, 200);
+      rov_context.fillText( "ON", (rov_canvas.width/4)*3+80, 200);
   } else {
       rov_context.fillStyle = "#aa0000";
-      rov_context.fillText( "OFF", 750, 200);
+      rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 200);
   }
   rov_context.fillStyle = "#aaaa00";
-  rov_context.fillText("HOVER:", 665, 250);
+  rov_context.fillText("HOVER:", (rov_canvas.width/4)*3, 250);
   if (hover) {
       rov_context.fillStyle = "#00aa00";
-      rov_context.fillText( "ON", 750, 250);
+      rov_context.fillText( "ON", (rov_canvas.width/4)*3+80, 250);
   } else {
       rov_context.fillStyle = "#aa0000";
-      rov_context.fillText( "OFF", 750, 250);
+      rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 250);
   }
   rov_context.fill();
 
@@ -336,19 +336,20 @@ function display() {
       rov_context.beginPath();
       rov_context.fillStyle = "#aa0000";
       rov_context.font = '10pt Verdana';
-      rov_context.fillText("Gamepad NOT supported",rov_canvas.width-200,rov_canvas.height-20);
+      rov_context.fillText("Gamepad NOT supported",rov_canvas.width-200,rov_canvas.height-21);
       rov_context.fill();
     } else {
       rov_context.beginPath();
       rov_context.fillStyle = "#00aa00";
       rov_context.font = '10pt Verdana';
-      rov_context.fillText("Gamepad enabled",rov_canvas.width-200,rov_canvas.height-20);
+      rov_context.fillText("Gamepad enabled",rov_canvas.width-200,rov_canvas.height-21);
       rov_context.fill();
     }
 }
 
 function mainloop() {
   display();
+  readgamepad();
 }
 
 function init() {

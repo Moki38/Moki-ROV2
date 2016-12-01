@@ -90,6 +90,15 @@ if (arduino) {
 port.on('data', function(line) {
   parse_serial(line);
 });
+} else {
+// No Arduino found
+  rovdata.Volt = 'N/A';
+  rovdata.Amps = 'N/A';
+  rovdata.X = 0;
+  rovdata.Y = 0;
+  rovdata.Z = 0;
+  rovdata.Depth = 0;
+  rovdata.Temperature = 0;
 }
 
 app.use(express.static('public'));
@@ -112,29 +121,49 @@ app.get('/config', function(req, res) {
 })
 
 io.on('connection', function (socket) {
-//  console.log('connecting');
   socket.emit('connect');
 
 var gamepadctrl = function(gamepad) {
   var event;
-  console.log ('Gamepad %s',gamepad);
+//  console.log ('Gamepad %s',gamepad);
   var res = gamepad.split(" ");
-  console.log ('Gamepad res:'+res);
   if (res[0] == "button") {
+// A Button
+    if ((res[1] == 0) && (res[3] == 1)) {
+    }
+// B Button
+    if ((res[1] == 1) && (res[3] == 1)) {
+    }
 // X Button
     if ((res[1] == 2) && (res[3] == 1)) {
     }
 //Y Button
     if ((res[1] == 3) && (res[3] == 1)) {
     }
-//Window (8) Button
+//View (8) Button
     if ((res[1] == 8) && (res[3] == 1)) {
     }
+//Menu (9) Button
+    if ((res[1] == 9) && (res[3] == 1)) {
+    }
+// LB Button
     if ((res[1] == 4) && (res[3] == 1)) {
     }
+// RB Button
     if ((res[1] == 5) && (res[3] == 1)) {
     }
   };
+// 6 Left trigger (0-100)
+// 7 Right trigger (0-100)
+// 12 Pad up
+// 13 Pad down
+// 14 Pad left
+// 15 Pad right
+
+// Axis 0 (LS hor)
+// Axis 1 (LS vert)
+// Axis 2 (RS hor)
+// Axis 3 (RS vert)
 
   if (res[0] == "axis") {
     event = 'Stop All';
@@ -189,9 +218,9 @@ socket.on('gamepad', function(gamepad) {
 
 socket.on('power', function(data) {
   power = data;
-  console.log('Power request: %d', data);
+//  console.log('Power request: %d', data);
   if (power == 0) {
-    motor_stop();
+    motor();
   }
 });
 
@@ -244,7 +273,7 @@ var motor = function(m, position) {
 
 }); /// END io.connection
 
-server.listen(3000, function () {
+server.listen(80, function () {
 
   var host = server.address().address
   var port = server.address().port
