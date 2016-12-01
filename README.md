@@ -57,7 +57,7 @@ cd Moki-ROV2
  
 # Start the ROV software
 node rov.js
-(Open browser to Raspberry PI IP adress, port 3000 => http://172.16.10.20:3000)
+(Open browser to Raspberry PI IP adress, port 80 => http://172.16.10.20)
 ```
 
 ## Usage
