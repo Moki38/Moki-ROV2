@@ -19,7 +19,7 @@ var port;
 var SerialPort = require('serialport');
 if (shell.test('-c', config.serial.device)) {
   port = new SerialPort(config.serial.device, {
-    baudrate: 9600,
+    baudrate: 115200,
     parser: SerialPort.parsers.readline('\n')
   });
   arduino = 1;
@@ -28,11 +28,12 @@ if (shell.test('-c', config.serial.device)) {
 var kill = shell.exec('kill -9 `pidof mjpg_streamer`', {silent:true, async:true});
 var camera = shell.exec('/usr/local/bin/mjpg_streamer -o \"output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www\" -i \"input_raspicam.so -x 1366 -y 768\"', {silent:true, async:true});
 
-camera.stdout.on('data', function(data) {
+rovdata.Cam_pos = 375;
+rovdata.Cam_move = 0; 
 
+camera.stdout.on('data', function(data) {
   console.log(data);
   /* ... do something with data ... */
-
 });
 
 function parse_serial(line) {
@@ -87,9 +88,10 @@ function parse_serial(line) {
 }
 
 if (arduino) {
-port.on('data', function(line) {
+  port.on('data', function(line) {
   parse_serial(line);
 });
+
 } else {
 // No Arduino found
   rovdata.Volt = 'N/A';
@@ -127,6 +129,7 @@ var gamepadctrl = function(gamepad) {
   var event;
 //  console.log ('Gamepad %s',gamepad);
   var res = gamepad.split(" ");
+  console.log ('Gamepad %s',res);
   if (res[0] == "button") {
 // A Button
     if ((res[1] == 0) && (res[3] == 1)) {
@@ -136,27 +139,43 @@ var gamepadctrl = function(gamepad) {
     }
 // X Button
     if ((res[1] == 2) && (res[3] == 1)) {
+      rovdata.Power = 0;
     }
 //Y Button
     if ((res[1] == 3) && (res[3] == 1)) {
     }
 //View (8) Button
     if ((res[1] == 8) && (res[3] == 1)) {
+      disarmmotor();
     }
 //Menu (9) Button
     if ((res[1] == 9) && (res[3] == 1)) {
+      armmotor();
     }
 // LB Button
     if ((res[1] == 4) && (res[3] == 1)) {
+      rovdata.Power = rovdata.Power - 10;
     }
 // RB Button
     if ((res[1] == 5) && (res[3] == 1)) {
+      rovdata.Power = rovdata.Power + 10;
     }
-  };
 // 6 Left trigger (0-100)
 // 7 Right trigger (0-100)
 // 12 Pad up
+    if ((res[1] == 12) && (res[3] == 1)) {
+      console.log("Cam UP");
+      rovdata.Cam_move = 1;
+    }
+    if ((res[1] == 12) && (res[3] == 0)) {
+      console.log("Cam STOP");
+      rovdata.Cam_move = 0;
+    }
 // 13 Pad down
+    if ((res[1] == 13) && (res[3] == 1)) {
+      rovdata.Cam_move = -1;
+      console.log("Cam DOWN");
+    }
 // 14 Pad left
 // 15 Pad right
 
@@ -164,6 +183,7 @@ var gamepadctrl = function(gamepad) {
 // Axis 1 (LS vert)
 // Axis 2 (RS hor)
 // Axis 3 (RS vert)
+  };
 
   if (res[0] == "axis") {
     event = 'Stop All';
@@ -176,7 +196,8 @@ var gamepadctrl = function(gamepad) {
     if ((res[1] == 3) && (res[3] > 50)) { event = 'dive'; };
     if ((res[1] == 3) && (res[3] < -50)) { event = 'up'; };
   
-    socket.emit("command",event);
+    //socket.emit("command",event);
+    console.log(event);
 
     switch (event) {
         case 'up':
@@ -188,14 +209,17 @@ var gamepadctrl = function(gamepad) {
         case 'right':
           break;
         case 'forward':
+          motor(1,1500+(4*rovdata.Power));
           break;
         case 'reverse':
+          motor(1,1500-(4*rovdata.Power));
           break;
         case 'strafe_l':
           break;
         case 'strafe_r':
           break;
         default:
+          motor(1,1500);
           break; 
      };
   };
@@ -210,18 +234,13 @@ var interval = setInterval(function () {
   if (rovdata.Hover) {
     hover();
   };
+  if (rovdata.Cam_move != 0) {
+//    movecamera(); 
+  }
 }, 500);
 
 socket.on('gamepad', function(gamepad) {
   gamepadctrl(gamepad);
-});
-
-socket.on('power', function(data) {
-  power = data;
-//  console.log('Power request: %d', data);
-  if (power == 0) {
-    motor();
-  }
 });
 
 var lights = function() {
@@ -242,16 +261,31 @@ var lights = function() {
   }
 }
 
-var armmotor = function() {
-  if (rovdata.Motor) {
-    console.log("MOTOR: ON");
-    port.write('ARM');
-    socket.emit("command","Motor ON");
-  } else {
-    console.log("Motor: OFF");
-    port.write('DISARM');
-    socket.emit("command","Motor Off");
+var movecamera = function() {
+  if (rovdata.Cam_move == 1) {
+    if (rovdata.Cam_pos < 1800) {
+      rovdata.Cam_pos = rovdata.Cam_pos + 1;
+    }
+    port.write('Camx:' + rovdata.Cam_pos);
   }
+  if (rovdata.Cam_move == -1) {
+    if (rovdata.Cam_pos > 1200) {
+      rovdata.Cam_pos = rovdata.Cam_pos - 1;
+    }
+    port.write('Camx:' + rovdata.Cam_pos);
+  }
+}
+
+var armmotor = function() {
+    console.log("MOTOR: ON");
+    port.write('ARM:1');
+    socket.emit("command","Motor ON");
+}
+
+var disarmmotor = function() {
+    console.log("MOTOR: OFF");
+    port.write('DISARM:0');
+    socket.emit("command","Motor OFF");
 }
 
 var hover = function() {
@@ -264,11 +298,34 @@ var hover = function() {
 }
 
 var motor = function(m, position) {
-  console.log("motor, stopall");
-  if (arduino) {
-    port.write('STOP:1');
+  console.log("motor: " + m + " pos: " + position);
+  if (rovdata.Motor) {
+    if (arduino) {
+      switch (m) {
+        case 1: 
+          port.write('Motor1:'+position);
+          break; 
+        case 2: 
+          port.write('Motor2:'+position);
+          break; 
+        case 3: 
+          port.write('Motor3:'+position);
+          break; 
+        case 4: 
+          port.write('Motor4:'+position);
+          break; 
+        case 5: 
+          port.write('Motor5:'+position);
+          break; 
+        case 6: 
+          port.write('Motor6:'+position);
+          break; 
+        default:
+          port.write('STOP:1');
+          socket.emit("motor", "stopall");
+      }
+    }
   }
-  socket.emit("motor", "stopall");
 }
 
 }); /// END io.connection

@@ -55,50 +55,36 @@ function readgamepad() {
        }
        gamepad_detected = true;
     }
-// Check button
-  for (i=0 ; i <= gamepad.buttons.length ; i++) {
-    if (typeof(gamepad.buttons[i]) == 'object') {
-          value = gamepad.buttons[i].value;
-          pressed = gamepad.buttons[i].pressed;
-          if (i == 6 || i == 7) {
-             if (value > (button_value[i]+0.1)) {
-                button_value[i] = value;
-                socket.emit("gamepad","button "+i+" value "+Math.floor(value*100));
-             }
-             if (value < (button_value[i]-0.1)) {
-                button_value[i] = value;
-                socket.emit("gamepad","button "+i+" value "+Math.floor(value*100));
-             }
+    // Check button
+    for (i=0 ; i <= gamepad.buttons.length ; i++) {
+      if (typeof(gamepad.buttons[i]) == 'object') {
+        value = gamepad.buttons[i].value;
+        pressed = gamepad.buttons[i].pressed;
+        if (i == 6 || i == 7) {
+          if (value > (button_value[i]+0.1)) {
+            button_value[i] = value;
+            socket.emit("gamepad","button "+i+" value "+Math.floor(value*100));
+          }
+          if (value < (button_value[i]-0.1)) {
+            button_value[i] = value;
+            socket.emit("gamepad","button "+i+" value "+Math.floor(value*100));
+          }
+        } else {
+          if (pressed) {
+            if (!button_pressed[i]) {
+              socket.emit("gamepad","button "+i+" value "+value);
+              button_pressed[i] = true;
+            }
           } else {
-            if (pressed) {
-              if (!button_pressed[i]) {
-          if (i == 2) {
-            power = 0;
-            socket.emit('power', power);
-          }
-          if (i == 4) {
-            power = power - 10;
-            if (power < 0) { power = 0; };
-            socket.emit('power', power);
-          }
-          if (i == 5) {
-            power = power + 10;
-            if (power > 100) { power = 100; };
-            socket.emit('power', power);
-          }
-                 socket.emit("gamepad","button "+i+" value "+value);
-                 button_pressed[i] = true;
-              }
-            } else {
-              if (button_pressed[i]) {
-                 socket.emit("gamepad","Gamepad button "+i+" released");
-                 button_pressed[i] = false;
-              }
+            if (button_pressed[i]) {
+              socket.emit("gamepad","Gamepad button "+i+" released");
+              button_pressed[i] = false;
             }
           }
-       }
+        }
+      }
     }
-  for (i=0 ; i < axes ; i++) {
+    for (i=0 ; i < axes ; i++) {
       value = gamepad.axes[i];
       if (gamepad.axes[i] > axis_value[i]+0.1) {
          axis_value[i] = gamepad.axes[i];
@@ -113,15 +99,16 @@ function readgamepad() {
 }
 
 function update(rovdata) {
-  depth = rovdata.Depth;
+  depth = rovdata.Depth*100;
   temp = rovdata.Temperature;
   volt = rovdata.Volt;
   current = rovdata.Amps;
-  heading = rovdata.X;
-  pitch = rovdata.Y;
-  roll = rovdata.Z;
+  heading = Math.floor(rovdata.X);
+  pitch = Math.floor(rovdata.Y);
+  roll = Math.floor(rovdata.Z);
   hover = rovdata.hover;
   lights = rovdata.lights;
+  power = rovdata.Power;
 }
 
 function display() {

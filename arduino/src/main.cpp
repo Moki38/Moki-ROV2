@@ -1,3 +1,5 @@
+#include "config.h"
+#include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
@@ -16,9 +18,12 @@ Servo motor1;
 Servo motor2;
 Servo motor3;
 Servo motor4;
+Servo motor5;
+Servo motor6;
 Servo light1;
 Servo light2;
-Servo cam1;
+Servo camx;
+Servo camy;
 
 //
 // Attopilot 180
@@ -121,7 +126,8 @@ void motor_stop() {
 }
 
 void setup() {
-  Serial.begin(9600);
+//  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB
   }
@@ -129,23 +135,31 @@ void setup() {
 
   sensor.init();
   sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
- 
-  motor1.attach(4); 
+
+  delay (100); 
+  motor1.attach(MOTOR1_PIN); 
   motor1.writeMicroseconds(1500);
-  motor2.attach(5); 
+  delay (100); 
+  motor2.attach(MOTOR2_PIN); 
   motor2.writeMicroseconds(1500);
-  motor3.attach(6); 
+  delay (100); 
+  motor3.attach(MOTOR3_PIN); 
   motor3.writeMicroseconds(1500);
-  motor4.attach(7); 
+  delay (100); 
+  motor4.attach(MOTOR4_PIN); 
   motor4.writeMicroseconds(1500);
   
-  light1.attach(8); 
+  delay (100); 
+  light1.attach(LIGHT1_PIN); 
   light1.writeMicroseconds(1000);
-  light2.attach(9); 
+  delay (100); 
+  light2.attach(LIGHT2_PIN); 
   light2.writeMicroseconds(1000);
 
-  cam1.attach(12); 
-  cam1.writeMicroseconds(375);
+  delay (100); 
+  camx.attach(CAMX_PIN); 
+  camx.writeMicroseconds(1500);
+  delay (100); 
 
   /* Initialise the sensor */
   if(bno.begin())
@@ -237,8 +251,8 @@ void loop() {
              light1.writeMicroseconds(value);  
       } else if (command == "Light2") {
              light2.writeMicroseconds(value);  
-      } else if (command == "Cam1") {
-             cam1.writeMicroseconds(value);  
+      } else if (command == "Camx") {
+             camx.writeMicroseconds(value);  
       }
     }
     delay(500);
