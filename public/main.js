@@ -77,7 +77,7 @@ function readgamepad() {
             }
           } else {
             if (button_pressed[i]) {
-              socket.emit("gamepad","Gamepad button "+i+" released");
+              socket.emit("gamepad","button "+i+" value 0");
               button_pressed[i] = false;
             }
           }

@@ -28,8 +28,8 @@ if (shell.test('-c', config.serial.device)) {
 var kill = shell.exec('kill -9 `pidof mjpg_streamer`', {silent:true, async:true});
 var camera = shell.exec('/usr/local/bin/mjpg_streamer -o \"output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www\" -i \"input_raspicam.so -x 1366 -y 768\"', {silent:true, async:true});
 
-rovdata.Cam_pos = 375;
-rovdata.Cam_move = 0; 
+rovdata.Camx_pos = 1500;
+rovdata.Camx_move = 0;
 
 camera.stdout.on('data', function(data) {
   console.log(data);
@@ -116,7 +116,7 @@ app.get('/config', function(req, res) {
   
   config.serial = {device: '/dev/ttyACM0'}
 
-  ipaddr = shell.exec('hostname -i', {silent:true}).stdout
+  ipaddr = shell.exec('hostname -I', {silent:true}).stdout
   ipaddr = ipaddr.replace(/[\n$]/g, '');
   config.network = {ipaddr : ipaddr}
   jsonfile.writeFileSync( __dirname + '/' + config_file , config)
@@ -129,7 +129,7 @@ var gamepadctrl = function(gamepad) {
   var event;
 //  console.log ('Gamepad %s',gamepad);
   var res = gamepad.split(" ");
-  console.log ('Gamepad %s',res);
+//  console.log ('Gamepad2 %s',res);
   if (res[0] == "button") {
 // A Button
     if ((res[1] == 0) && (res[3] == 1)) {
@@ -164,17 +164,27 @@ var gamepadctrl = function(gamepad) {
 // 7 Right trigger (0-100)
 // 12 Pad up
     if ((res[1] == 12) && (res[3] == 1)) {
-      console.log("Cam UP");
-      rovdata.Cam_move = 1;
+      if (rovdata.Camx_move == 0) {
+        if (rovdata.Camx_pos < 1800) {
+          rovdata.Camx_pos += 100;
+        }
+      }
+      rovdata.Camx_move = 1;
     }
     if ((res[1] == 12) && (res[3] == 0)) {
-      console.log("Cam STOP");
-      rovdata.Cam_move = 0;
+      rovdata.Camx_move = 0;
     }
 // 13 Pad down
     if ((res[1] == 13) && (res[3] == 1)) {
-      rovdata.Cam_move = -1;
-      console.log("Cam DOWN");
+      if (rovdata.Camx_move == 0) {
+        if (rovdata.Camx_pos > 1200) {
+          rovdata.Camx_pos -= 100;
+        }
+      }
+      rovdata.Camx_move = 1;
+    }
+    if ((res[1] == 13) && (res[3] == 0)) {
+      rovdata.Camx_move = 0;
     }
 // 14 Pad left
 // 15 Pad right
@@ -234,13 +244,10 @@ var interval = setInterval(function () {
   if (rovdata.Hover) {
     hover();
   };
-  if (rovdata.Cam_move != 0) {
-//    movecamera(); 
-  }
 }, 500);
 
-socket.on('gamepad', function(gamepad) {
-  gamepadctrl(gamepad);
+socket.on('gamepad', function(data) {
+  gamepadctrl(data);
 });
 
 var lights = function() {
@@ -258,21 +265,6 @@ var lights = function() {
       port.write('Light2:1000');
     }
     socket.emit("command","Light Off");
-  }
-}
-
-var movecamera = function() {
-  if (rovdata.Cam_move == 1) {
-    if (rovdata.Cam_pos < 1800) {
-      rovdata.Cam_pos = rovdata.Cam_pos + 1;
-    }
-    port.write('Camx:' + rovdata.Cam_pos);
-  }
-  if (rovdata.Cam_move == -1) {
-    if (rovdata.Cam_pos > 1200) {
-      rovdata.Cam_pos = rovdata.Cam_pos - 1;
-    }
-    port.write('Camx:' + rovdata.Cam_pos);
   }
 }
 
