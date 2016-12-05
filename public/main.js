@@ -129,7 +129,7 @@ function display() {
   rov_context.lineWidth = 1;
   rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( today, 10, 20);
-  rov_context.fillText( "GPS: ", 10, 40);
+  rov_context.fillText( "GPS: N/A", 10, 40);
   rov_context.fillText( "Moki ROV (Raspberry PI)", 10, 60);
   rov_context.fillText(constatus, 10, rov_canvas.height-20);
 
@@ -138,14 +138,20 @@ function display() {
   rov_context.fillText( ": "+volt, (rov_canvas.width/4)+80, 20);
   rov_context.fillText( ": "+current, (rov_canvas.width/4)+80, 40);
   rov_context.fillText( "Power ", (rov_canvas.width/4) , 60);
+  rov_context.fillText( ":", (rov_canvas.width/4) + 80, 60);
+  rov_context.fill();
+  rov_context.beginPath();
   if (motor) {
-    rov_context.strokeStyle = "#00aa00";
-    rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
+    rov_context.fillStyle = "#00aa00";
+    rov_context.fillText( "  "+power+" %", (rov_canvas.width/4) + 80, 60);
   } else {
     rov_context.fillStyle = "#aaaa55";
-    rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
+    rov_context.fillText( "  "+power+" %", (rov_canvas.width/4) + 80, 60);
   }
+  rov_context.fill();
 
+  rov_context.beginPath();
+  rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( "Heading", (rov_canvas.width/2), 20);
   rov_context.fillText( "Roll", (rov_canvas.width/2), 40);
   rov_context.fillText( "Pitch", (rov_canvas.width/2), 60);
@@ -331,6 +337,16 @@ function display() {
   rov_context.fillText("  1      2       3      4", (rov_canvas.width/2) - 100, rov_canvas.height/2+205);
   rov_context.stroke();
   rov_context.fillStyle = "#aaaa00";
+  rov_context.fillText("MOTOR:", (rov_canvas.width/4)*3, 150);
+  if (motor) {
+      rov_context.fillStyle = "#00aa00";
+      rov_context.fillText( "ARMED", (rov_canvas.width/4)*3+80, 150);
+  } else {
+      rov_context.fillStyle = "#aa0000";
+      rov_context.fillText( "DISARM", (rov_canvas.width/4)*3+80, 150);
+  }
+  rov_context.fill();
+  rov_context.fillStyle = "#aaaa00";
   rov_context.fillText("LIGHTS:", (rov_canvas.width/4)*3, 200);
   if (lights) {
       rov_context.fillStyle = "#00aa00";
@@ -357,7 +373,7 @@ function display() {
       rov_context.fillText( "AUTO", (rov_canvas.width/4)*3+80, 300);
   } else {
       rov_context.fillStyle = "#aa0000";
-      rov_context.fillText( "STANDY", (rov_canvas.width/4)*3+80, 300);
+      rov_context.fillText( "STANDBY", (rov_canvas.width/4)*3+80, 300);
   }
   rov_context.fill();
 
