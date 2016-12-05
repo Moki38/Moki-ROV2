@@ -63,8 +63,9 @@ node rov.js
 ## Usage
 
 ######################################################################################
-#                   Arduino Pins
+# Arduino Pins => Configured in "Moki-ROV2/arduino/src/config.h"
 ######################################################################################
+Arduino Mega2560 (example pin layout)
 ```
 Pin 4    ESC 1    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)    
 Pin 5    ESC 2    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
@@ -74,7 +75,7 @@ Pin 7    ESC 4    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
 Pin 8    Lum 1    1100 μs (off) to 1900 μs (brightest)
 Pin 9    Lum 2    1100 μs (off) to 1900 μs (brightest)
 
-Pin 12   Servo 1  150 - 600   375 neutral
+Pin 12   Servo Cam C    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
 
 Pin A0   V Attopilot 180A
 Pin A1   I Attopilot 180A
@@ -86,9 +87,37 @@ Pin 21   I2C SDA
 GND      I2C GND
 ```
 
+Teensy 3.2 (example pin layout)
+```
+Digital Pin 3    ESC 1    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)    
+Digital Pin 4    ESC 2    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+Digital Pin 23   ESC 3    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+Digital Pin 22   ESC 4    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+
+Digital Pin 6    Lum 1    1100 μs (off) to 1900 μs (brightest)
+Digital Pin 20   Lum 2    1100 μs (off) to 1900 μs (brightest)
+
+Digital Pin 10   Servo Cam C    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
+
+Analog Pin A0   V Attopilot 180A
+Analog Pin A1   I Attopilot 180A
+
+# Daisy chain your I2C sensors to the Arduino Pins.
+Digital Pin 19   I2C SCL0
+Digital Pin 18   I2C SDA0
+5V      I2C 5v
+GND     I2C GND
+
+# Power (Cut/scratch circuit to separate VIN from VUSB)
+GND
+Vin
+```
+
 # PlatformIO cli commands
 ```
-platformio init -b megaatmega2560
+platformio init -b uno (for Arduino Uno)
+platformio init -b megaatmega2560 (for Arduino Mega2560)
+platformio init -b teensy31 (for Teensy 3.2)
 platformio run
 platformio run --target upload
 platformio device monitor -p /dev/ttyACM0

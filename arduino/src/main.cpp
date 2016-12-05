@@ -1,4 +1,5 @@
 #include "config.h"
+
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -13,6 +14,11 @@ int FOUND_BNO = 0;
 int FOUND_MS5837 = 0;
 int FOUND_A180 = 0;
 int READY = 0;
+String serial_command = "";
+String command = "";
+String value_string = "";
+int value = 0;
+boolean command_complete = false;
 
 Servo motor1;
 Servo motor2;
@@ -126,7 +132,33 @@ void motor_stop() {
 }
 
 void setup() {
-//  Serial.begin(9600);
+  delay (6000); 
+  motor1.attach(MOTOR1_PIN); 
+  motor1.writeMicroseconds(1500);
+  delay (200); 
+  motor2.attach(MOTOR2_PIN); 
+  motor2.writeMicroseconds(1500);
+  delay (200); 
+  motor3.attach(MOTOR3_PIN); 
+  motor3.writeMicroseconds(1500);
+  delay (200); 
+  motor4.attach(MOTOR4_PIN); 
+  motor4.writeMicroseconds(1500);
+  
+  delay (200); 
+  light1.attach(LIGHT1_PIN); 
+  light1.writeMicroseconds(1000);
+  delay (200); 
+  light2.attach(LIGHT2_PIN); 
+  light2.writeMicroseconds(1000);
+
+  delay (200); 
+  camx.attach(CAMX_PIN); 
+  camx.writeMicroseconds(1500);
+  delay (200); 
+
+  serial_command.reserve(200);
+
   Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB
@@ -135,31 +167,6 @@ void setup() {
 
   sensor.init();
   sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
-
-  delay (100); 
-  motor1.attach(MOTOR1_PIN); 
-  motor1.writeMicroseconds(1500);
-  delay (100); 
-  motor2.attach(MOTOR2_PIN); 
-  motor2.writeMicroseconds(1500);
-  delay (100); 
-  motor3.attach(MOTOR3_PIN); 
-  motor3.writeMicroseconds(1500);
-  delay (100); 
-  motor4.attach(MOTOR4_PIN); 
-  motor4.writeMicroseconds(1500);
-  
-  delay (100); 
-  light1.attach(LIGHT1_PIN); 
-  light1.writeMicroseconds(1000);
-  delay (100); 
-  light2.attach(LIGHT2_PIN); 
-  light2.writeMicroseconds(1000);
-
-  delay (100); 
-  camx.attach(CAMX_PIN); 
-  camx.writeMicroseconds(1500);
-  delay (100); 
 
   /* Initialise the sensor */
   if(bno.begin())
@@ -215,54 +222,67 @@ void loop() {
       Serial.print("Altitude:"); 
       Serial.println(sensor.altitude()); 
 
+      if (command_complete) {
+        serial_command.trim();
+        int pos = serial_command.indexOf(':');
+        command = serial_command.substring(0,pos);
+        value_string = serial_command.substring(pos+1);
+        value = value_string.toInt();
+        
+        Serial.print("Command: ");
+        Serial.print(command);
+        Serial.print(" Value: ");
+        Serial.println(value);
 
-    Serial.setTimeout(100);
-    if (Serial.available() > 0)
-    {
-      String command = Serial.readStringUntil(':');
-      int value = Serial.readStringUntil('\n').toInt();
-      Serial.print("Command: ");
-      Serial.print(command);
-      Serial.print(" Value: ");
-      Serial.println(value);
-      if (command == "ARM") { 
-           MOTOR_ARM = 1;
-      } else if (command == "DISARM") {
-           MOTOR_ARM = 0;
-      } else if (command == "STOP") {
-           motor_stop();
-      } else if (command == "Motor1") {
-         if (MOTOR_ARM) {
+        if (command == "ARM") { 
+             MOTOR_ARM = 1;
+        } else if (command == "DISARM") {
+             MOTOR_ARM = 0;
+        } else if (command == "STOP") {
+             motor_stop();
+        } else if (command == "Motor1") {
+           Serial.println("Motor1");
+           if (MOTOR_ARM) {
+           Serial.println("Motor1 RUN");
              motor1.writeMicroseconds(value);  
            }
-      } else if (command == "Motor2") {
+        } else if (command == "Motor2") {
            if (MOTOR_ARM) {
+           Serial.println("Motor2 RUN");
              motor2.writeMicroseconds(value);  
            }
-      } else if (command == "Motor3") {
+        } else if (command == "Motor3") {
            if (MOTOR_ARM) {
+           Serial.println("Motor3 RUN");
              motor3.writeMicroseconds(value);  
            }
-      } else if (command == "Motor4") {
+        } else if (command == "Motor4") {
            if (MOTOR_ARM) {
+           Serial.println("Motor4 RUN");
              motor4.writeMicroseconds(value);  
            }
-      } else if (command == "Light1") {
-             light1.writeMicroseconds(value);  
-      } else if (command == "Light2") {
-             light2.writeMicroseconds(value);  
-      } else if (command == "Camx") {
-             camx.writeMicroseconds(value);  
-      }
-    }
-    delay(500);
+        } else if (command == "Light1") {
+           light1.writeMicroseconds(value);  
+           light2.writeMicroseconds(value);  
+        } else if (command == "Light2") {
+           light1.writeMicroseconds(value);  
+           light2.writeMicroseconds(value);  
+        } else if (command == "Camx") {
+           camx.writeMicroseconds(value);  
+        } else if (command == "Camy") {
+           camy.writeMicroseconds(value);  
+        }
 
+        // clear the string:
+        serial_command = "";
+        command_complete = false;
+      }
     if (FOUND_BNO) {
-    /* Get a new sensor event */
+    // Get a new sensor event 
       sensors_event_t event;
       bno.getEvent(&event);
 
-    /* Display the floating point data */
+    // Display the floating point data 
       Serial.print("X:");
       Serial.println(event.orientation.x, 4);
       Serial.print("Y:");
@@ -270,16 +290,30 @@ void loop() {
       Serial.print("Z:");
       Serial.println(event.orientation.z, 4);
 
-      /* Optional: Display calibration status */
+      // Optional: Display calibration status 
       displayCalStatus();
 
-    /* Optional: Display sensor status (debug only) */
+    // Optional: Display sensor status (debug only) 
       //displaySensorStatus();
 
-    /* Wait the specified delay before requesting nex data */
+    // Wait the specified delay before requesting nex data 
  
        delay(BNO055_SAMPLERATE_DELAY_MS); 
     }
   }
 }
-  
+ 
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    // add it to the inputString:
+    serial_command += inChar;
+    // if the incoming character is a newline, set a flag
+    // so the main loop can do something about it:
+    if (inChar == '\n') {
+      command_complete = true;
+    }
+  }
+}
+ 

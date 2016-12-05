@@ -20,8 +20,10 @@ var current_raw = 0;
 var current = 0;
 var lights = false;
 var hover = false;
+var pilot = false;
 
 var power = 0;
+var motor = 0;
 var motor_1 = 0;
 var motor_2 = 0;
 var motor_3 = 0;
@@ -32,6 +34,11 @@ var gamepadSupportAvailable = navigator.getGamepads || !!navigator.webkitGetGame
 var button_pressed = new Array(16);
 var button_value = new Array(16);
 var axis_value = new Array(16);
+
+function zeroPad(num, places) {
+  var zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
 
 function readgamepad() {
   var value;
@@ -99,6 +106,7 @@ function readgamepad() {
 }
 
 function update(rovdata) {
+  mbar = rovdata.Pressure;
   depth = rovdata.Depth*100;
   temp = rovdata.Temperature;
   volt = rovdata.Volt;
@@ -106,9 +114,12 @@ function update(rovdata) {
   heading = Math.floor(rovdata.X);
   pitch = Math.floor(rovdata.Y);
   roll = Math.floor(rovdata.Z);
-  hover = rovdata.hover;
-  lights = rovdata.lights;
+  pilot = rovdata.Pilot;
+  hover = rovdata.Hover;
+  lights = rovdata.Lights;
   power = rovdata.Power;
+  motor = rovdata.Motor;
+  camx = rovdata.Camx_pos-1500;
 }
 
 function display() {
@@ -127,7 +138,13 @@ function display() {
   rov_context.fillText( ": "+volt, (rov_canvas.width/4)+80, 20);
   rov_context.fillText( ": "+current, (rov_canvas.width/4)+80, 40);
   rov_context.fillText( "Power ", (rov_canvas.width/4) , 60);
-  rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
+  if (motor) {
+    rov_context.strokeStyle = "#00aa00";
+    rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
+  } else {
+    rov_context.fillStyle = "#aaaa55";
+    rov_context.fillText( ": "+power+" %", (rov_canvas.width/4) + 80, 60);
+  }
 
   rov_context.fillText( "Heading", (rov_canvas.width/2), 20);
   rov_context.fillText( "Roll", (rov_canvas.width/2), 40);
@@ -196,6 +213,11 @@ function display() {
   rov_context.moveTo((rov_canvas.width/2) , (rov_canvas.height/2) -100);
   rov_context.lineTo((rov_canvas.width/2) , (rov_canvas.height/2) +100);
   rov_context.stroke();
+// Camera Dot
+   rov_context.beginPath();
+   rov_context.fillStyle = "#aa0000";
+   rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-Math.floor(camx/10*2), 5, 0, 2*Math.PI);
+   rov_context.fill();
 // Depth
   rov_context.fillStyle = "#00aa00";
   rov_context.strokeStyle = "#00aa00";
@@ -234,7 +256,17 @@ function display() {
       } else {
           var heading_tmp = (heading+i).toString();
           var heading_length = heading_tmp.length;
-          rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-(heading_length/2)*12, 100);
+          if (heading+i < 0) {
+            rov_context.fillText(Math.floor(heading+i+360), (rov_canvas.width/2)+(i*35)-18, 100);
+          } else {
+            if (heading+i >= 100) {
+              rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-18, 100);
+            } else if (heading+i >= 10) {
+              rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
+            } else if (heading+i < 10) {
+              rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
+            }
+          }
           rov_context.moveTo((rov_canvas.width/2)+(i*35), 65);
           rov_context.lineTo((rov_canvas.width/2)+(i*35), 85);
       }
@@ -307,6 +339,7 @@ function display() {
       rov_context.fillStyle = "#aa0000";
       rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 200);
   }
+  rov_context.fill();
   rov_context.fillStyle = "#aaaa00";
   rov_context.fillText("HOVER:", (rov_canvas.width/4)*3, 250);
   if (hover) {
@@ -315,6 +348,16 @@ function display() {
   } else {
       rov_context.fillStyle = "#aa0000";
       rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 250);
+  }
+  rov_context.fill();
+  rov_context.fillStyle = "#aaaa00";
+  rov_context.fillText("PILOT:", (rov_canvas.width/4)*3, 300);
+  if (pilot) {
+      rov_context.fillStyle = "#00aa00";
+      rov_context.fillText( "AUTO", (rov_canvas.width/4)*3+80, 300);
+  } else {
+      rov_context.fillStyle = "#aa0000";
+      rov_context.fillText( "STANDY", (rov_canvas.width/4)*3+80, 300);
   }
   rov_context.fill();
 

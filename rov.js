@@ -13,6 +13,15 @@ var config = jsonfile.readFileSync(config_file)
 
 var rovdata = {};
 
+rovdata.Hover = false;
+rovdata.Power = 0;
+rovdata.Lights = false;
+rovdata.Pilot = false;
+rovdata.Motor = false;
+
+var hoverset = 0;
+var pilotset = 0;
+
 var arduino = 0;
 var port;
 
@@ -84,7 +93,6 @@ function parse_serial(line) {
     default:
       console.log('Serial data: ' + line);
   }
-//  port.write('SER1:100');
 }
 
 if (arduino) {
@@ -133,52 +141,81 @@ var gamepadctrl = function(gamepad) {
   if (res[0] == "button") {
 // A Button
     if ((res[1] == 0) && (res[3] == 1)) {
+  console.log ('Gamepad Button A');
+      if (rovdata.Hover) {
+        rovdata.Hover = false;
+      } else { 
+        rovdata.Hover = true;
+        hoverset = rovdata.Depth
+      } 
     }
 // B Button
     if ((res[1] == 1) && (res[3] == 1)) {
+  console.log ('Gamepad Button B');
+      if (rovdata.Pilot) {
+        rovdata.Pilot = false;
+      } else { 
+        rovdata.Pilot = true;
+        pilotset = rovdata.X
+      } 
     }
 // X Button
     if ((res[1] == 2) && (res[3] == 1)) {
+  console.log ('Gamepad Button X');
       rovdata.Power = 0;
     }
 //Y Button
     if ((res[1] == 3) && (res[3] == 1)) {
+  console.log ('Gamepad Button Y');
+      lights();
     }
 //View (8) Button
     if ((res[1] == 8) && (res[3] == 1)) {
+      console.log('VIEW Button, pressed');
       disarmmotor();
     }
 //Menu (9) Button
     if ((res[1] == 9) && (res[3] == 1)) {
+      console.log('MENU Button, pressed');
       armmotor();
     }
 // LB Button
     if ((res[1] == 4) && (res[3] == 1)) {
-      rovdata.Power = rovdata.Power - 10;
+      console.log('LB Button, pressed');
+      if (rovdata.Power > 0) {
+        rovdata.Power = rovdata.Power - 10;
+      }
     }
 // RB Button
     if ((res[1] == 5) && (res[3] == 1)) {
-      rovdata.Power = rovdata.Power + 10;
+      console.log('RB Button, pressed');
+      if (rovdata.Power < 100) {
+        rovdata.Power = rovdata.Power + 10;
+      }
     }
 // 6 Left trigger (0-100)
 // 7 Right trigger (0-100)
 // 12 Pad up
     if ((res[1] == 12) && (res[3] == 1)) {
+    console.log('12 Pad up, pressed');
       if (rovdata.Camx_move == 0) {
-        if (rovdata.Camx_pos < 1800) {
-          rovdata.Camx_pos += 100;
+        if (rovdata.Camx_pos > 1100) {
+          rovdata.Camx_pos -= 100;
+          port.write('Camx:'+rovdata.Camx_pos+'\n');
         }
       }
       rovdata.Camx_move = 1;
     }
     if ((res[1] == 12) && (res[3] == 0)) {
+    console.log('12 Pad up, released');
       rovdata.Camx_move = 0;
     }
 // 13 Pad down
     if ((res[1] == 13) && (res[3] == 1)) {
       if (rovdata.Camx_move == 0) {
-        if (rovdata.Camx_pos > 1200) {
-          rovdata.Camx_pos -= 100;
+        if (rovdata.Camx_pos < 1900) {
+          rovdata.Camx_pos += 100;
+          port.write('Camx:'+rovdata.Camx_pos+'\n');
         }
       }
       rovdata.Camx_move = 1;
@@ -211,18 +248,26 @@ var gamepadctrl = function(gamepad) {
 
     switch (event) {
         case 'up':
+          motor(1,1500+(4*rovdata.Power));
+          motor(3,1500+(4*rovdata.Power));
           break;
         case 'dive':
+          motor(1,1500+(4*rovdata.Power));
+          motor(3,1500+(4*rovdata.Power));
           break;
         case 'left':
+          motor(2,1500+(4*rovdata.Power));
           break;
         case 'right':
+          motor(4,1500+(4*rovdata.Power));
           break;
         case 'forward':
-          motor(1,1500+(4*rovdata.Power));
+          motor(2,1500+(4*rovdata.Power));
+          motor(4,1500+(4*rovdata.Power));
           break;
         case 'reverse':
-          motor(1,1500-(4*rovdata.Power));
+          motor(2,1500-(4*rovdata.Power));
+          motor(4,1500+(4*rovdata.Power));
           break;
         case 'strafe_l':
           break;
@@ -251,69 +296,72 @@ socket.on('gamepad', function(data) {
 });
 
 var lights = function() {
-  if (rovdata.Lights) {
+  if (rovdata.Lights == false) {
     console.log("LIGHTS: ON");
     if (arduino) {
-      port.write('Light1:1600');
-      port.write('Light2:1600');
+      port.write('Light1:1600'+'\n');
+      port.write('Light2:1600'+'\n');
     }
     socket.emit("command","Light ON");
+    rovdata.Lights = true;
   } else {
     console.log("LIGHTS: OFF");
     if (arduino) {
-      port.write('Light1:1000');
-      port.write('Light2:1000');
+      port.write('Light1:1000'+'\n');
+      port.write('Light2:1000'+'\n');
     }
     socket.emit("command","Light Off");
+    rovdata.Lights = false;
   }
 }
 
 var armmotor = function() {
     console.log("MOTOR: ON");
-    port.write('ARM:1');
+    rovdata.Motor = true;
+    port.write('ARM:1'+'\n');
     socket.emit("command","Motor ON");
 }
 
 var disarmmotor = function() {
     console.log("MOTOR: OFF");
-    port.write('DISARM:0');
+    rovdata.Motor = false;
+    port.write('DISARM:0'+'\n');
     socket.emit("command","Motor OFF");
 }
 
 var hover = function() {
-  if (hoverset < rovdata.depth) {
+  if (hoverset < rovdata.Depth) {
     console.log("HOVER: UP");
   } 
-  if (hoverset > rovdata.depth) {
+  if (hoverset > rovdata.Depth) {
     console.log("HOVER: DOWN");
   } 
 }
 
 var motor = function(m, position) {
-  console.log("motor: " + m + " pos: " + position);
   if (rovdata.Motor) {
     if (arduino) {
       switch (m) {
         case 1: 
-          port.write('Motor1:'+position);
+          port.write('Motor1:'+position+'\n');
           break; 
         case 2: 
-          port.write('Motor2:'+position);
+          port.write('Motor2:'+position+'\n');
           break; 
         case 3: 
-          port.write('Motor3:'+position);
+          port.write('Motor3:'+position+'\n');
           break; 
         case 4: 
-          port.write('Motor4:'+position);
+          port.write('Motor4:'+position+'\n');
           break; 
         case 5: 
-          port.write('Motor5:'+position);
+          port.write('Motor5:'+position+'\n');
           break; 
         case 6: 
-          port.write('Motor6:'+position);
+          port.write('Motor6:'+position+'\n');
           break; 
         default:
-          port.write('STOP:1');
+          port.write('STOP:1'+'\n');
           socket.emit("motor", "stopall");
       }
     }
