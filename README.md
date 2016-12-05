@@ -14,7 +14,7 @@ This software was build on a Raspberry PI (Model B+)
 * Google Chrome browser on PC
 * XBox One controller (bluetooth connected to PC)
 
-* Arduino Mega2560
+* Teensy 3.2 (replaces Arduino Mega2560, but both will work)
 * BlueRobotics Depth/Pressure sensor [MS5837-30BA]
 * Pololu attopilot 180A
 * Adafruit BNO055 IMU
