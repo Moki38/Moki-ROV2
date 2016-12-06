@@ -20,6 +20,9 @@ String value_string = "";
 int value = 0;
 boolean command_complete = false;
 
+int sensor_time = 0;
+int power = 0;
+
 Servo motor1;
 Servo motor2;
 Servo motor3;
@@ -184,121 +187,146 @@ void setup() {
     bno.setExtCrystalUse(true);
   }
 
+  sensor_time = millis();
   Serial.println("Ready!");
   READY = 1;
 }
 
+void sensor_run() {
+  Serial.print("Time:");
+  sensor_time = millis();
+  Serial.println(sensor_time);
+
+  VRaw = analogRead(A0);
+  IRaw = analogRead(A1);
+
+  if (VRaw < 400) {
+  //Conversion
+    VFinal = VRaw/12.99; //180 Amp board  
+    IFinal = IRaw/3.7; //180 Amp board
+
+    Serial.print("Volt:");
+    Serial.println(VFinal);
+    Serial.print("Amps:");
+    Serial.println(IFinal);
+  }
+
+  sensor.read();
+
+  Serial.print("Pressure:"); 
+  Serial.println(sensor.pressure()); 
+  Serial.print("Temperature:"); 
+  Serial.println(sensor.temperature()); 
+  Serial.print("Depth:"); 
+  Serial.println(sensor.depth()); 
+  Serial.print("Altitude:"); 
+  Serial.println(sensor.altitude()); 
+
+  if (FOUND_BNO) {
+  // Get a new sensor event 
+    sensors_event_t event;
+    bno.getEvent(&event);
+
+  // Display the floating point data 
+    Serial.print("X:");
+    Serial.println(event.orientation.x, 4);
+    Serial.print("Y:");
+    Serial.println(event.orientation.y, 4);
+    Serial.print("Z:");
+    Serial.println(event.orientation.z, 4);
+
+  // Optional: Display calibration status 
+    displayCalStatus();
+
+  // Optional: Display sensor status (debug only) 
+    //displaySensorStatus();
+
+  }
+}
+
 void loop() {
   if (READY) {
-    Serial.print("Time:");
-    time = millis();
-    Serial.println(time);
-
-    VRaw = analogRead(A0);
-    IRaw = analogRead(A1);
-
-    if (VRaw < 400) {
-    //Conversion
-      VFinal = VRaw/12.99; //180 Amp board  
-      IFinal = IRaw/3.7; //180 Amp board
-
-      Serial.print("Volt:");
-      Serial.println(VFinal);
-      Serial.print("Amps:");
-      Serial.println(IFinal);
+    int time = millis();
+    if ((time >= (sensor_time + 1000)) || (time < sensor_time)) { 
+      sensor_run();
     }
 
-      sensor.read();
-
-      Serial.print("Pressure:"); 
-      Serial.println(sensor.pressure()); 
-    
-      Serial.print("Temperature:"); 
-      Serial.println(sensor.temperature()); 
-    
-      Serial.print("Depth:"); 
-      Serial.println(sensor.depth()); 
-  
-      Serial.print("Altitude:"); 
-      Serial.println(sensor.altitude()); 
-
-      if (command_complete) {
-        serial_command.trim();
-        int pos = serial_command.indexOf(':');
-        command = serial_command.substring(0,pos);
-        value_string = serial_command.substring(pos+1);
-        value = value_string.toInt();
+    if (command_complete) {
+      serial_command.trim();
+      int pos = serial_command.indexOf(':');
+      command = serial_command.substring(0,pos);
+      value_string = serial_command.substring(pos+1);
+      value = value_string.toInt();
         
-        Serial.print("Command: ");
-        Serial.print(command);
-        Serial.print(" Value: ");
-        Serial.println(value);
+      Serial.print("Command: ");
+      Serial.print(command);
+      Serial.print(" Value: ");
+      Serial.println(value);
 
-        if (command == "ARM") { 
-             MOTOR_ARM = 1;
-        } else if (command == "DISARM") {
-             MOTOR_ARM = 0;
-        } else if (command == "STOP") {
-             motor_stop();
-        } else if (command == "Motor1") {
-           Serial.println("Motor1");
-           if (MOTOR_ARM) {
-           Serial.println("Motor1 RUN");
-             motor1.writeMicroseconds(value);  
-           }
-        } else if (command == "Motor2") {
-           if (MOTOR_ARM) {
-           Serial.println("Motor2 RUN");
-             motor2.writeMicroseconds(value);  
-           }
-        } else if (command == "Motor3") {
-           if (MOTOR_ARM) {
-           Serial.println("Motor3 RUN");
-             motor3.writeMicroseconds(value);  
-           }
-        } else if (command == "Motor4") {
-           if (MOTOR_ARM) {
-           Serial.println("Motor4 RUN");
-             motor4.writeMicroseconds(value);  
-           }
-        } else if (command == "Light1") {
-           light1.writeMicroseconds(value);  
-           light2.writeMicroseconds(value);  
-        } else if (command == "Light2") {
-           light1.writeMicroseconds(value);  
-           light2.writeMicroseconds(value);  
-        } else if (command == "Camx") {
-           camx.writeMicroseconds(value);  
-        } else if (command == "Camy") {
-           camy.writeMicroseconds(value);  
-        }
+      if (command == "ARM") { 
+           MOTOR_ARM = 1;
+      } else if (command == "DISARM") {
+           MOTOR_ARM = 0;
+      } else if (command == "Stop") {
+           motor_stop();
+      } else if (command == "Power") {
+           power = value;
 
-        // clear the string:
-        serial_command = "";
-        command_complete = false;
+// Right Left Reverse Forward Strafe_r Strafe_l Dive Up
+
+      } else if (command == "Forward") {
+         if (MOTOR_ARM) {
+           motor2.writeMicroseconds(1500+(4*power));  
+           motor4.writeMicroseconds(1500+(4*power));  
+         }
+      } else if (command == "Reverse") {
+         if (MOTOR_ARM) {
+           motor2.writeMicroseconds(1500-(4*power));  
+           motor4.writeMicroseconds(1500-(4*power));  
+         }
+      } else if (command == "Right") {
+         if (MOTOR_ARM) {
+           motor2.writeMicroseconds(1500-(4*power));  
+           motor4.writeMicroseconds(1500+(4*power));  
+         }
+      } else if (command == "Left") {
+         if (MOTOR_ARM) {
+           motor2.writeMicroseconds(1500+(4*power));  
+           motor4.writeMicroseconds(1500-(4*power));  
+         }
+      } else if (command == "Dive") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500-(4*power));  
+           motor3.writeMicroseconds(1500-(4*power));  
+         }
+      } else if (command == "Up") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500+(4*power));  
+           motor3.writeMicroseconds(1500+(4*power));  
+         }
+      } else if (command == "Strafe_r") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500+(4*power));  
+           motor3.writeMicroseconds(1500-(4*power));  
+         }
+      } else if (command == "Strafe_l") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500-(4*power));  
+           motor3.writeMicroseconds(1500+(4*power));  
+         }
+      } else if (command == "Light1") {
+         light1.writeMicroseconds(value);  
+      } else if (command == "Light2") {
+         light2.writeMicroseconds(value);  
+      } else if (command == "Camx") {
+         camx.writeMicroseconds(value);  
+      } else if (command == "Camy") {
+         camy.writeMicroseconds(value);  
       }
-    if (FOUND_BNO) {
-    // Get a new sensor event 
-      sensors_event_t event;
-      bno.getEvent(&event);
 
-    // Display the floating point data 
-      Serial.print("X:");
-      Serial.println(event.orientation.x, 4);
-      Serial.print("Y:");
-      Serial.println(event.orientation.y, 4);
-      Serial.print("Z:");
-      Serial.println(event.orientation.z, 4);
-
-      // Optional: Display calibration status 
-      displayCalStatus();
-
-    // Optional: Display sensor status (debug only) 
-      //displaySensorStatus();
-
-    // Wait the specified delay before requesting nex data 
- 
-       delay(BNO055_SAMPLERATE_DELAY_MS); 
+      // clear the string:
+      serial_command = "";
+      command_complete = false;
     }
   }
 }

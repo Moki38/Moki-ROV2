@@ -1,4 +1,4 @@
-# Moki-ROV2 (Almost working software)
+# Moki-ROV2 (Working software, with my setup) 
 
 Pilot your ROV-PI directly from your PC webbrowser browser.
 
@@ -48,7 +48,7 @@ sudo apt-get dist-upgrade
 reboot 
 
 
-Install all the needed software, may take a while..
+Install the MOKI-ROV2 software, may take a while..
 ```
 sudo su -
 git clone https://github.com/Moki38/Moki-ROV2.git
@@ -75,7 +75,7 @@ Pin 7    ESC 4    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
 Pin 8    Lum 1    1100 μs (off) to 1900 μs (brightest)
 Pin 9    Lum 2    1100 μs (off) to 1900 μs (brightest)
 
-Pin 12   Servo Cam C    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
+Pin 12   Servo Cam X    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
 
 Pin A0   V Attopilot 180A
 Pin A1   I Attopilot 180A
@@ -97,7 +97,7 @@ Digital Pin 22   ESC 4    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forw
 Digital Pin 6    Lum 1    1100 μs (off) to 1900 μs (brightest)
 Digital Pin 20   Lum 2    1100 μs (off) to 1900 μs (brightest)
 
-Digital Pin 10   Servo Cam C    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
+Digital Pin 10   Servo Cam X    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
 
 Analog Pin A0   V Attopilot 180A
 Analog Pin A1   I Attopilot 180A
@@ -113,7 +113,7 @@ GND
 Vin
 ```
 
-# PlatformIO cli commands
+# PlatformIO cli commands (debug only)
 ```
 platformio init -b uno (for Arduino Uno)
 platformio init -b megaatmega2560 (for Arduino Mega2560)
@@ -126,6 +126,9 @@ platformio device monitor -p /dev/ttyACM0
 ## Easy to mis mistakes
 ```
 Are you sure, you are using the right IP adress?
+```
+```
+XBOX One controller sluggisch, make sure your browser window is active?
 ```
 
 ## Thanks

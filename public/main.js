@@ -106,8 +106,11 @@ function readgamepad() {
 }
 
 function update(rovdata) {
+  var t;
+
   mbar = rovdata.Pressure;
-  depth = rovdata.Depth*100;
+  t = rovdata.Depth*100;
+  depth = t.toFixed(2);
   temp = rovdata.Temperature;
   volt = rovdata.Volt;
   current = rovdata.Amps;
@@ -120,6 +123,11 @@ function update(rovdata) {
   power = rovdata.Power;
   motor = rovdata.Motor;
   camx = rovdata.Camx_pos-1500;
+
+  motor_1 = rovdata.motor_1;
+  motor_2 = rovdata.motor_2;
+  motor_3 = rovdata.motor_3;
+  motor_4 = rovdata.motor_4;
 }
 
 function display() {

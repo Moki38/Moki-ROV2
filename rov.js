@@ -24,6 +24,9 @@ var pilotset = 0;
 
 var arduino = 0;
 var port;
+  
+var event;
+var last_event;
 
 var SerialPort = require('serialport');
 if (shell.test('-c', config.serial.device)) {
@@ -134,10 +137,7 @@ io.on('connection', function (socket) {
   socket.emit('connect');
 
 var gamepadctrl = function(gamepad) {
-  var event;
-//  console.log ('Gamepad %s',gamepad);
   var res = gamepad.split(" ");
-//  console.log ('Gamepad2 %s',res);
   if (res[0] == "button") {
 // A Button
     if ((res[1] == 0) && (res[3] == 1)) {
@@ -161,8 +161,11 @@ var gamepadctrl = function(gamepad) {
     }
 // X Button
     if ((res[1] == 2) && (res[3] == 1)) {
-  console.log ('Gamepad Button X');
+      console.log ('Gamepad Button X');
       rovdata.Power = 0;
+      if (arduino) {
+        port.write('Power:'+rovdata.Power+'\n');
+      }
     }
 //Y Button
     if ((res[1] == 3) && (res[3] == 1)) {
@@ -185,12 +188,18 @@ var gamepadctrl = function(gamepad) {
       if (rovdata.Power > 0) {
         rovdata.Power = rovdata.Power - 10;
       }
+      if (arduino) {
+        port.write('Power:'+rovdata.Power+'\n');
+      }
     }
 // RB Button
     if ((res[1] == 5) && (res[3] == 1)) {
       console.log('RB Button, pressed');
       if (rovdata.Power < 100) {
         rovdata.Power = rovdata.Power + 10;
+      }
+      if (arduino) {
+        port.write('Power:'+rovdata.Power+'\n');
       }
     }
 // 6 Left trigger (0-100)
@@ -233,50 +242,22 @@ var gamepadctrl = function(gamepad) {
   };
 
   if (res[0] == "axis") {
-    event = 'Stop All';
-    if ((res[1] == 0) && (res[3] > 50)) { event = 'right'; };
-    if ((res[1] == 0) && (res[3] < -50)) { event = 'left'; };
-    if ((res[1] == 1) && (res[3] > 50)) { event = 'reverse'; };
-    if ((res[1] == 1) && (res[3] < -50)) { event = 'forward'; };
-    if ((res[1] == 2) && (res[3] > 50)) { event = 'strafe_r'; };
-    if ((res[1] == 2) && (res[3] < -50)) { event = 'strafe_l'; };
-    if ((res[1] == 3) && (res[3] > 50)) { event = 'dive'; };
-    if ((res[1] == 3) && (res[3] < -50)) { event = 'up'; };
+    event = 'Stop';
+    if ((res[1] == 0) && (res[3] > 30)) { event = 'Right'; };
+    if ((res[1] == 0) && (res[3] < -30)) { event = 'Left'; };
+    if ((res[1] == 1) && (res[3] > 30)) { event = 'Reverse'; };
+    if ((res[1] == 1) && (res[3] < -30)) { event = 'Forward'; };
+    if ((res[1] == 2) && (res[3] > 30)) { event = 'Strafe_r'; };
+    if ((res[1] == 2) && (res[3] < -30)) { event = 'Strafe_l'; };
+    if ((res[1] == 3) && (res[3] > 30)) { event = 'Dive'; };
+    if ((res[1] == 3) && (res[3] < -30)) { event = 'Up'; };
   
-    //socket.emit("command",event);
-    console.log(event);
-
-    switch (event) {
-        case 'up':
-          motor(1,1500+(4*rovdata.Power));
-          motor(3,1500+(4*rovdata.Power));
-          break;
-        case 'dive':
-          motor(1,1500+(4*rovdata.Power));
-          motor(3,1500+(4*rovdata.Power));
-          break;
-        case 'left':
-          motor(2,1500+(4*rovdata.Power));
-          break;
-        case 'right':
-          motor(4,1500+(4*rovdata.Power));
-          break;
-        case 'forward':
-          motor(2,1500+(4*rovdata.Power));
-          motor(4,1500+(4*rovdata.Power));
-          break;
-        case 'reverse':
-          motor(2,1500-(4*rovdata.Power));
-          motor(4,1500+(4*rovdata.Power));
-          break;
-        case 'strafe_l':
-          break;
-        case 'strafe_r':
-          break;
-        default:
-          motor(1,1500);
-          break; 
-     };
+    if (arduino) {
+      if (event != last_event) {
+        port.write(event+':'+res[3]+'\n');
+        last_event = event;
+      }
+    }
   };
 }
   
@@ -336,36 +317,6 @@ var hover = function() {
   if (hoverset > rovdata.Depth) {
     console.log("HOVER: DOWN");
   } 
-}
-
-var motor = function(m, position) {
-  if (rovdata.Motor) {
-    if (arduino) {
-      switch (m) {
-        case 1: 
-          port.write('Motor1:'+position+'\n');
-          break; 
-        case 2: 
-          port.write('Motor2:'+position+'\n');
-          break; 
-        case 3: 
-          port.write('Motor3:'+position+'\n');
-          break; 
-        case 4: 
-          port.write('Motor4:'+position+'\n');
-          break; 
-        case 5: 
-          port.write('Motor5:'+position+'\n');
-          break; 
-        case 6: 
-          port.write('Motor6:'+position+'\n');
-          break; 
-        default:
-          port.write('STOP:1'+'\n');
-          socket.emit("motor", "stopall");
-      }
-    }
-  }
 }
 
 }); /// END io.connection
