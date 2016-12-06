@@ -130,6 +130,9 @@ Are you sure, you are using the right IP adress?
 ```
 XBOX One controller sluggisch, make sure your browser window is active?
 ```
+```
+Motors not running, check Power setting (> 0%) and if "MOTOR: ARMED"
+```
 
 ## Thanks
 

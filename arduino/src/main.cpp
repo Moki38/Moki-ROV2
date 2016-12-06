@@ -314,6 +314,16 @@ void loop() {
            motor1.writeMicroseconds(1500-(4*power));  
            motor3.writeMicroseconds(1500+(4*power));  
          }
+      } else if (command == "Roll_r") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500+(4*power));  
+           motor3.writeMicroseconds(1500-(4*power));  
+         }
+      } else if (command == "Roll_l") {
+         if (MOTOR_ARM) {
+           motor1.writeMicroseconds(1500-(4*power));  
+           motor3.writeMicroseconds(1500+(4*power));  
+         }
       } else if (command == "Light1") {
          light1.writeMicroseconds(value);  
       } else if (command == "Light2") {
