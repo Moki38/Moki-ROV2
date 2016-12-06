@@ -157,7 +157,7 @@ void setup() {
 
   delay (200); 
   camx.attach(CAMX_PIN); 
-  camx.writeMicroseconds(1500);
+  camx.writeMicroseconds(1600);
   delay (200); 
 
   serial_command.reserve(200);

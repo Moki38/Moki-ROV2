@@ -40,7 +40,7 @@ if (shell.test('-c', config.serial.device)) {
 var kill = shell.exec('kill -9 `pidof mjpg_streamer`', {silent:true, async:true});
 var camera = shell.exec('/usr/local/bin/mjpg_streamer -o \"output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www\" -i \"input_raspicam.so -x 1366 -y 768\"', {silent:true, async:true});
 
-rovdata.Camx_pos = 1500;
+rovdata.Camx_pos = 1600;
 rovdata.Camx_move = 0;
 
 camera.stdout.on('data', function(data) {
