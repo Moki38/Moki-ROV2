@@ -1,5 +1,27 @@
 var socket = io.connect();
 
+aIsDown = false;
+
+$(window).keydown(function(e){
+  switch(e.which){
+    case 65:
+      if(aIsDown) return;
+      aIsDown = true;
+      socket.emit('keydown', 'abort');
+      break;
+   }
+});
+
+$(window).keyup(function(e){
+  switch(e.which){
+    case 65:
+      if(!aIsDown) return;
+      aIsDown = false;
+      socket.emit('keyup', 'abort');
+      break;
+   }
+});
+
 var rov_canvas = document.getElementById('rovCanvas');
 var rov_context = rov_canvas.getContext('2d');
 

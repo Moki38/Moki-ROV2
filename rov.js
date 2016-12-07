@@ -204,6 +204,21 @@ var gamepadctrl = function(gamepad) {
     }
 // 6 Left trigger (0-100)
 // 7 Right trigger (0-100)
+    event = 'Stop';
+    if ((res[1] == 6) && (res[3] > 30)) { event = 'Roll_l'; };
+    if (arduino) {
+      if (event != last_event) {
+        port.write(event+':'+res[3]+'\n');
+        last_event = event;
+      }
+    }
+    if ((res[1] == 7) && (res[3] > 30)) { event = 'Roll_r'; };
+    if (arduino) {
+      if (event != last_event) {
+        port.write(event+':'+res[3]+'\n');
+        last_event = event;
+      }
+    }
 // 12 Pad up
     if ((res[1] == 12) && (res[3] == 1)) {
     console.log('12 Pad up, pressed');
@@ -233,21 +248,32 @@ var gamepadctrl = function(gamepad) {
       rovdata.Camx_move = 0;
     }
 // 14 Pad left
-// 15 Pad right
-    event = 'Stop';
-    if ((res[1] == 14) && (res[3] > 30)) { event = 'Roll_l'; };
-    if (arduino) {
-      if (event != last_event) {
-        port.write(event+':'+res[3]+'\n');
-        last_event = event;
+    if ((res[1] == 14) && (res[3] == 1)) {
+    console.log('14 Pad right, pressed');
+      if (rovdata.Camy_move == 0) {
+        if (rovdata.Camy_pos > 1100) {
+          rovdata.Camy_pos -= 100;
+          port.write('Camy:'+rovdata.Camy_pos+'\n');
+        }
       }
+      rovdata.Camy_move = 1;
     }
-    if ((res[1] == 15) && (res[3] > 30)) { event = 'Roll_r'; };
-    if (arduino) {
-      if (event != last_event) {
-        port.write(event+':'+res[3]+'\n');
-        last_event = event;
+    if ((res[1] == 14) && (res[3] == 0)) {
+    console.log('14 Pad up, released');
+      rovdata.Camy_move = 0;
+    }
+// 15 Pad right
+    if ((res[1] == 15) && (res[3] == 1)) {
+      if (rovdata.Camy_move == 0) {
+        if (rovdata.Camy_pos < 1900) {
+          rovdata.Camy_pos += 100;
+          port.write('Camy:'+rovdata.Camx_pos+'\n');
+        }
       }
+      rovdata.Camy_move = 1;
+    }
+    if ((res[1] == 15) && (res[3] == 0)) {
+      rovdata.Camy_move = 0;
     }
   };
 
@@ -288,6 +314,16 @@ var interval = setInterval(function () {
 
 socket.on('gamepad', function(data) {
   gamepadctrl(data);
+});
+
+socket.on('keydown', function(event) {
+  socket.emit("command",event);
+  switch (event) {
+    case 'abort':
+      rovdata.Motor = false;
+      port.write('DISARM:0'+'\n');
+      break;
+  }
 });
 
 var lights = function() {

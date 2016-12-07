@@ -60,6 +60,44 @@ node rov.js
 (Open browser to Raspberry PI IP adress, port 80 => http://172.16.10.20)
 ```
 
+## Controls
+
+XBOX Controller
+```
+ 'A': Hover ON/OFF
+ 'B': AutoPilot ON/OFF
+ 'X': Kill Power (0%)
+ 'Y': Lights ON/OFF
+
+ VIEW: DisARM Motor
+ Menu: ARM Motor
+
+ LB: Power -10%
+ RB: Power +10%
+
+ Pad UP: Camera Down (-10%)
+ Pad DOWN: Camera Up (+10%)
+
+ RT: Roll Right
+ LT: Roll Left
+
+ LS Up:    Forward
+ LS Down:  Reverse
+ LS Left:  Turn left
+ LS Right: Turn Right
+
+ RS Up:    Up
+ RS Down:  Dive
+ RS Left:  Strafe Left
+ RS Right: Strafe Right
+
+```
+
+Keyboard
+```
+ 'A': Abort (will kill the engines, etc.) (Safety: if XBOX Controller fails)
+```
+
 ## Usage
 
 ######################################################################################
