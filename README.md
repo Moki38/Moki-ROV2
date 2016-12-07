@@ -103,6 +103,30 @@ Keyboard
 ######################################################################################
 # Arduino Pins => Configured in "Moki-ROV2/arduino/src/config.h"
 ######################################################################################
+Arduino UNO (example pin layout)
+```
+Pin 3    ESC 1    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)    
+Pin 5    ESC 2    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+Pin 6    ESC 3    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+Pin 9    ESC 4    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)
+
+Pin 10   Lum 1    1100 μs (off) to 1900 μs (brightest) (Daisy chain, if you have multiple Lumen Lights)
+
+Pin 11   Servo Cam X    1100 μs (full down) 1500 μs (central) 1900 μs (full up)
+
+Pin A0   V Attopilot 180A
+Pin A1   I Attopilot 180A
+
+# Daisy chain your I2C sensors to the Arduino Pins.
+Pin A5   I2C SCL
+Pin A4   I2C SDA
+5V       I2C 5v
+GND      I2C GND
+
+# Power 
+USB Powered from PI
+```
+
 Arduino Mega2560 (example pin layout)
 ```
 Pin 4    ESC 1    1100 μs (full reverse) 1500 μs (stop) 1900 μs (forward)    
@@ -123,6 +147,9 @@ Pin 20   I2C SCL
 Pin 21   I2C SDA
 5V       I2C 5v
 GND      I2C GND
+
+# Power 
+USB Powered from PI
 ```
 
 Teensy 3.2 (example pin layout)
