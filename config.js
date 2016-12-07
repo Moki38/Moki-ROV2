@@ -6,6 +6,6 @@
         "device": "/dev/ttyACM0"
     },
     "network": {
-        "ipaddr": "127.0.1.1"
+        "ipaddr": "172.16.10.20 "
     }
 }

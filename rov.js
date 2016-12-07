@@ -18,6 +18,7 @@ rovdata.Power = 0;
 rovdata.Lights = false;
 rovdata.Pilot = false;
 rovdata.Motor = false;
+rovdata.Depth_Offset = 0;
 
 var hoverset = 0;
 var pilotset = 0;
@@ -61,7 +62,7 @@ function parse_serial(line) {
       rovdata.Temperature = res[1];
       break;
     case    'Depth':
-      rovdata.Depth = res[1];
+      rovdata.Depth = res[1] - rovdata.Depth_Offset;
       break;
     case    'Altitude':
       rovdata.Altitude = res[1];
@@ -121,6 +122,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/config', function(req, res) {
+  console.log("/config");
   res.end(req.cookies);
 
   config.i2c = {device: '/dev/i2c-1'}
@@ -135,6 +137,13 @@ app.get('/config', function(req, res) {
 
 io.on('connection', function (socket) {
   socket.emit('connect');
+
+var buttonctrl = function(button_data) {
+  console.log('buttonctrl ' + button_data);
+  if (button_data == 'zero_depth') {
+    rovdata.Depth_Offset = rovdata.Depth;
+  } 
+};
 
 var gamepadctrl = function(gamepad) {
   var res = gamepad.split(" ");
@@ -314,6 +323,10 @@ var interval = setInterval(function () {
 
 socket.on('gamepad', function(data) {
   gamepadctrl(data);
+});
+
+socket.on('button', function(data) {
+  buttonctrl(data);
 });
 
 socket.on('keydown', function(event) {

@@ -6,34 +6,16 @@
     <link rel="stylesheet" href="style.css">
   </head>
 
-<style type="text/css">
-iframe{
-  position:absolute;
-  top:0px;
-  left:50px;
-  width:100%;
-  height:100%;
-  border:0;
-  margin:0;
-  padding:0;
-  style="z-index: -3;
-}
-</style>
-
 <body bgcolor="#00000000">
 
 <iframe id="camera" src="http://172.16.10.20:8080/javascript_simple.html" allowtransparency="true"></iframe>
-
-var config_window = function() {
-window.open("http://172.16.10.20/config", "Moki ROV2 Config", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=810, height=610", border="0");
-window.blur();
-}
 
 <div id="canvasesdiv" style="position:relative; width:1366px; height:768px">
 <canvas id="rovCanvas" width="1366px" height="768px" style="z-index: 100"></canvas>
 </div>
 
 <button class="button" onClick="config_window()"><span class="icon">Config</span></button>
+<button class="button" onClick="zero_depth_window()"><span class="icon">Zero Depth</span></button>
 
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>

@@ -57,6 +57,11 @@ var button_pressed = new Array(16);
 var button_value = new Array(16);
 var axis_value = new Array(16);
 
+function zero_depth_window() {
+  socket.emit("button","zero_depth");
+}
+
+
 function zeroPad(num, places) {
   var zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join("0") + num;
