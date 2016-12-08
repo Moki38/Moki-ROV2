@@ -171,8 +171,16 @@ function display() {
   rov_context.fillText( today, 10, 20);
   rov_context.fillText( "GPS: N/A", 10, 40);
   rov_context.fillText( "Moki ROV (Raspberry PI)", 10, 60);
-  rov_context.fillText(constatus, 10, rov_canvas.height-100);
+  if (constatus == 'Disonnected') {
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.font = '20pt Verdana';
+    rov_context.fillText("DISCONNECTED", (rov_canvas.width/2-110), rov_canvas.height/2-140);
+    rov_context.fill();
+  }
 
+  rov_context.font = '14pt Verdana';
+  rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( "Main V", (rov_canvas.width/4), 20);
   rov_context.fillText( "Main A", (rov_canvas.width/4), 40);
   rov_context.fillText( ": "+volt, (rov_canvas.width/4)+80, 20);

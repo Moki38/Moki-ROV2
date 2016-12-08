@@ -21,7 +21,9 @@ rovdata.Motor = false;
 rovdata.Depth_Offset = 0;
 
 var hoverset = 0;
+var hoverevent = 'Stop';
 var pilotset = 0;
+var pilotevent = 'Stop';
 
 var arduino = 0;
 var port;
@@ -337,6 +339,9 @@ var interval = setInterval(function () {
   if (rovdata.Hover) {
     hover();
   };
+  if (rovdata.Pilot) {
+    pilot();
+  };
 }, 500);
 
 socket.on('gamepad', function(data) {
@@ -387,13 +392,52 @@ var disarmmotor = function() {
     port.write('DISARM:0'+'\n');
 }
 
+var pilot = function() {
+  if (pilotset < rovdata.X) {
+    console.log("PILOT: RIGHT");
+    event = 'Right';
+    if (arduino) {
+      port.write(event+':30\n');
+    } 
+  }
+  if (pilotset > rovdata.X) {
+    console.log("PILOT: LEFT");
+    event = 'Left';
+    if (arduino) {
+      port.write(event+':30\n');
+    } 
+  } 
+  if (pilotset ) {
+    event = 'Stop';
+    if (arduino) {
+      port.write(event+':1\n');
+    } 
+  } 
+}
+
 var hover = function() {
-  if (hoverset < rovdata.Depth) {
+  if (hoverset < (rovdata.Depth-5)) {
     console.log("HOVER: UP");
-  } 
-  if (hoverset > rovdata.Depth) {
+    hoverevent = event = 'Up';
+    if (arduino) {
+      port.write(event+':30\n');
+    } 
+  }
+  if (hoverset > (rovdata.Depth+5)) {
     console.log("HOVER: DOWN");
+    hoverevent = event = 'Dive';
+    if (arduino) {
+      port.write(event+':30\n');
+    } 
   } 
+  if (hoverset) {
+    if (hoverevent != 'Stop') {
+      hoverevent = event = 'Stop';
+      if (arduino) {
+        port.write(event+':1\n');
+      } 
+    } 
+  }
 }
 
 }); /// END io.connection
