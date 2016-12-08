@@ -1,26 +1,24 @@
 <!doctype html>
 <html>
   <head>
-    <title>Raspberry MOKI ROV2 (V1.0.1)</title>
+    <title>Raspberry MOKI ROV (V2.0)</title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" charset="UTF-8">
     <link rel="stylesheet" href="style.css">
   </head>
 
-<body bgcolor="#00000000">
+  <body>
+    <iframe id="camera" src="http://172.16.10.20:8080/javascript_simple.html" allowtransparency="true"></iframe>
+    <div id="canvasesdiv">
+       <canvas id="rovCanvas"></canvas> 
+    </div>
 
-<iframe id="camera" src="http://172.16.10.20:8080/javascript_simple.html" allowtransparency="true"></iframe>
+    <button class="configbutton" onClick="config_window()"><span class="icon">Config</span></button>
+    <button class="zerodepthbutton" onClick="zero_depth_window()"><span class="icon">Zero Depth</span></button>
+    <button class="cambutton" onClick="window.open('http://172.16.10.20:8080/javascript_simple.html');"><span class="icon">Cam Window</span></button>
 
-<div id="canvasesdiv" style="position:relative; width:1366px; height:768px">
-<canvas id="rovCanvas" width="1366px" height="768px" style="z-index: 100"></canvas>
-</div>
-
-<button class="button" onClick="config_window()"><span class="icon">Config</span></button>
-<button class="button" onClick="zero_depth_window()"><span class="icon">Zero Depth</span></button>
-
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/main.js"></script>
-
-</body>  
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/main.js"></script>
+  </body>  
 </html>
 

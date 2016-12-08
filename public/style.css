@@ -1,37 +1,103 @@
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+  overflow: hidden;
+  background-color:rgba(0, 0, 0, .5);
+}
+
 iframe{
   position:absolute;
   top:60px;
-  left:50px;
-  width:100%;
-  height:100%;
+  left:5%;
+  width:90%;
+  height:90%;
   border:0;
   margin:0;
   padding:0;
-  style="z-index: -3;
+  overflow: hidden;
+  z-index: -3;
 }
 
-.button {
-    border-style: solid;
-    border-width: 0px 0px 3px;
-    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) inset;
-    color: #ffffff;	   
-    border-radius: 6px;
-    cursor: pointer;
-    display: inline-block;
-    font-style: normal;
-    overflow: hidden;
-    text-align: center;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    transition: all 200ms ease-in-out 0s;
-    white-space: nowrap;	
-    font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
-    font-weight: 700;	
-    padding: 19px 39px 18px;
-    font-size: 18px;
-    background-color: #C6CCD2;
-    border-color: #333333;
-    opacity: 0.5;
+.configbutton {
+  position:absolute;
+  top:90%;
+  left:0%;
+  border-style: solid;
+  border-width: 0px 3px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) inset;
+  color: #ffffff;	   
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-style: normal;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: all 200ms ease-in-out 0s;
+  white-space: nowrap;	
+  font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+  font-weight: 700;	
+  padding: 19px 39px 18px;
+  font-size: 18px;
+  background-color: #C6CCD2;
+  border-color: #333333;
+  opacity: 0.5;
+}
+
+.zerodepthbutton {
+  position:absolute;
+  top:90%;
+  left:140px;
+  border-style: solid;
+  border-width: 0px 3px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) inset;
+  color: #ffffff;	   
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-style: normal;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: all 200ms ease-in-out 0s;
+  white-space: nowrap;	
+  font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+  font-weight: 700;	
+  padding: 19px 39px 18px;
+  font-size: 18px;
+  background-color: #C6CCD2;
+  border-color: #333333;
+  opacity: 0.5;
+}
+
+.cambutton {
+  position:absolute;
+  top:90%;
+  left:318px;
+  border-style: solid;
+  border-width: 0px 3px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) inset;
+  color: #ffffff;	   
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-style: normal;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: all 200ms ease-in-out 0s;
+  white-space: nowrap;	
+  font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+  font-weight: 700;	
+  padding: 19px 39px 18px;
+  font-size: 18px;
+  background-color: #C6CCD2;
+  border-color: #333333;
+  opacity: 0.5;
 }
 
 .button:hover {

@@ -22,8 +22,13 @@ $(window).keyup(function(e){
    }
 });
 
+$(window).resize(function(){location.reload();});
+
 var rov_canvas = document.getElementById('rovCanvas');
 var rov_context = rov_canvas.getContext('2d');
+
+rov_canvas.width = window.innerWidth;
+rov_canvas.height = window.innerHeight;
 
 var constatus = "Not connected";
 var connected = false;
@@ -151,10 +156,10 @@ function update(rovdata) {
   motor = rovdata.Motor;
   camx = rovdata.Camx_pos-1500;
 
-  motor_1 = rovdata.motor_1;
-  motor_2 = rovdata.motor_2;
-  motor_3 = rovdata.motor_3;
-  motor_4 = rovdata.motor_4;
+  motor_1 = rovdata.Motor_1;
+  motor_2 = rovdata.Motor_2;
+  motor_3 = rovdata.Motor_3;
+  motor_4 = rovdata.Motor_4;
 }
 
 function display() {
@@ -166,7 +171,7 @@ function display() {
   rov_context.fillText( today, 10, 20);
   rov_context.fillText( "GPS: N/A", 10, 40);
   rov_context.fillText( "Moki ROV (Raspberry PI)", 10, 60);
-  rov_context.fillText(constatus, 10, rov_canvas.height-20);
+  rov_context.fillText(constatus, 10, rov_canvas.height-100);
 
   rov_context.fillText( "Main V", (rov_canvas.width/4), 20);
   rov_context.fillText( "Main A", (rov_canvas.width/4), 40);
@@ -204,34 +209,45 @@ function display() {
   rov_context.fillText( ": "+temp+" °C", (rov_canvas.width/4)*3+80, 60);
 
 // Visual Gamepad Axis
+  if (!gamepad_detected) {
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.fillText("NO CONTROLLER", (rov_canvas.width/2-80), rov_canvas.height/4*3);
+    rov_context.fill();
+  } else {
   rov_context.beginPath();
   rov_context.strokeStyle = "#aaaa55";
-  rov_context.arc((rov_canvas.width/2)-300, (rov_canvas.height/2)+60, 30, 0, 2*Math.PI);
+  rov_context.arc((rov_canvas.width/2)-60, (rov_canvas.height/2)+200, 30, 0, 2*Math.PI);
   rov_context.stroke();
   rov_context.beginPath();
-  rov_context.arc((rov_canvas.width/2)-200, (rov_canvas.height/2)+60, 30, 0, 2*Math.PI);
+  rov_context.arc((rov_canvas.width/2)+60, (rov_canvas.height/2)+200, 30, 0, 2*Math.PI);
   rov_context.stroke();
-// Green cross
-  rov_context.strokeStyle = "#00aa00";
-  rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2)-300-15,rov_canvas.height/2+60);
-  rov_context.lineTo((rov_canvas.width/2)-300+15,rov_canvas.height/2+60);
-  rov_context.moveTo((rov_canvas.width/2)-200-15,rov_canvas.height/2+60);
-  rov_context.lineTo((rov_canvas.width/2)-200+15,rov_canvas.height/2+60);
-  rov_context.moveTo((rov_canvas.width/2)-300,rov_canvas.height/2+60-15);
-  rov_context.lineTo((rov_canvas.width/2)-300,rov_canvas.height/2+60+15);
-  rov_context.moveTo((rov_canvas.width/2)-200,rov_canvas.height/2+60-15);
-  rov_context.lineTo((rov_canvas.width/2)-200,rov_canvas.height/2+60+15);
-   rov_context.stroke();
+
+// Green cross gamepad
+    rov_context.strokeStyle = "#00aa00";
+    rov_context.beginPath();
+    rov_context.moveTo((rov_canvas.width/2)-60-15,rov_canvas.height/2+200);
+    rov_context.lineTo((rov_canvas.width/2)-60+15,rov_canvas.height/2+200);
+    rov_context.moveTo((rov_canvas.width/2)+60-15,rov_canvas.height/2+200);
+    rov_context.lineTo((rov_canvas.width/2)+60+15,rov_canvas.height/2+200);
+    rov_context.moveTo((rov_canvas.width/2)-60,rov_canvas.height/2+200-15);
+    rov_context.lineTo((rov_canvas.width/2)-60,rov_canvas.height/2+200+15);
+    rov_context.moveTo((rov_canvas.width/2)+60,rov_canvas.height/2+200-15);
+    rov_context.lineTo((rov_canvas.width/2)+60,rov_canvas.height/2+200+15);
+    rov_context.stroke();
+
 // Red dot Gamepad
-   rov_context.beginPath();
-   rov_context.fillStyle = "#aa0000";
-  rov_context.arc((rov_canvas.width/2)-300+Math.floor(axis_value[0]*20), (rov_canvas.height/2)+60+Math.floor(axis_value[1]*20), 5, 0, 2*Math.PI);
-   rov_context.fill();
-  rov_context.beginPath();
-  rov_context.fillStyle = "#aa0000";
-  rov_context.arc((rov_canvas.width/2)-200+Math.floor(axis_value[2]*20), (rov_canvas.height/2)+60+Math.floor(axis_value[3]*20), 5, 0, 2*Math.PI);
-  rov_context.fill();
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.arc((rov_canvas.width/2)-60+Math.floor(axis_value[0]*20), (rov_canvas.height/2)+200+Math.floor(axis_value[1]*20), 5, 0, 2*Math.PI);
+    rov_context.fill();
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.arc((rov_canvas.width/2)+60+Math.floor(axis_value[2]*20), (rov_canvas.height/2)+200+Math.floor(axis_value[3]*20), 5, 0, 2*Math.PI);
+    rov_context.fill();
+  }
+
+
 // HUD
   rov_context.beginPath();
   rov_context.fillStyle = "#aa0000";
@@ -255,11 +271,16 @@ function display() {
   rov_context.lineTo((rov_canvas.width/2) , (rov_canvas.height/2) +100);
   rov_context.stroke();
 // Camera Dot
-   rov_context.beginPath();
-   rov_context.fillStyle = "#aa0000";
-   rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-Math.floor(camx/10*2), 5, 0, 2*Math.PI);
-   rov_context.fill();
+  rov_context.beginPath();
+  rov_context.fillStyle = "#aa0000";
+  rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-Math.floor(camx/10*2), 5, 0, 2*Math.PI);
+  rov_context.fill();
 // Depth
+  rov_context.beginPath();
+  rov_context.fillStyle = "#000000";
+  rov_context.rect(10,rov_canvas.height/2-220,60,440);
+  rov_context.fill();
+
   rov_context.fillStyle = "#00aa00";
   rov_context.strokeStyle = "#00aa00";
   rov_context.lineWidth = 1;
@@ -267,12 +288,12 @@ function display() {
   for (i = -8; i <= 8; i++) {
     if (depth-i >= 0) {
       if ( (i-depth) % 5) {
-          rov_context.moveTo(50, rov_canvas.height/2-(i*25));
-          rov_context.lineTo(60, rov_canvas.height/2-(i*25));
+          rov_context.moveTo(10, rov_canvas.height/2-(i*25));
+          rov_context.lineTo(20, rov_canvas.height/2-(i*25));
       } else {
-          rov_context.fillText( depth-i, 72, rov_canvas.height/2+5-(i*25));
-          rov_context.moveTo(50, rov_canvas.height/2-(i*25));
-          rov_context.lineTo(70, rov_canvas.height/2-(i*25));
+          rov_context.fillText( depth-i, 32, rov_canvas.height/2+5-(i*25));
+          rov_context.moveTo(10, rov_canvas.height/2-(i*25));
+          rov_context.lineTo(30, rov_canvas.height/2-(i*25));
       }
       rov_context.stroke();
     }
@@ -281,8 +302,8 @@ function display() {
   rov_context.strokeStyle = "#aa0000";
   rov_context.lineWidth = 3;
   rov_context.beginPath();
-  rov_context.moveTo(50, rov_canvas.height/2);
-  rov_context.lineTo(100, rov_canvas.height/2);
+  rov_context.moveTo(10, rov_canvas.height/2);
+  rov_context.lineTo(50, rov_canvas.height/2);
   rov_context.stroke();
   // rov_context.fillText( depth, 90, rov_canvas.height/2 + 5);
 // Heading
@@ -321,56 +342,49 @@ function display() {
   rov_context.lineTo(rov_canvas.width/2, 110);
   rov_context.stroke();
   
-  // Motor
+// Motor
   rov_context.fillStyle = "#00aa00";
   rov_context.strokeStyle = "#00aa00";
   rov_context.lineWidth = 1;
+  rov_context.font = '14pt Verdana';
+  rov_context.fillText("Motor", (rov_canvas.width/4*3), rov_canvas.height/2+10);
   rov_context.beginPath();
-  rov_context.rect((rov_canvas.width/2) - 80 - 10, rov_canvas.height/2+150 -2 , 20, 100 + 4);
-  rov_context.rect((rov_canvas.width/2) - 30 - 10, rov_canvas.height/2+150 -2 , 20, 100 + 4);
-  rov_context.rect((rov_canvas.width/2) + 30 - 10, rov_canvas.height/2+150 -2 , 20, 100 + 4);
-  rov_context.rect((rov_canvas.width/2) + 80 - 10, rov_canvas.height/2+150 -2 , 20, 100 + 4);
+  rov_context.font = '10pt Verdana';
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+30,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+60,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+90,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+120,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+30,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+60,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+90,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+120,100,20);
   rov_context.stroke();
   rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2) - 100, rov_canvas.height/2+200);
-  rov_context.lineTo((rov_canvas.width/2) + 100, rov_canvas.height/2+200);
-  rov_context.stroke();
-// Motor active color
-  rov_context.fillStyle = "#aa0000";
-  rov_context.strokeStyle = "#aa0000";
-// Motor 1
+  rov_context.fillText("1", (rov_canvas.width/4*3), rov_canvas.height/2+45);
+  rov_context.fillText("2", (rov_canvas.width/4*3), rov_canvas.height/2+75);
+  rov_context.fillText("3", (rov_canvas.width/4*3), rov_canvas.height/2+105);
+  rov_context.fillText("4", (rov_canvas.width/4*3), rov_canvas.height/2+135);
+  rov_context.fill();
   rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2) - 80, rov_canvas.height/2+200);
-  rov_context.lineTo((rov_canvas.width/2) - 80, rov_canvas.height/2+200+(motor_1*50));
-  rov_context.lineWidth = 15;
-  rov_context.stroke();
-// Motor 2
+  rov_context.fillStyle = "#aa0000"; 
+  if (motor_1 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+35,motor_1,10);
+  }
+  if (motor_2 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+65,motor_2,10);
+  }
+  if (motor_3 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+95,motor_3,10);
+  }
+  if (motor_4 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+125,motor_4,10);
+  }
+  rov_context.fill();
+
+
+// HUD Status Text
   rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2) - 30, rov_canvas.height/2+200);
-  rov_context.lineTo((rov_canvas.width/2) - 30, rov_canvas.height/2+200+(motor_2*50));
-  rov_context.lineWidth = 15;
-  rov_context.stroke();
-// Motor 3
-  rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2) + 30, rov_canvas.height/2+200);
-  rov_context.lineTo((rov_canvas.width/2) + 30, rov_canvas.height/2+200+(motor_3*50));
-  rov_context.lineWidth = 15;
-  rov_context.stroke();
-// Motor 4
-  rov_context.beginPath();
-  rov_context.moveTo((rov_canvas.width/2) + 80, rov_canvas.height/2+200);
-  rov_context.lineTo((rov_canvas.width/2) + 80, rov_canvas.height/2+200+(motor_4*50));
-  rov_context.lineWidth = 15;
-  rov_context.stroke();
-// Motor Fix
-  rov_context.beginPath();
-  rov_context.stroke();
-  
-  rov_context.fillStyle = "#00aa00";
-  rov_context.strokeStyle = "#00aa00";
-  rov_context.fillText("Motor", (rov_canvas.width/2) - 160, rov_canvas.height/2+205);
-  rov_context.fillText("  1      2       3      4", (rov_canvas.width/2) - 100, rov_canvas.height/2+205);
-  rov_context.stroke();
+  rov_context.font = '14pt Verdana';
   rov_context.fillStyle = "#aaaa00";
   rov_context.fillText("MOTOR:", (rov_canvas.width/4)*3, 150);
   if (motor) {
@@ -457,72 +471,6 @@ socket.on("rovdata", function(rovdata) {
 socket.on("command", function(cmd) {
   command = cmd;; 
 });
-
-socket.on("motor", function(position) {
-  if (position == "stopall") {
-    motor_1 = 0;
-    motor_2 = 0;
-    motor_3 = 0;
-    motor_4 = 0;
-  } 
-});
-
-socket.on("motor1", function(position) {
-  switch (position) {
-    case "forward":
-        motor_1 = 1;
-        break;
-    case "reverse":
-        motor_1 = -1;
-        break;
-    case "stop":
-        motor_1 = 0;
-        break;
-  } 
-});
-
-socket.on("motor2", function(position) {
-  switch (position) {
-    case "forward":
-        motor_2 = 1;
-        break;
-    case "reverse":
-        motor_2 = -1;
-        break;
-    case "stop":
-        motor_2 = 0;
-        break;
-  } 
-});
-
-socket.on("motor3", function(position) {
-  switch (position) {
-    case "forward":
-        motor_3 = 1;
-        break;
-    case "reverse":
-        motor_3 = -1;
-        break;
-    case "stop":
-        motor_3 = 0;
-        break;
-  } 
-});
-
-socket.on("motor4", function(position) {
-  switch (position) {
-    case "forward":
-        motor_4 = 1;
-        break;
-    case "reverse":
-        motor_4 = -1;
-        break;
-    case "stop":
-        motor_4 = 0;
-        break;
-  } 
-});
-
 
 init();
 

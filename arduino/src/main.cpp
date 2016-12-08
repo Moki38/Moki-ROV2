@@ -133,6 +133,8 @@ void motor_stop() {
   motor2.writeMicroseconds(1500);
   motor3.writeMicroseconds(1500);
   motor4.writeMicroseconds(1500);
+  Serial.print("Stop:");
+  Serial.println(1);
 }
 
 void setup() {
@@ -277,53 +279,93 @@ void loop() {
 
       } else if (command == "Forward") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500+(4*power));  
-           motor4.writeMicroseconds(1500+(4*power));  
+           motor2.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_2:");
+           Serial.println(-power);
+           motor4.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_4:");
+           Serial.println(-power);
          }
       } else if (command == "Reverse") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500-(4*power));  
-           motor4.writeMicroseconds(1500-(4*power));  
+           motor2.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_2:");
+           Serial.println(power);
+           motor4.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_4:");
+           Serial.println(power);
          }
       } else if (command == "Right") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500-(4*power));  
-           motor4.writeMicroseconds(1500+(4*power));  
+           motor2.writeMicroseconds(1500+(4*power));  
+           motor4.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_2:");
+           Serial.println(power);
+           Serial.print("Motor_4:");
+           Serial.println(-power);
          }
       } else if (command == "Left") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500+(4*power));  
-           motor4.writeMicroseconds(1500-(4*power));  
+           motor2.writeMicroseconds(1500-(4*power));  
+           motor4.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_2:");
+           Serial.println(-power);
+           Serial.print("Motor_4:");
+           Serial.println(power);
          }
       } else if (command == "Dive") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500-(4*power));  
-           motor3.writeMicroseconds(1500-(4*power));  
+           motor3.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(-power);
+           Serial.print("Motor_3:");
+           Serial.println(power);
          }
       } else if (command == "Up") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500+(4*power));  
-           motor3.writeMicroseconds(1500+(4*power));  
+           motor3.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(power);
+           Serial.print("Motor_3:");
+           Serial.println(-power);
          }
       } else if (command == "Strafe_r") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500+(4*power));  
            motor3.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(power);
+           Serial.print("Motor_3:");
+           Serial.println(-power);
          }
       } else if (command == "Strafe_l") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500-(4*power));  
            motor3.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(-power);
+           Serial.print("Motor_3:");
+           Serial.println(power);
          }
       } else if (command == "Roll_r") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500+(4*power));  
            motor3.writeMicroseconds(1500-(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(power);
+           Serial.print("Motor_3:");
+           Serial.println(-power);
          }
       } else if (command == "Roll_l") {
          if (MOTOR_ARM) {
            motor1.writeMicroseconds(1500-(4*power));  
            motor3.writeMicroseconds(1500+(4*power));  
+           Serial.print("Motor_1:");
+           Serial.println(-power);
+           Serial.print("Motor_3:");
+           Serial.println(power);
          }
       } else if (command == "Light1") {
          light1.writeMicroseconds(value);  

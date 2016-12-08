@@ -94,6 +94,24 @@ function parse_serial(line) {
     case    'Amps':
       rovdata.Amps = res[1];
       break;
+    case    'Motor_1':
+      rovdata.Motor_1 = res[1];
+      break;
+    case    'Motor_2':
+      rovdata.Motor_2 = res[1];
+      break;
+    case    'Motor_3':
+      rovdata.Motor_3 = res[1];
+      break;
+    case    'Motor_4':
+      rovdata.Motor_4 = res[1];
+      break;
+    case    'Stop':
+      rovdata.Motor_1 = 0;
+      rovdata.Motor_2 = 0;
+      rovdata.Motor_3 = 0;
+      rovdata.Motor_4 = 0;
+      break;
     default:
       console.log('Serial data: ' + line);
   }
@@ -346,7 +364,6 @@ var lights = function() {
       port.write('Light1:1600'+'\n');
       port.write('Light2:1600'+'\n');
     }
-    socket.emit("command","Light ON");
     rovdata.Lights = true;
   } else {
     console.log("LIGHTS: OFF");
@@ -354,7 +371,6 @@ var lights = function() {
       port.write('Light1:1000'+'\n');
       port.write('Light2:1000'+'\n');
     }
-    socket.emit("command","Light Off");
     rovdata.Lights = false;
   }
 }
@@ -363,14 +379,12 @@ var armmotor = function() {
     console.log("MOTOR: ON");
     rovdata.Motor = true;
     port.write('ARM:1'+'\n');
-    socket.emit("command","Motor ON");
 }
 
 var disarmmotor = function() {
     console.log("MOTOR: OFF");
     rovdata.Motor = false;
     port.write('DISARM:0'+'\n');
-    socket.emit("command","Motor OFF");
 }
 
 var hover = function() {
