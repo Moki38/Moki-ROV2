@@ -19,6 +19,33 @@ iframe{
   z-index: -3;
 }
 
+.exitbutton {
+  position:absolute;
+  top:90%;
+  left:0%;
+  border-style: solid;
+  border-width: 0px 3px 3px;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.4) inset;
+  color: #ffffff;	   
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  font-style: normal;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: all 200ms ease-in-out 0s;
+  white-space: nowrap;	
+  font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+  font-weight: 700;	
+  padding: 19px 39px 18px;
+  font-size: 18px;
+  background-color: #C6CCD2;
+  border-color: #333333;
+  opacity: 0.5;
+}
+
 .configbutton {
   position:absolute;
   top:90%;

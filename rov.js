@@ -11,6 +11,8 @@ var serialport = require('serialport');
 var config_file = 'config.js'
 var config = jsonfile.readFileSync(config_file)
 
+console.log(config);
+
 var rovdata = {};
 
 rovdata.Hover = false;
@@ -40,8 +42,8 @@ if (shell.test('-c', config.serial.device)) {
   arduino = 1;
 }
 
-var kill = shell.exec('kill -9 `pidof mjpg_streamer`', {silent:true, async:true});
-var camera = shell.exec('/usr/local/bin/mjpg_streamer -o \"output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www\" -i \"input_raspicam.so -x 1366 -y 768\"', {silent:true, async:true});
+var kill = shell.exec(config.camera.kill, {silent:true, async:true});
+var camera = shell.exec(config.camera.command+" -o "+config.camera.output+" -i "+config.camera.input, {silent:true, async:true});
 
 rovdata.Camx_pos = 1600;
 rovdata.Camx_move = 0;
@@ -142,17 +144,27 @@ app.get('/', function(req, res) {
 })
 
 app.get('/config', function(req, res) {
-  console.log("/config");
-  res.end(req.cookies);
 
-  config.i2c = {device: '/dev/i2c-1'}
-  
-  config.serial = {device: '/dev/ttyACM0'}
+  if (req.query.action) {
+    if (req.query.action == 'edit') {
+      res.sendFile("config.html", {"root": __dirname+'/public'});
 
-  ipaddr = shell.exec('hostname -I', {silent:true}).stdout
-  ipaddr = ipaddr.replace(/[\n$]/g, '');
-  config.network = {ipaddr : ipaddr}
-  jsonfile.writeFileSync( __dirname + '/' + config_file , config)
+    } else if (req.query.action == 'read') {
+      config = jsonfile.readFileSync(config_file)
+
+    } else if (req.query.action == 'write') {
+      jsonfile.writeFileSync( __dirname + '/' + config_file , config)
+
+    } else if (req.query.action == 'init') {
+      config.i2c = {device: '/dev/i2c-1'}
+      config.serial = {device: '/dev/ttyACM0'}
+      ipaddr = shell.exec('hostname -i', {silent:true}).stdout
+      ipaddr = ipaddr.replace(/[\n$]/g, '');
+      config.network = {ipaddr : ipaddr}
+      jsonfile.writeFileSync( __dirname + '/' + config_file , config)
+    }
+  }
+  res.end();
 })
 
 io.on('connection', function (socket) {
