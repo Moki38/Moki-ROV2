@@ -1,5 +1,3 @@
-#include "config.h"
-
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -24,12 +22,22 @@ boolean command_complete = false;
 int sensor_time = 0;
 int power = 0;
 
-Servo motor1;
-Servo motor2;
-Servo motor3;
-Servo motor4;
-Servo motor5;
-Servo motor6;
+struct Motor {
+  int proto;		// proto:  1:'PWM', 2:I2C
+  int addr;		// pin: 3 or i2c address
+  int neutral;		// neutral: 1500,
+  int min;		// min: 1100,
+  int max;		// max: 1900,
+  boolean reverse;	// reverse: true 
+  Servo servo;
+  unsigned char direction;	// 0 1 2 4 8 16 32 64 128
+};
+
+struct Motor Motor1;
+struct Motor Motor2;
+struct Motor Motor3;
+struct Motor Motor4;
+
 Servo light1;
 Servo light2;
 Servo camx;
@@ -129,29 +137,31 @@ void displayCalStatus(void)
 }
 
 void motor_stop() {
-  motor1.writeMicroseconds(1500);
-  motor2.writeMicroseconds(1500);
-  motor3.writeMicroseconds(1500);
-  motor4.writeMicroseconds(1500);
+  Motor1.servo.writeMicroseconds(Motor1.n);
+  Motor2.servo.writeMicroseconds(Motor2.n);
+  Motor3.servo.writeMicroseconds(Motor3.n);
+  Motor4.servo.writeMicroseconds(Motor4.n);
   Serial.print("Stop:");
   Serial.println(1);
 }
 
+void motor_setup() {
+  Motor1.servo.attach(Motor1.addr);
+  Motor1.servo.writeMicroseconds(Motor1.n);
+  delay (200); 
+  Motor2.servo.attach(Motor2.addr);
+  Motor2.servo.writeMicroseconds(Motor2.n);
+  delay (200); 
+  Motor3.servo.attach(Motor3.addr);
+  Motor3.servo.writeMicroseconds(Motor3.n);
+  delay (200); 
+  Motor4.servo.attach(Motor4.addr);
+  Motor4.servo.writeMicroseconds(Motor4.n);
+  delay (200); 
+}
+
 void setup() {
   delay (6000); 
-  motor1.attach(MOTOR1_PIN); 
-  motor1.writeMicroseconds(1500);
-  delay (200); 
-  motor2.attach(MOTOR2_PIN); 
-  motor2.writeMicroseconds(1500);
-  delay (200); 
-  motor3.attach(MOTOR3_PIN); 
-  motor3.writeMicroseconds(1500);
-  delay (200); 
-  motor4.attach(MOTOR4_PIN); 
-  motor4.writeMicroseconds(1500);
-  
-  delay (200); 
   light1.attach(LIGHT1_PIN); 
   light1.writeMicroseconds(1000);
   delay (200); 
@@ -279,21 +289,29 @@ void loop() {
 
       } else if (command == "Forward") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500-(4*power));  
-           Serial.print("Motor_2:");
-           Serial.println(-power);
-           motor4.writeMicroseconds(1500-(4*power));  
-           Serial.print("Motor_4:");
-           Serial.println(-power);
+           if (Motor2.dir & 0x01) {
+             Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             Serial.print("Motor_2:");
+             Serial.println(-power);
+           } 
+           if (Motor4.dir & 0x01) {
+             Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             Serial.print("Motor_4:");
+             Serial.println(-power);
+           } 
          }
       } else if (command == "Reverse") {
          if (MOTOR_ARM) {
-           motor2.writeMicroseconds(1500+(4*power));  
-           Serial.print("Motor_2:");
-           Serial.println(power);
-           motor4.writeMicroseconds(1500+(4*power));  
-           Serial.print("Motor_4:");
-           Serial.println(power);
+           if (Motor2.dir & 0x02) {
+             Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+             Serial.print("Motor_2:");
+             Serial.println(power);
+           } 
+           if (Motor4.dir & 0x02) {
+             Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+             Serial.print("Motor_4:");
+             Serial.println(power);
+           } 
          }
       } else if (command == "Right") {
          if (MOTOR_ARM) {
@@ -375,6 +393,67 @@ void loop() {
          camx.writeMicroseconds(value);  
       } else if (command == "Camy") {
          camy.writeMicroseconds(value);  
+
+// Config part
+      } else if (command == "CFG_M1_PROTO") {
+         Motor1.proto = value;  
+      } else if (command == "CFG_M1_ADDR") {
+         Motor1.addr = value;  
+      } else if (command == "CFG_M1_N") {
+         Motor1.neutral = value;  
+      } else if (command == "CFG_M1_MIN") {
+         Motor1.min = value;  
+      } else if (command == "CFG_M1_MAX") {
+         Motor1.max = value;  
+      } else if (command == "CFG_M1_REV") {
+         Motor1.reverse = value;  
+      } else if (command == "CFG_M1_DIR") {
+         Motor1.direction = value;  
+      } else if (command == "CFG_M2_PROTO") {
+         Motor2.proto = value;  
+      } else if (command == "CFG_M2_ADDR") {
+         Motor2.addr = value;  
+      } else if (command == "CFG_M2_N") {
+         Motor2.neutral = value;  
+      } else if (command == "CFG_M2_MIN") {
+         Motor2.min = value;  
+      } else if (command == "CFG_M2_MAX") {
+         Motor2.max = value;  
+      } else if (command == "CFG_M2_REV") {
+         Motor2.reverse = value;  
+      } else if (command == "CFG_M2_DIR") {
+         Motor2.direction = value;  
+      } else if (command == "CFG_M3_PROTO") {
+         Motor3.proto = value;  
+      } else if (command == "CFG_M3_ADDR") {
+         Motor3.addr = value;  
+      } else if (command == "CFG_M3_N") {
+         Motor3.neutral = value;  
+      } else if (command == "CFG_M3_MIN") {
+         Motor3.min = value;  
+      } else if (command == "CFG_M3_MAX") {
+         Motor3.max = value;  
+      } else if (command == "CFG_M3_REV") {
+         Motor3.reverse = value;  
+      } else if (command == "CFG_M3_DIR") {
+         Motor3.direction = value;  
+      } else if (command == "CFG_M4_PROTO") {
+         Motor4.proto = value;  
+      } else if (command == "CFG_M4_ADDR") {
+         Motor4.addr = value;  
+      } else if (command == "CFG_M4_N") {
+         Motor4.neutral = value;  
+      } else if (command == "CFG_M4_MIN") {
+         Motor4.min = value;  
+      } else if (command == "CFG_M4_MAX") {
+         Motor4.max = value;  
+      } else if (command == "CFG_M4_REV") {
+         Motor4.reverse = value;  
+      } else if (command == "CFG_M4_DIR") {
+         Motor4.direction = value;  
+
+      } else if (command == "MOTOR_SETUP") {
+         motor_setup();  
       }
 
       // clear the string:
