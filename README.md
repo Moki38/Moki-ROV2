@@ -101,7 +101,7 @@ Keyboard
 ## Usage
 
 ######################################################################################
-# Arduino Pins => Configured in "Moki-ROV2/arduino/src/config.h"
+# Arduino Pins => Configured in "Moki-ROV2/config.js"
 ######################################################################################
 Arduino UNO (example pin layout)
 ```

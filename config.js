@@ -46,7 +46,8 @@
                 "pin": 10,
                 "neutral": 1500,
                 "min": 1100,
-                "max": 1900
+                "max": 1900,
+                "reverse": 0 
             },
             "y": {
                 "proto": "NONE"
@@ -61,7 +62,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "reverse": true
+            "direction": 0,
+            "reverse": 0 
         },
         "2": {
             "host": "ARDUINO",
@@ -70,7 +72,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "reverse": false
+            "direction": 0,
+            "reverse": 0 
         },
         "3": {
             "host": "ARDUINO",
@@ -79,7 +82,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "reverse": true
+            "direction": 0,
+            "reverse": 0 
         },
         "4": {
             "host": "ARDUINO",
@@ -88,7 +92,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "reverse": true
+            "direction": 0,
+            "reverse": 0 
         }
     },
     "light": {

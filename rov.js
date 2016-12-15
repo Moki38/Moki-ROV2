@@ -394,7 +394,7 @@ var push_config = function() {
       port.write('CFG_M1_MIN:'+config.motor[1].min+'\n');
       port.write('CFG_M1_MAX:'+config.motor[1].max+'\n');
       port.write('CFG_M1_REV:'+config.motor[1].reverse+'\n');
-      port.write('CFG_M1_DIR:'+config.motor[1].direction'\n');
+      port.write('CFG_M1_DIR:'+config.motor[1].direction+'\n');
   }
   if (config.motor[2].host == 'ARDUINO') {
       port.write('CFG_M2_PROTO:'+config.motor[2].proto+'\n');
@@ -408,7 +408,7 @@ var push_config = function() {
       port.write('CFG_M2_MIN:'+config.motor[2].min+'\n');
       port.write('CFG_M2_MAX:'+config.motor[2].max+'\n');
       port.write('CFG_M2_REV:'+config.motor[2].reverse+'\n');
-      port.write('CFG_M2_DIR:'+config.motor[2].direction'\n');
+      port.write('CFG_M2_DIR:'+config.motor[2].direction+'\n');
   }
   if (config.motor[3].host == 'ARDUINO') {
       port.write('CFG_M3_PROTO:'+config.motor[3].proto+'\n');
@@ -422,7 +422,7 @@ var push_config = function() {
       port.write('CFG_M3_MIN:'+config.motor[3].min+'\n');
       port.write('CFG_M3_MAX:'+config.motor[3].max+'\n');
       port.write('CFG_M3_REV:'+config.motor[3].reverse+'\n');
-      port.write('CFG_M3_DIR:'+config.motor[3].direction'\n');
+      port.write('CFG_M3_DIR:'+config.motor[3].direction+'\n');
   }
   if (config.motor[4].host == 'ARDUINO') {
       port.write('CFG_M4_PROTO:'+config.motor[4].proto+'\n');
@@ -430,20 +430,75 @@ var push_config = function() {
         port.write('CFG_M4_ADDR:'+config.motor[4].pin+'\n');
       }
       if (config.motor[4].proto == 'I2C') {
-        port.write('CFG_M1_ADDR:'+config.motor[4].address+'\n');
+        port.write('CFG_M4_ADDR:'+config.motor[4].address+'\n');
       }
       port.write('CFG_M4_N:'+config.motor[4].neutral+'\n');
       port.write('CFG_M4_MIN:'+config.motor[4].min+'\n');
       port.write('CFG_M4_MAX:'+config.motor[4].max+'\n');
       port.write('CFG_M4_REV:'+config.motor[4].reverse+'\n');
-      port.write('CFG_M4_DIR:'+config.motor[4].direction'\n');
+      port.write('CFG_M4_DIR:'+config.motor[4].direction+'\n');
   }
+  port.write('MOTOR_SETUP:1\n');
+
 // Light
+  if (config.light[1].host == 'ARDUINO') {
+      port.write('CFG_L1_PROTO:'+config.light[1].proto+'\n');
+      if (config.light[1].proto == 'PWM') {
+        port.write('CFG_L1_ADDR:'+config.light[1].pin+'\n');
+      }
+      if (config.light[1].proto == 'I2C') {
+        port.write('CFG_L1_ADDR:'+config.light[1].address+'\n');
+      }
+      port.write('CFG_L1_ON:'+config.light[1].on+'\n');
+      port.write('CFG_L1_OFF:'+config.light[1].off+'\n');
+  }
+
+  if (config.light[2].host == 'ARDUINO') {
+      port.write('CFG_L2_PROTO:'+config.light[2].proto+'\n');
+      if (config.light[2].proto == 'PWM') {
+        port.write('CFG_L2_ADDR:'+config.light[2].pin+'\n');
+      }
+      if (config.light[2].proto == 'I2C') {
+        port.write('CFG_L2_ADDR:'+config.light[2].address+'\n');
+      }
+      port.write('CFG_L2_ON:'+config.light[2].on+'\n');
+      port.write('CFG_L2_OFF:'+config.light[2].off+'\n');
+  }
+  port.write('LIGHT_SETUP:1\n');
 
 // Sensor
 
 // Camera Tilt
 
+   "camera": {
+        "command": "/usr/local/bin/mjpg_streamer",
+        "output": "output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www",
+        "input": "input_raspicam.so -x 1366 -y 768",
+        "kill": "kill -9 `pidof mjpg_streamer`",
+        "tilt": {
+            "x": {
+                "host": "ARDUINO",
+                "proto": "PWM",
+                "pin": 10,
+                "neutral": 1500,
+                "min": 1100,
+                "max": 1900,
+                "reverse": 0
+  
+if (config.camera.tilt.x.host == 'ARDUINO') {
+      port.write('CFG_CX_PROTO:'+config.camera.tilt.x.proto+'\n');
+      if (config.camera.tilt.x.proto == 'PWM') {
+        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.pin+'\n');
+      }
+      if (config.light[2].proto == 'I2C') {
+        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.address+'\n');
+      }
+      port.write('CFG_CX_N:'+config.camera.tilt.x.neutral+'\n');
+      port.write('CFG_CX_MIN:'+config.camera.tilt.x.on+'\n');
+      port.write('CFG_CX_MAX:'+config.camera.tilt.x.off+'\n');
+  }
+
+  port.write('CAM_SETUP:1\n');
 }
 
 
@@ -451,15 +506,15 @@ var lights = function() {
   if (rovdata.Lights == false) {
     console.log("LIGHTS: ON");
     if (arduino) {
-      port.write('Light1:1600'+'\n');
-      port.write('Light2:1600'+'\n');
+      port.write('Light1:'+config.light[1].on+'\n');
+      port.write('Light2:'+config.light[2].on+'\n');
     }
     rovdata.Lights = true;
   } else {
     console.log("LIGHTS: OFF");
     if (arduino) {
-      port.write('Light1:1000'+'\n');
-      port.write('Light2:1000'+'\n');
+      port.write('Light1:'+config.light[1].off+'\n');
+      port.write('Light2:'+config.light[1].off+'\n');
     }
     rovdata.Lights = false;
   }
