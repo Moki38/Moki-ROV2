@@ -104,12 +104,14 @@ function parse_serial(line) {
       rovdata.Motor_1 = res[1];
       break;
     case    'Motor_2':
+      console.log('Serial data: ' + line);
       rovdata.Motor_2 = res[1];
       break;
     case    'Motor_3':
       rovdata.Motor_3 = res[1];
       break;
     case    'Motor_4':
+      console.log('Serial data: ' + line);
       rovdata.Motor_4 = res[1];
       break;
     case    'Stop':

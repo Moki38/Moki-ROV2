@@ -30,7 +30,7 @@ struct Motor {
   int neutral;		// neutral: 1500,
   int min;		// min: 1100,
   int max;		// max: 1900,
-  boolean reverse;	// reverse: true 
+  int reverse;		// reverse: true 
   Servo servo;
   unsigned char direction;	// 0 1 2 4 8 16 32 64 128
 };

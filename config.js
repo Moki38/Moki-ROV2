@@ -44,7 +44,7 @@
                 "host": "ARDUINO",
                 "proto": "PWM",
                 "pin": 10,
-                "neutral": 1500,
+                "neutral": 1600,
                 "min": 1100,
                 "max": 1900,
                 "reverse": 0 
@@ -63,7 +63,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 48,
-            "reverse": 0 
+            "reverse": 16
         },
         "2": {
             "host": "ARDUINO",
@@ -73,7 +73,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 15,
-            "reverse": 0 
+            "reverse": 9
         },
         "3": {
             "host": "ARDUINO",
@@ -83,7 +83,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 48,
-            "reverse": 0 
+            "reverse": 32
         },
         "4": {
             "host": "ARDUINO",
@@ -93,7 +93,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 15,
-            "reverse": 0 
+            "reverse": 5
         }
     },
     "light": {

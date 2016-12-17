@@ -125,11 +125,11 @@ function readgamepad() {
     }
     for (i=0 ; i < axes ; i++) {
       value = gamepad.axes[i];
-      if (gamepad.axes[i] > axis_value[i]+0.1) {
+      if (gamepad.axes[i] > axis_value[i]+0.5) {
          axis_value[i] = gamepad.axes[i];
          socket.emit("gamepad","axis "+i+" value "+Math.floor(gamepad.axes[i]*100));
       }
-      if (gamepad.axes[i] < axis_value[i]-0.1) {
+      if (gamepad.axes[i] < axis_value[i]-0.5) {
          axis_value[i] = gamepad.axes[i];
          socket.emit("gamepad","axis "+i+" value "+Math.floor(gamepad.axes[i]*100));
       }
