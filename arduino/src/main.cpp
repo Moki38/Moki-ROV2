@@ -163,42 +163,42 @@ void displayCalStatus(void)
 }
 
 void motor_stop() {
-  Motor1.servo.writeMicroseconds(Motor1.n);
-  Motor2.servo.writeMicroseconds(Motor2.n);
-  Motor3.servo.writeMicroseconds(Motor3.n);
-  Motor4.servo.writeMicroseconds(Motor4.n);
+  Motor1.servo.writeMicroseconds(Motor1.neutral);
+  Motor2.servo.writeMicroseconds(Motor2.neutral);
+  Motor3.servo.writeMicroseconds(Motor3.neutral);
+  Motor4.servo.writeMicroseconds(Motor4.neutral);
   Serial.print("Stop:");
   Serial.println(1);
 }
 
 void motor_setup() {
   Motor1.servo.attach(Motor1.addr);
-  Motor1.servo.writeMicroseconds(Motor1.n);
-  delay (200); 
+  Motor1.servo.writeMicroseconds(Motor1.neutral);
+//  delay (200); 
   Motor2.servo.attach(Motor2.addr);
-  Motor2.servo.writeMicroseconds(Motor2.n);
-  delay (200); 
+  Motor2.servo.writeMicroseconds(Motor2.neutral);
+//  delay (200); 
   Motor3.servo.attach(Motor3.addr);
-  Motor3.servo.writeMicroseconds(Motor3.n);
-  delay (200); 
+  Motor3.servo.writeMicroseconds(Motor3.neutral);
+ // delay (200); 
   Motor4.servo.attach(Motor4.addr);
-  Motor4.servo.writeMicroseconds(Motor4.n);
-  delay (200); 
+  Motor4.servo.writeMicroseconds(Motor4.neutral);
+ // delay (200); 
 }
 
 void light_setup() {
   Light1.servo.attach(Light1.addr);
   Light1.servo.writeMicroseconds(Light1.off);
-  delay (200); 
+//  delay (200); 
   Light2.servo.attach(Light2.addr);
   Light2.servo.writeMicroseconds(Light2.off);
-  delay (200); 
+//  delay (200); 
 }
 
 void cam_setup() {
   CamX.servo.attach(CamX.addr);
-  CamX.servo.writeMicroseconds(CamX.n);
-  delay (200); 
+  CamX.servo.writeMicroseconds(CamX.neutral);
+ // delay (200); 
 
 }
 
@@ -235,6 +235,8 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB
   }
   Wire.begin();
+
+  sensor_setup();
 
   Serial.println("Ready!");
   READY = 1;
@@ -327,397 +329,427 @@ void loop() {
            if (Motor1.direction & 0x01) {
              Serial.print("Motor_1:");
              if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
+           }
            if (Motor2.direction & 0x01) {
              Serial.print("Motor_2:");
              if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
+           }
            if (Motor3.direction & 0x01) {
              Serial.print("Motor_3:");
              if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
+           }
            if (Motor4.direction & 0x01) {
              Serial.print("Motor_4:");
              if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Reverse") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x02) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x02) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x02) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x02) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x02) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x02) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x02) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x02) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Right") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x04) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x04) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x04) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x04) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x04) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x04) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x04) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x04) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Left") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x08) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x08) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x08) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x08) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x08) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x08) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x08) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x08) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Dive") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x10) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x10) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x10) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x10) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x10) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x10) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x10) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x10) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Up") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x20) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x20) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x20) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x20) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x20) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x20) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x20) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x20) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Strafe_r") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x40) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x40) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x40) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x40) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x40) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x40) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x40) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x40) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Strafe_l") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x80) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x80) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x80) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x80) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x80) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x80) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x80) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x80) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Roll_r") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x40) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x40) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x40) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x40) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x40) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x40) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x40) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x40) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
          }
       } else if (command == "Roll_l") {
          if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
+           if (Motor1.direction & 0x80) {
              Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.n-(4*power));
+             if (Motor1.reverse & 0x80) {
+               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor1.servo.writeMicroseconds(Motor1.n+(4*power));
+               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor2.direction & 0x01) {
+           }
+           if (Motor2.direction & 0x80) {
              Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.n-(4*power));
+             if (Motor2.reverse & 0x80) {
+               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor2.servo.writeMicroseconds(Motor2.n+(4*power));
+               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor3.direction & 0x01) {
+           }
+           if (Motor3.direction & 0x80) {
              Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.n-(4*power));
+             if (Motor3.reverse & 0x80) {
+               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor3.servo.writeMicroseconds(Motor3.n+(4*power));
+               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
                Serial.println(power);
              }
-           if (Motor4.direction & 0x01) {
+           }
+           if (Motor4.direction & 0x80) {
              Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.n-(4*power));
+             if (Motor4.reverse & 0x80) {
+               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
                Serial.println(-power);
              } else {
-               Motor4.servo.writeMicroseconds(Motor4.n+(4*power));
+               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
                Serial.println(power);
              }
            } 
@@ -727,9 +759,9 @@ void loop() {
       } else if (command == "Light2") {
          Light2.servo.writeMicroseconds(value);  
       } else if (command == "Camx") {
-         Camx.servo.writeMicroseconds(value);  
+         CamX.servo.writeMicroseconds(value);  
       } else if (command == "Camy") {
-         Camy.servo.writeMicroseconds(value);  
+         CamY.servo.writeMicroseconds(value);  
 
 // Config part
       } else if (command == "CFG_M1_PROTO") {
@@ -790,48 +822,52 @@ void loop() {
          Motor4.direction = value;  
 
       } else if (command == "MOTOR_SETUP") {
+    serial_command = "";
+    command_complete = false;
          motor_setup();  
-      }
 
       } else if (command == "CFG_L1_PROTO") {
          Light1.proto = value;  
       } else if (command == "CFG_L1_ADDR") {
          Light1.addr = value;  
       } else if (command == "CFG_L1_ON") {
-         Light1.min = value;  
+         Light1.on= value;  
       } else if (command == "CFG_L1_OFF") {
-         Light1.max = value;  
+         Light1.off = value;  
       } else if (command == "CFG_L2_PROTO") {
          Light2.proto = value;  
       } else if (command == "CFG_L2_ADDR") {
          Light2.addr = value;  
       } else if (command == "CFG_L2_ON") {
-         Light2.min = value;  
+         Light2.on = value;  
       } else if (command == "CFG_L2_OFF") {
-         Light2.max = value;  
+         Light2.off = value;  
 
       } else if (command == "LIGHT_SETUP") {
+    serial_command = "";
+    command_complete = false;
          light_setup();  
-      }
 
       } else if (command == "CFG_CX_PROTO") {
          CamX.proto = value;  
       } else if (command == "CFG_CX_ADDR") {
-         Camx.addr = value;  
+         CamX.addr = value;  
       } else if (command == "CFG_CX_N") {
-         Camx.neutral = value;  
+         CamX.neutral = value;  
       } else if (command == "CFG_CX_MIN") {
-         Camx.min = value;  
+         CamX.min = value;  
       } else if (command == "CFG_CX_MAX") {
-         Camx.max = value;  
+         CamX.max = value;  
 
       } else if (command == "CAM_SETUP") {
+    serial_command = "";
+    command_complete = false;
          cam_setup();  
       }
 
-      // clear the string:
-      serial_command = "";
-      command_complete = false;
+    // clear the string:
+    serial_command = "";
+    command_complete = false;
     }
   }
 }

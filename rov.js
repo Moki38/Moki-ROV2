@@ -350,7 +350,7 @@ socket.on('disconnect', function () {
 
 var interval = setInterval(function () {
   socket.emit("rovdata", rovdata);
-  if (!rovdata.Config) {
+  if (rovdata.Config == false) {
     push_config();
   };
   if (rovdata.Hover) {
@@ -380,6 +380,9 @@ socket.on('keydown', function(event) {
 });
 
 var push_config = function() {
+
+  console.log('Push Config');
+
   rovdata.Config = true;
 // Motor
   if (arduino) {
@@ -442,6 +445,7 @@ var push_config = function() {
     port.write('MOTOR_SETUP:1\n');
   
 // Light
+
     if (config.light[1].host == 'ARDUINO') {
       port.write('CFG_L1_PROTO:'+config.light[1].proto+'\n');
       if (config.light[1].proto == 'PWM') {

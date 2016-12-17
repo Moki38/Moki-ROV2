@@ -62,7 +62,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 48,
             "reverse": 0 
         },
         "2": {
@@ -72,7 +72,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 15,
             "reverse": 0 
         },
         "3": {
@@ -82,7 +82,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 48,
             "reverse": 0 
         },
         "4": {
@@ -92,7 +92,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 15,
             "reverse": 0 
         }
     },
