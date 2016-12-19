@@ -473,7 +473,58 @@ var push_config = function() {
     }
     port.write('LIGHT_SETUP:1\n');
 
-// Sensor
+// Sensors
+    if (config.sensor.IMU.host == 'ARDUINO') {
+      if (config.sensor.IMU.proto == 'PWM') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
+        port.write('CFG_IMU_PROTO:1\n');
+      }
+      if (config.sensor.IMU.proto == 'I2C') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.address+'\n');
+        port.write('CFG_IMU_PROTO:2\n');
+      }
+      if (config.sensor.IMU.type == 'BNO055') {
+        port.write('CFG_IMU_TYPE:1\n');
+      }
+    }
+    port.write('IMU_SETUP:1\n');
+
+    if (config.sensor.DEPTH.host == 'ARDUINO') {
+      if (config.sensor.DEPTH.proto == 'PWM') {
+        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.pin+'\n');
+        port.write('CFG_DEPTH_PROTO:1\n');
+      }
+      if (config.sensor.DEPTH.proto == 'I2C') {
+        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.address+'\n');
+        port.write('CFG_DEPTH_PROTO:2\n');
+      }
+      if (config.sensor.DEPTH.type == 'MS5837') {
+        port.write('CFG_DEPTH_TYPE:1\n');
+      }
+    }
+    port.write('DEPTH_SETUP:1\n');
+
+    if (config.sensor.CURRENT.host == 'ARDUINO') {
+      if (config.sensor.CURRENT.proto == 'ANALOG') {
+        port.write('CFG_CURRENT_ADDR:'+config.sensor.CURRENT.pin+'\n');
+        port.write('CFG_CURRENT_PROTO:3\n');
+      }
+      if (config.sensor.CURRENT.type == 'ATTOPILOT_A180') {
+        port.write('CFG_CURRENT_TYPE:1\n');
+      }
+    }
+    port.write('CURRENT_SETUP:1\n');
+
+    if (config.sensor.AMP.host == 'ARDUINO') {
+      if (config.sensor.AMP.proto == 'ANALOG') {
+        port.write('CFG_AMP_ADDR:'+config.sensor.AMP.pin+'\n');
+        port.write('CFG_AMP_PROTO:3\n');
+      }
+      if (config.sensor.AMP.type == 'ATTOPILOT_A180') {
+        port.write('CFG_AMP_TYPE:1\n');
+      }
+    }
+    port.write('AMP_SETUP:1\n');
 
 // Camera Tilt
 

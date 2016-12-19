@@ -25,13 +25,13 @@
             "host": "ARDUINO",
             "type": "ATTOPILOT_A180",
             "proto": "ANALOG",
-            "pin": "A0"
+            "pin": "0"
         },
         "AMP": {
             "host": "ARDUINO",
             "type": "ATTOPILOT_A180",
             "proto": "ANALOG",
-            "pin": "A1"
+            "pin": "1"
         }
     },
     "camera": {

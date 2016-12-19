@@ -9,7 +9,6 @@
 unsigned long time;
 int MOTOR_ARM = 0;
 
-
 int FOUND_BNO = 0;
 int FOUND_MS5837 = 0;
 int FOUND_A180 = 0;
@@ -69,6 +68,17 @@ struct Camera CamY;
 
 boolean CONFIG_CAMERA = false;
 
+struct Sensor {
+  int proto;
+  int addr;
+  int type;
+};
+
+struct Sensor IMU;
+struct Sensor DEPTH;
+struct Sensor CURRENT;
+struct Sensor AMP;
+
 //
 // Attopilot 180
 //
@@ -78,11 +88,10 @@ int IRaw;
 float VFinal; //This will store the converted data
 float IFinal;
 
-MS5837 sensor;
+MS5837 MS5837_sensor;
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
-
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 /**************************************************************************/
@@ -202,30 +211,49 @@ void cam_setup() {
 
 }
 
-void sensor_setup() {
-  sensor.init();
-  sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
-
+void imu_setup() {
+  if (IMU.type == 1) {
   /* Initialise the sensor */
-  if(bno.begin())
-  {
-     FOUND_BNO = 1; 
-  }
+    if(bno.begin())
+    {
+       FOUND_BNO = 1; 
+    }
 
-  delay(1000);
-  /* Display some basic information on this sensor */
-  if (FOUND_BNO) {
-    displaySensorDetails();
-  /* Optional: Display current status */
-    displaySensorStatus();
-
-    bno.setExtCrystalUse(true);
+    delay(1000);
+    /* Display some basic information on this sensor */
+    if (FOUND_BNO) {
+      displaySensorDetails();
+    /* Optional: Display current status */
+      displaySensorStatus();
+  
+      bno.setExtCrystalUse(true);
+    }
   }
+}
+
+void depth_setup() {
+  if (CURRENT.type == 1) {
+    MS5837_sensor.init();
+    MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
+  }
+}
+
+void current_setup() {
+}
+
+void amp_setup() {
+}
+
+void sensor_setup() {
+
+  depth_setup();
+  imu_setup();
+  current_setup();
+  amp_setup();
 
   sensor_time = millis();
 
 }
-
 
 void setup() {
   delay (6000); 
@@ -236,10 +264,72 @@ void setup() {
   }
   Wire.begin();
 
-  sensor_setup();
-
   Serial.println("Ready!");
   READY = 1;
+}
+
+void current_run() {
+  if (CURRENT.type == 1) {
+    VRaw = analogRead(CURRENT.addr);
+    if (VRaw < 400) {
+    //Conversion
+      VFinal = VRaw/12.99; //180 Amp board  
+      Serial.print("Volt:");
+      Serial.println(VFinal);
+    }
+  }
+}
+
+void amp_run() {
+  if (AMP.type == 1) {
+    IRaw = analogRead(AMP.addr);
+    if (VRaw < 400) {
+      //Conversion
+      IFinal = IRaw/3.7; //180 Amp board
+      Serial.print("Amps:");
+      Serial.println(IFinal);
+    }
+  }
+}
+
+void depth_run() {
+  if (DEPTH.type == 1) {
+    MS5837_sensor.read();
+
+    Serial.print("Pressure:"); 
+    Serial.println(MS5837_sensor.pressure()); 
+    Serial.print("Temperature:"); 
+    Serial.println(MS5837_sensor.temperature()); 
+    Serial.print("Depth:"); 
+    Serial.println(MS5837_sensor.depth()); 
+    Serial.print("Altitude:"); 
+    Serial.println(MS5837_sensor.altitude()); 
+  }
+}
+
+void imu_run() {
+  if (IMU.type == 1) {
+    if (FOUND_BNO) {
+    // Get a new sensor event 
+      sensors_event_t event;
+      bno.getEvent(&event);
+
+    // Display the floating point data 
+      Serial.print("X:");
+      Serial.println(event.orientation.x, 4);
+      Serial.print("Y:");
+      Serial.println(event.orientation.y, 4);
+      Serial.print("Z:");
+      Serial.println(event.orientation.z, 4);
+
+    // Optional: Display calibration status 
+      displayCalStatus();
+
+    // Optional: Display sensor status (debug only) 
+      //displaySensorStatus();
+
+    }
+  }
 }
 
 void sensor_run() {
@@ -247,51 +337,13 @@ void sensor_run() {
   sensor_time = millis();
   Serial.println(sensor_time);
 
-  VRaw = analogRead(A0);
-  IRaw = analogRead(A1);
+  current_run();
+  amp_run();
 
-  if (VRaw < 400) {
-  //Conversion
-    VFinal = VRaw/12.99; //180 Amp board  
-    IFinal = IRaw/3.7; //180 Amp board
+  depth_run();
 
-    Serial.print("Volt:");
-    Serial.println(VFinal);
-    Serial.print("Amps:");
-    Serial.println(IFinal);
-  }
+  imu_run();
 
-  sensor.read();
-
-  Serial.print("Pressure:"); 
-  Serial.println(sensor.pressure()); 
-  Serial.print("Temperature:"); 
-  Serial.println(sensor.temperature()); 
-  Serial.print("Depth:"); 
-  Serial.println(sensor.depth()); 
-  Serial.print("Altitude:"); 
-  Serial.println(sensor.altitude()); 
-
-  if (FOUND_BNO) {
-  // Get a new sensor event 
-    sensors_event_t event;
-    bno.getEvent(&event);
-
-  // Display the floating point data 
-    Serial.print("X:");
-    Serial.println(event.orientation.x, 4);
-    Serial.print("Y:");
-    Serial.println(event.orientation.y, 4);
-    Serial.print("Z:");
-    Serial.println(event.orientation.z, 4);
-
-  // Optional: Display calibration status 
-    displayCalStatus();
-
-  // Optional: Display sensor status (debug only) 
-    //displaySensorStatus();
-
-  }
 }
 
 void loop() {
@@ -822,8 +874,8 @@ void loop() {
          Motor4.direction = value;  
 
       } else if (command == "MOTOR_SETUP") {
-    serial_command = "";
-    command_complete = false;
+         serial_command = "";
+         command_complete = false;
          motor_setup();  
 
       } else if (command == "CFG_L1_PROTO") {
@@ -844,8 +896,8 @@ void loop() {
          Light2.off = value;  
 
       } else if (command == "LIGHT_SETUP") {
-    serial_command = "";
-    command_complete = false;
+         serial_command = "";
+         command_complete = false;
          light_setup();  
 
       } else if (command == "CFG_CX_PROTO") {
@@ -860,11 +912,59 @@ void loop() {
          CamX.max = value;  
 
       } else if (command == "CAM_SETUP") {
-    serial_command = "";
-    command_complete = false;
+         serial_command = "";
+         command_complete = false;
          cam_setup();  
-      }
 
+      } else if (command == "CFG_IMU_PROTO") {
+         IMU.proto = value;  
+      } else if (command == "CFG_IMU_ADDR") {
+         IMU.addr = value;  
+      } else if (command == "CFG_IMU_TYPE") {
+         IMU.type = value;  
+      
+      } else if (command == "IMU_SETUP") {
+         serial_command = "";
+         command_complete = false;
+         imu_setup();  
+
+      } else if (command == "CFG_DEPTH_PROTO") {
+         DEPTH.proto = value;  
+      } else if (command == "CFG_DEPTH_ADDR") {
+         DEPTH.addr = value;  
+      } else if (command == "CFG_DEPTH_TYPE") {
+         DEPTH.type = value;  
+      
+      } else if (command == "DEPTH_SETUP") {
+         serial_command = "";
+         command_complete = false;
+         depth_setup();  
+
+      } else if (command == "CFG_CURRENT_PROTO") {
+         CURRENT.proto = value;  
+      } else if (command == "CFG_CURRENT_ADDR") {
+         CURRENT.addr = value;  
+      } else if (command == "CFG_CURRENT_TYPE") {
+         CURRENT.type = value;  
+      
+      } else if (command == "CURRENT_SETUP") {
+         serial_command = "";
+         command_complete = false;
+         current_setup();  
+
+      } else if (command == "CFG_AMP_PROTO") {
+         AMP.proto = value;  
+      } else if (command == "CFG_AMP_ADDR") {
+         AMP.addr = value;  
+      } else if (command == "CFG_AMP_TYPE") {
+         AMP.type = value;  
+      
+      } else if (command == "AMP_SETUP") {
+         serial_command = "";
+         command_complete = false;
+         amp_setup();  
+
+      }
     // clear the string:
     serial_command = "";
     command_complete = false;
