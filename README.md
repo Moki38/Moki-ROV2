@@ -18,6 +18,8 @@ This software was build on a Raspberry PI (Model B+)
 * BlueRobotics Depth/Pressure sensor [MS5837-30BA]
 * Pololu attopilot 180A
 * Adafruit BNO055 IMU
+
+* BlueESC (PWM/I2C) with T100 Thrusters
 ```
 ## Install
 
@@ -170,7 +172,7 @@ Analog Pin A1   I Attopilot 180A
 # Daisy chain your I2C sensors to the Arduino Pins.
 Digital Pin 19   I2C SCL0
 Digital Pin 18   I2C SDA0
-5V      I2C 5v
+3.3V    I2C 3.3v
 GND     I2C GND
 
 # Power (Cut/scratch circuit to separate VIN from VUSB)

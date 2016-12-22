@@ -20,6 +20,7 @@ String value_string = "";
 int value = 0;
 boolean command_complete = false;
 
+int motor_time = 0;
 int sensor_time = 0;
 int power = 0;
 
@@ -31,6 +32,11 @@ struct Motor {
   int max;		// max: 1900,
   int reverse;		// reverse: true 
   Servo servo;
+  Arduino_I2C_ESC i2c;
+  float voltage;
+  float current;
+  float temperature;
+  int16_t rpm;
   unsigned char direction;	// 0 1 2 4 8 16 32 64 128
 };
 
@@ -172,7 +178,13 @@ void displayCalStatus(void)
 }
 
 void motor_stop() {
-  Motor1.servo.writeMicroseconds(Motor1.neutral);
+  if (Motor1.proto == 'PWM') {
+    Motor1.servo.writeMicroseconds(Motor1.neutral);
+  }
+  if (Motor1.proto == 'I2C') {
+    Motor1.i2c.setPWM(Motor1.neutral);
+  }
+
   Motor2.servo.writeMicroseconds(Motor2.neutral);
   Motor3.servo.writeMicroseconds(Motor3.neutral);
   Motor4.servo.writeMicroseconds(Motor4.neutral);
@@ -181,8 +193,16 @@ void motor_stop() {
 }
 
 void motor_setup() {
-  Motor1.servo.attach(Motor1.addr);
-  Motor1.servo.writeMicroseconds(Motor1.neutral);
+  motor_time = millis();
+
+  if (Motor1.proto == 'PWM') {
+    Motor1.servo.attach(Motor1.addr);
+    Motor1.servo.writeMicroseconds(Motor1.neutral);
+  }
+  if (Motor1.proto == 'I2C') {
+    Motor1.i2c(Motor1.addr);
+    Motor1.i2c.setPWM(Motor1.neutral);
+  }
 //  delay (200); 
   Motor2.servo.attach(Motor2.addr);
   Motor2.servo.writeMicroseconds(Motor2.neutral);
@@ -332,6 +352,10 @@ void imu_run() {
   }
 }
 
+void motor_run() {
+  motor_time = millis();
+}
+
 void sensor_run() {
   Serial.print("Time:");
   sensor_time = millis();
@@ -351,6 +375,9 @@ void loop() {
     int time = millis();
     if ((time >= (sensor_time + 1000)) || (time < sensor_time)) { 
       sensor_run();
+    }
+    if ((time >= (motor_time + 250)) || (time < motor_time)) { 
+      motor_run();
     }
 
     if (command_complete) {
