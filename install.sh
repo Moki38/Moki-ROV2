@@ -12,21 +12,22 @@ HOST_IP=`hostname -I`
 # NodeJS
 #
 cd
-wget https://nodejs.org/dist/v6.9.1/node-v6.9.1-linux-armv6l.tar.xz
+wget https://nodejs.org/dist/v6.9.5/node-v6.9.5-linux-armv6l.tar.xz
 cd /usr/local
 rm -rf bin/node bin/npm include/node lib/node
-tar --strip-components 1 -xJf /root/node-v6.9.1-linux-armv6l.tar.xz
+tar --strip-components 1 -xJf /root/node-v6.9.5-linux-armv6l.tar.xz
 
 ## Arduino IDE
 cd
-wget https://downloads.arduino.cc/arduino-1.6.13-linuxarm.tar.xz
+wget https://downloads.arduino.cc/arduino-1.8.1-linuxarm.tar.xz
 cd /usr/share
-tar xfJ ~/arduino-1.6.13-linuxarm.tar.xz
-ln -s arduino-1.6.13 arduino
+tar xfJ ~/arduino-1.8.1-linuxarm.tar.xz
+ln -s arduino-1.8.1 arduino
 
 ## Arduino UDEV Rules
 cd /etc/udev/rules.d/
-wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/99-platformio-udev.rules
+wget https://github.com/platformio/platformio-core/blob/develop/scripts/99-platformio-udev.rules
+#wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/99-platformio-udev.rules
 systemctl restart udev
 
 # Moki-ROV2 Software
@@ -45,10 +46,13 @@ make install
 echo "disable_camera_led=1" >> /boot/config.txt
 
 # PlatformIO (Arduino CLI)
-pip install -U platformio
+#pip install -U platformio
+cd
+wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/get-platformio.py
+python get-platformio.py
 cd 
 cd Moki-ROV2/arduino
-platformio init -b megaatmega2560
+platformio init -b teensy31
 cd lib
 git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
 git clone https://github.com/adafruit/Adafruit_Sensor.git

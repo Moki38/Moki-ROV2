@@ -43,7 +43,7 @@
             "x": {
                 "host": "ARDUINO",
                 "proto": "PWM",
-                "pin": 10,
+                "pin": 9,
                 "neutral": 1600,
                 "min": 1100,
                 "max": 1900,
@@ -57,8 +57,9 @@
     "motor": {
         "1": {
             "host": "ARDUINO",
-            "proto": "PWM",
-            "pin": 3,
+            "proto": 2,
+	    "pole": 6,
+	    "address": "0x29",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -67,8 +68,9 @@
         },
         "2": {
             "host": "ARDUINO",
-            "proto": "PWM",
-            "pin": 4,
+            "proto": 2,
+	    "pole": 6,
+            "address": "0x2a",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -77,8 +79,9 @@
         },
         "3": {
             "host": "ARDUINO",
-            "proto": "PWM",
-            "pin": 23,
+            "proto": 2,
+	    "pole": 6,
+            "address": "0x2b",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -87,8 +90,32 @@
         },
         "4": {
             "host": "ARDUINO",
-            "proto": "PWM",
-            "pin": 22,
+            "proto": 2,
+	    "pole": 6,
+            "address": "0x2c",
+            "neutral": 1500,
+            "min": 1100,
+            "max": 1900,
+            "direction": 15,
+            "reverse": 5
+        }
+        "5": {
+            "host": "ARDUINO",
+            "proto": 2,
+	    "pole": 6,
+            "address": "0x2d",
+            "addr": 0x2d,
+            "neutral": 1500,
+            "min": 1100,
+            "max": 1900,
+            "direction": 15,
+            "reverse": 5
+        }
+        "6": {
+            "host": "ARDUINO",
+            "proto": 2,
+	    "pole": 6,
+            "address": "0x2e",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -100,14 +127,14 @@
         "1": {
             "host": "ARDUINO",
             "proto": "PWM",
-            "pin": 6,
+            "pin": 5,
             "off": 1100,
             "on": 1900
         },
         "2": {
             "host": "ARDUINO",
             "proto": "PWM",
-            "pin": 20,
+            "pin": 6,
             "off": 1100,
             "on": 1900
         }

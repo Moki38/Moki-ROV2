@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
+#include <Arduino_I2C_ESC.h>
 #include <utility/imumaths.h>
 #include "MS5837.h"
 
@@ -27,12 +28,12 @@ int power = 0;
 struct Motor {
   int proto;		// proto:  1:'PWM', 2:I2C
   int addr;		// pin: 3 or i2c address
+  int pole;		// 6 for T100, 8 for T200
   int neutral;		// neutral: 1500,
   int min;		// min: 1100,
   int max;		// max: 1900,
   int reverse;		// reverse: true 
   Servo servo;
-  Arduino_I2C_ESC i2c;
   float voltage;
   float current;
   float temperature;
@@ -44,6 +45,22 @@ struct Motor Motor1;
 struct Motor Motor2;
 struct Motor Motor3;
 struct Motor Motor4;
+struct Motor Motor5;
+struct Motor Motor6;
+  
+Arduino_I2C_ESC Motor_29_6(0x29, 6);
+Arduino_I2C_ESC Motor_2A_6(0x2A, 6);
+Arduino_I2C_ESC Motor_2B_6(0x2B, 6);
+Arduino_I2C_ESC Motor_2C_6(0x2C, 6);
+Arduino_I2C_ESC Motor_2D_6(0x2D, 6);
+Arduino_I2C_ESC Motor_2E_6(0x2E, 6);
+
+Arduino_I2C_ESC Motor_29_8(0x29, 8);
+Arduino_I2C_ESC Motor_2A_8(0x2A, 8);
+Arduino_I2C_ESC Motor_2B_8(0x2B, 8);
+Arduino_I2C_ESC Motor_2C_8(0x2C, 8);
+Arduino_I2C_ESC Motor_2D_8(0x2D, 8);
+Arduino_I2C_ESC Motor_2E_8(0x2E, 8);
 
 boolean CONFIG_MOTOR = false;
 
@@ -178,11 +195,15 @@ void displayCalStatus(void)
 }
 
 void motor_stop() {
-  if (Motor1.proto == 'PWM') {
+  if (Motor1.proto == 1) {
     Motor1.servo.writeMicroseconds(Motor1.neutral);
   }
-  if (Motor1.proto == 'I2C') {
-    Motor1.i2c.setPWM(Motor1.neutral);
+  if (Motor1.proto == 2) {
+    switch (Motor1.addr) {
+      case 0x29:
+        Motor_29_6.setPWM(Motor1.neutral);
+ 	break;
+    } 
   }
 
   Motor2.servo.writeMicroseconds(Motor2.neutral);
@@ -195,13 +216,16 @@ void motor_stop() {
 void motor_setup() {
   motor_time = millis();
 
-  if (Motor1.proto == 'PWM') {
+  if (Motor1.proto == 1) {
     Motor1.servo.attach(Motor1.addr);
     Motor1.servo.writeMicroseconds(Motor1.neutral);
   }
-  if (Motor1.proto == 'I2C') {
-    Motor1.i2c(Motor1.addr);
-    Motor1.i2c.setPWM(Motor1.neutral);
+  if (Motor1.proto == 2) {
+    switch (Motor1.addr) {
+      case 0x29:
+        Motor_29_6.setPWM(Motor1.neutral);
+ 	break;
+    } 
   }
 //  delay (200); 
   Motor2.servo.attach(Motor2.addr);
@@ -212,6 +236,10 @@ void motor_setup() {
  // delay (200); 
   Motor4.servo.attach(Motor4.addr);
   Motor4.servo.writeMicroseconds(Motor4.neutral);
+  Motor5.servo.attach(Motor4.addr);
+  Motor5.servo.writeMicroseconds(Motor4.neutral);
+  Motor6.servo.attach(Motor4.addr);
+  Motor6.servo.writeMicroseconds(Motor4.neutral);
  // delay (200); 
 }
 
@@ -847,6 +875,8 @@ void loop() {
          Motor1.proto = value;  
       } else if (command == "CFG_M1_ADDR") {
          Motor1.addr = value;  
+      } else if (command == "CFG_M1_POLE") {
+         Motor1.pole = value;  
       } else if (command == "CFG_M1_N") {
          Motor1.neutral = value;  
       } else if (command == "CFG_M1_MIN") {
@@ -861,6 +891,8 @@ void loop() {
          Motor2.proto = value;  
       } else if (command == "CFG_M2_ADDR") {
          Motor2.addr = value;  
+      } else if (command == "CFG_M2_POLE") {
+         Motor2.pole = value;  
       } else if (command == "CFG_M2_N") {
          Motor2.neutral = value;  
       } else if (command == "CFG_M2_MIN") {
@@ -875,6 +907,8 @@ void loop() {
          Motor3.proto = value;  
       } else if (command == "CFG_M3_ADDR") {
          Motor3.addr = value;  
+      } else if (command == "CFG_M3_POLE") {
+         Motor3.pole = value;  
       } else if (command == "CFG_M3_N") {
          Motor3.neutral = value;  
       } else if (command == "CFG_M3_MIN") {
@@ -889,6 +923,8 @@ void loop() {
          Motor4.proto = value;  
       } else if (command == "CFG_M4_ADDR") {
          Motor4.addr = value;  
+      } else if (command == "CFG_M4_POLE") {
+         Motor4.pole = value;  
       } else if (command == "CFG_M4_N") {
          Motor4.neutral = value;  
       } else if (command == "CFG_M4_MIN") {
@@ -899,6 +935,38 @@ void loop() {
          Motor4.reverse = value;  
       } else if (command == "CFG_M4_DIR") {
          Motor4.direction = value;  
+      } else if (command == "CFG_M5_PROTO") {
+         Motor5.proto = value;  
+      } else if (command == "CFG_M5_ADDR") {
+         Motor5.addr = value;  
+      } else if (command == "CFG_M5_POLE") {
+         Motor5.pole = value;  
+      } else if (command == "CFG_M5_N") {
+         Motor5.neutral = value;  
+      } else if (command == "CFG_M5_MIN") {
+         Motor5.min = value;  
+      } else if (command == "CFG_M5_MAX") {
+         Motor5.max = value;  
+      } else if (command == "CFG_M5_REV") {
+         Motor5.reverse = value;  
+      } else if (command == "CFG_M5_DIR") {
+         Motor5.direction = value;  
+      } else if (command == "CFG_M6_PROTO") {
+         Motor6.proto = value;  
+      } else if (command == "CFG_M6_ADDR") {
+         Motor6.addr = value;  
+      } else if (command == "CFG_M6_POLE") {
+         Motor6.pole = value;  
+      } else if (command == "CFG_M6_N") {
+         Motor6.neutral = value;  
+      } else if (command == "CFG_M6_MIN") {
+         Motor6.min = value;  
+      } else if (command == "CFG_M6_MAX") {
+         Motor6.max = value;  
+      } else if (command == "CFG_M6_REV") {
+         Motor6.reverse = value;  
+      } else if (command == "CFG_M6_DIR") {
+         Motor6.direction = value;  
 
       } else if (command == "MOTOR_SETUP") {
          serial_command = "";
