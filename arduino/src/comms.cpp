@@ -26,6 +26,11 @@
 
 #ifdef COMMS_SERIAL
 void serialEvent() {
+
+  String serial_command = "";
+  boolean command_complete = false;
+
+  serial_command.reserve(200);
   while (Serial.available()) {
     // get the new byte:
     char inChar = (char)Serial.read();
@@ -61,7 +66,6 @@ void Comms::setup() {
 
 
 #ifdef COMMS_SERIAL
-  serial_command.reserve(200);
   Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB

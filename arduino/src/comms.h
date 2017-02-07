@@ -34,8 +34,6 @@
 #define COMMS_SERIAL            // Enable Serial comms
 #define COMMS_SERIAL_DEBUG      // Enable Serial debug messages
 
-String serial_command = "";
-boolean command_complete = false;
 
 class Comms {
 public:
