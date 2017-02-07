@@ -2,7 +2,7 @@
 
  Copyright (C) 2017 Eric van Dijken <eric@team-moki.nl>
 
- Permission is hereby granted, free of charge, to any person obtaining a copy 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -22,25 +22,11 @@
 
 */
 
-#include "main.h"
+#include "sensor.h"
 
-Motor motor;
-Config config;
-Light light;
-Sensor sensor;
-Comms comms;
-Camera camera;
-
-void setup() {
-  config.setup();
-  comms.setup();
-  motor.setup();
-  light.setup();
-  camera.setup();
-  sensor.setup();
+void Sensor::setup() {
 }
 
-void loop() {
-  motor.loop();
+void Sensor::loop() {
 }
 

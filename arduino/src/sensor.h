@@ -2,7 +2,7 @@
 
  Copyright (C) 2017 Eric van Dijken <eric@team-moki.nl>
 
- Permission is hereby granted, free of charge, to any person obtaining a copy 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -22,25 +22,23 @@
 
 */
 
-#include "main.h"
+#include <Wire.h>
+#include "Adafruit_Sensor.h"
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
+#include "MS5837.h"
 
-Motor motor;
-Config config;
-Light light;
-Sensor sensor;
-Comms comms;
-Camera camera;
+#ifndef _SENSOR_H
+#define _SENSOR_H
 
-void setup() {
-  config.setup();
-  comms.setup();
-  motor.setup();
-  light.setup();
-  camera.setup();
-  sensor.setup();
-}
+class Sensor {
+public:
+	void setup();
+	void loop();
+private:
+	int x = 0;
+};
 
-void loop() {
-  motor.loop();
-}
+#endif
+
 

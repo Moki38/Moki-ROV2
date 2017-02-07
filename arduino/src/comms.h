@@ -2,7 +2,7 @@
 
  Copyright (C) 2017 Eric van Dijken <eric@team-moki.nl>
 
- Permission is hereby granted, free of charge, to any person obtaining a copy 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -22,25 +22,29 @@
 
 */
 
-#include "main.h"
+#include <Wire.h>
 
-Motor motor;
-Config config;
-Light light;
-Sensor sensor;
-Comms comms;
-Camera camera;
+#ifndef _COMMS_H
+#define _COMMS_H
 
-void setup() {
-  config.setup();
-  comms.setup();
-  motor.setup();
-  light.setup();
-  camera.setup();
-  sensor.setup();
-}
+//
+// Comms Configuration defines
+//
+#define COMMS_I2C               // Enable I2C comms
+#define COMMS_SERIAL            // Enable Serial comms
+#define COMMS_SERIAL_DEBUG      // Enable Serial debug messages
 
-void loop() {
-  motor.loop();
-}
+String serial_command = "";
+boolean command_complete = false;
+
+class Comms {
+public:
+	void setup();
+	void loop();
+private:
+	int x = 0;
+};
+
+#endif /* _COMMS_H */
+
 
