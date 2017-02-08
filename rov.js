@@ -103,20 +103,92 @@ function parse_serial(line) {
     case    'Motor_1':
       rovdata.Motor_1 = res[1];
       break;
+    case    'Motor_1_RPM':
+      rovdata.Motor_1_RPM = res[1];
+      break;
+    case    'Motor_1_V':
+      rovdata.Motor_1_V = res[1];
+      break;
+    case    'Motor_1_A':
+      rovdata.Motor_1_A = res[1];
+      break;
+    case    'Motor_1_Temp':
+      rovdata.Motor_1_Temp = res[1];
+      break;
     case    'Motor_2':
       rovdata.Motor_2 = res[1];
+      break;
+    case    'Motor_2_RPM':
+      rovdata.Motor_2_RPM = res[1];
+      break;
+    case    'Motor_2_V':
+      rovdata.Motor_2_V = res[1];
+      break;
+    case    'Motor_2_A':
+      rovdata.Motor_2_A = res[1];
+      break;
+    case    'Motor_2_Temp':
+      rovdata.Motor_2_Temp = res[1];
       break;
     case    'Motor_3':
       rovdata.Motor_3 = res[1];
       break;
+    case    'Motor_3_RPM':
+      rovdata.Motor_3_RPM = res[1];
+      break;
+    case    'Motor_3_V':
+      rovdata.Motor_3_V = res[1];
+      break;
+    case    'Motor_3_A':
+      rovdata.Motor_3_A = res[1];
+      break;
+    case    'Motor_3_Temp':
+      rovdata.Motor_3_Temp = res[1];
+      break;
     case    'Motor_4':
       rovdata.Motor_4 = res[1];
+      break;
+    case    'Motor_4_RPM':
+      rovdata.Motor_4_RPM = res[1];
+      break;
+    case    'Motor_4_V':
+      rovdata.Motor_4_V = res[1];
+      break;
+    case    'Motor_4_A':
+      rovdata.Motor_4_A = res[1];
+      break;
+    case    'Motor_4_Temp':
+      rovdata.Motor_4_Temp = res[1];
       break;
     case    'Motor_5':
       rovdata.Motor_5 = res[1];
       break;
+    case    'Motor_5_RPM':
+      rovdata.Motor_5_RPM = res[1];
+      break;
+    case    'Motor_5_V':
+      rovdata.Motor_5_V = res[1];
+      break;
+    case    'Motor_5_A':
+      rovdata.Motor_5_A = res[1];
+      break;
+    case    'Motor_5_Temp':
+      rovdata.Motor_5_Temp = res[1];
+      break;
     case    'Motor_6':
       rovdata.Motor_6 = res[1];
+      break;
+    case    'Motor_6_RPM':
+      rovdata.Motor_6_RPM = res[1];
+      break;
+    case    'Motor_6_V':
+      rovdata.Motor_6_V = res[1];
+      break;
+    case    'Motor_6_A':
+      rovdata.Motor_6_A = res[1];
+      break;
+    case    'Motor_6_Temp':
+      rovdata.Motor_6_Temp = res[1];
       break;
     case    'Stop':
       rovdata.Motor_1 = 0;

@@ -41,12 +41,12 @@ struct Motor {
   unsigned char direction;	// 0 1 2 4 8 16 32 64 128
 };
 
-struct Motor Motor1;
-struct Motor Motor2;
-struct Motor Motor3;
-struct Motor Motor4;
-struct Motor Motor5;
-struct Motor Motor6;
+Motor Motor1;
+Motor Motor2;
+Motor Motor3;
+Motor Motor4;
+Motor Motor5;
+Motor Motor6;
   
 Arduino_I2C_ESC Motor_29_6(0x29, 6);
 Arduino_I2C_ESC Motor_2A_6(0x2A, 6);
@@ -54,13 +54,6 @@ Arduino_I2C_ESC Motor_2B_6(0x2B, 6);
 Arduino_I2C_ESC Motor_2C_6(0x2C, 6);
 Arduino_I2C_ESC Motor_2D_6(0x2D, 6);
 Arduino_I2C_ESC Motor_2E_6(0x2E, 6);
-
-Arduino_I2C_ESC Motor_29_8(0x29, 8);
-Arduino_I2C_ESC Motor_2A_8(0x2A, 8);
-Arduino_I2C_ESC Motor_2B_8(0x2B, 8);
-Arduino_I2C_ESC Motor_2C_8(0x2C, 8);
-Arduino_I2C_ESC Motor_2D_8(0x2D, 8);
-Arduino_I2C_ESC Motor_2E_8(0x2E, 8);
 
 boolean CONFIG_MOTOR = false;
 
@@ -72,8 +65,8 @@ struct Light {
   Servo servo;
 };
 
-struct Light Light1;
-struct Light Light2;
+Light Light1;
+Light Light2;
 
 boolean CONFIG_LIGHT = false;
 
@@ -86,8 +79,8 @@ struct Camera {
   Servo servo;
 };
 
-struct Camera CamX;
-struct Camera CamY;
+Camera CamX;
+Camera CamY;
 
 boolean CONFIG_CAMERA = false;
 
@@ -97,10 +90,10 @@ struct Sensor {
   int type;
 };
 
-struct Sensor IMU;
-struct Sensor DEPTH;
-struct Sensor CURRENT;
-struct Sensor AMP;
+Sensor IMU;
+Sensor DEPTH;
+Sensor CURRENT;
+Sensor AMP;
 
 //
 // Attopilot 180
@@ -380,8 +373,166 @@ void imu_run() {
   }
 }
 
+void motor_do(int x, Motor M, int dir) {
+  if (MOTOR_ARM) {
+    if (M.direction & 0x01) {
+       switch(x) {
+	 case 1:
+           Serial.print("Motor_1:");
+           break;
+	 case 2:
+           Serial.print("Motor_2:");
+           break;
+	 case 3:
+           Serial.print("Motor_3:");
+           break;
+	 case 4:
+           Serial.print("Motor_4:");
+           break;
+	 case 5:
+           Serial.print("Motor_5:");
+           break;
+	 case 6:
+           Serial.print("Motor_6:");
+           break;
+       }
+       if (M.reverse & 0x01) {
+         if (M.proto == 2) {
+           switch(x) {
+	     case 1:
+               Motor_29_6.setPWM(M.neutral-(4*power));
+               break;
+	     case 2:
+               Motor_2A_6.setPWM(M.neutral-(4*power));
+               break;
+	     case 3:
+               Motor_2B_6.setPWM(M.neutral-(4*power));
+               break;
+	     case 4:
+               Motor_2C_6.setPWM(M.neutral-(4*power));
+               break;
+	     case 5:
+               Motor_2D_6.setPWM(M.neutral-(4*power));
+               break;
+	     case 6:
+               Motor_2E_6.setPWM(M.neutral-(4*power));
+               break;
+           }
+         } else {
+           M.servo.writeMicroseconds(M.neutral-(4*power));
+           Serial.println(-power);
+         }
+       } else {
+         if (M.proto == 2) {
+           switch(x) {
+	     case 1:
+               Motor_29_6.setPWM(M.neutral+(4*power));
+               break;
+	     case 2:
+               Motor_2A_6.setPWM(M.neutral+(4*power));
+               break;
+	     case 3:
+               Motor_2B_6.setPWM(M.neutral+(4*power));
+               break;
+	     case 4:
+               Motor_2C_6.setPWM(M.neutral+(4*power));
+               break;
+	     case 5:
+               Motor_2D_6.setPWM(M.neutral+(4*power));
+               break;
+	     case 6:
+               Motor_2E_6.setPWM(M.neutral+(4*power));
+               break;
+           }
+         } else {
+           M.servo.writeMicroseconds(M.neutral+(4*power));
+           Serial.println(power);
+         }
+       }
+    }
+  }
+}
+
 void motor_run() {
   motor_time = millis();
+  Motor_29_6.update();
+  Motor1.voltage = Motor_29_6.voltage();
+  Serial.print("Motor_1_V:");
+  Serial.println(Motor1.voltage);
+  Motor1.current = Motor_29_6.current();
+  Serial.print("Motor_1_A:");
+  Serial.println(Motor1.current);
+  Motor1.temperature = Motor_29_6.temperature();
+  Serial.print("Motor_1_Temp:");
+  Serial.println(Motor1.temperature);
+  Motor1.rpm = Motor_29_6.rpm();
+  Serial.print("Motor_1_RPM:");
+  Serial.println(Motor1.rpm);
+  Motor_2A_6.update();
+  Motor2.voltage = Motor_2A_6.voltage();
+  Serial.print("Motor_2_V:");
+  Serial.println(Motor2.voltage);
+  Motor2.current = Motor_2A_6.current();
+  Serial.print("Motor_2_A:");
+  Serial.println(Motor2.current);
+  Motor2.temperature = Motor_2A_6.temperature();
+  Serial.print("Motor_2_Temp:");
+  Serial.println(Motor2.temperature);
+  Motor2.rpm = Motor_2A_6.rpm();
+  Serial.print("Motor_2_RPM:");
+  Serial.println(Motor2.rpm);
+  Motor_2B_6.update();
+  Motor3.voltage = Motor_2B_6.voltage();
+  Serial.print("Motor_3_V:");
+  Serial.println(Motor3.voltage);
+  Motor3.current = Motor_2B_6.current();
+  Serial.print("Motor_3_A:");
+  Serial.println(Motor3.current);
+  Motor3.temperature = Motor_2B_6.temperature();
+  Serial.print("Motor_3_Temp:");
+  Serial.println(Motor3.temperature);
+  Motor3.rpm = Motor_2B_6.rpm();
+  Serial.print("Motor_3_RPM:");
+  Serial.println(Motor3.rpm);
+  Motor_2C_6.update();
+  Motor4.voltage = Motor_2C_6.voltage();
+  Serial.print("Motor_4_V:");
+  Serial.println(Motor4.voltage);
+  Motor4.current = Motor_2C_6.current();
+  Serial.print("Motor_4_A:");
+  Serial.println(Motor4.current);
+  Motor4.temperature = Motor_2C_6.temperature();
+  Serial.print("Motor_4_Temp:");
+  Serial.println(Motor4.temperature);
+  Motor4.rpm = Motor_2C_6.rpm();
+  Serial.print("Motor_4_RPM:");
+  Serial.println(Motor4.rpm);
+  Motor_2D_6.update();
+  Motor5.voltage = Motor_2D_6.voltage();
+  Serial.print("Motor_5_V:");
+  Serial.println(Motor5.voltage);
+  Motor5.current = Motor_2D_6.current();
+  Serial.print("Motor_5_A:");
+  Serial.println(Motor5.current);
+  Motor5.temperature = Motor_2D_6.temperature();
+  Serial.print("Motor_5_Temp:");
+  Serial.println(Motor5.temperature);
+  Motor5.rpm = Motor_2D_6.rpm();
+  Serial.print("Motor_5_RPM:");
+  Serial.println(Motor5.rpm);
+  Motor_2E_6.update();
+  Motor6.voltage = Motor_2E_6.voltage();
+  Serial.print("Motor_6_V:");
+  Serial.println(Motor6.voltage);
+  Motor6.current = Motor_2E_6.current();
+  Serial.print("Motor_6_A:");
+  Serial.println(Motor6.current);
+  Motor6.temperature = Motor_2E_6.temperature();
+  Serial.print("Motor_6_Temp:");
+  Serial.println(Motor6.temperature);
+  Motor6.rpm = Motor_2E_6.rpm();
+  Serial.print("Motor_6_RPM:");
+  Serial.println(Motor6.rpm);
 }
 
 void sensor_run() {
@@ -432,435 +583,75 @@ void loop() {
 // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
 
       } else if (command == "Forward") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x01) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x01) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x01) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x01) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x01) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x01) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x01) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x01) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x01);
+        motor_do(2, Motor2, 0x01);
+        motor_do(3, Motor3, 0x01);
+        motor_do(4, Motor4, 0x01);
+        motor_do(5, Motor5, 0x01);
+        motor_do(6, Motor6, 0x01);
       } else if (command == "Reverse") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x02) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x02) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x02) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x02) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x02) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x02) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x02) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x02) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x02);
+        motor_do(2, Motor2, 0x02);
+        motor_do(3, Motor3, 0x02);
+        motor_do(4, Motor4, 0x02);
+        motor_do(5, Motor5, 0x02);
+        motor_do(6, Motor6, 0x02);
       } else if (command == "Right") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x04) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x04) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x04) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x04) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x04) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x04) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x04) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x04) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x04);
+        motor_do(2, Motor2, 0x04);
+        motor_do(3, Motor3, 0x04);
+        motor_do(4, Motor4, 0x04);
+        motor_do(5, Motor5, 0x04);
+        motor_do(6, Motor6, 0x04);
       } else if (command == "Left") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x08) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x08) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x08) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x08) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x08) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x08) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x08) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x08) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x08);
+        motor_do(2, Motor2, 0x08);
+        motor_do(3, Motor3, 0x08);
+        motor_do(4, Motor4, 0x08);
+        motor_do(5, Motor5, 0x08);
+        motor_do(6, Motor6, 0x08);
       } else if (command == "Dive") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x10) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x10) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x10) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x10) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x10) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x10) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x10) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x10) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x10);
+        motor_do(2, Motor2, 0x10);
+        motor_do(3, Motor3, 0x10);
+        motor_do(4, Motor4, 0x10);
+        motor_do(5, Motor5, 0x10);
+        motor_do(6, Motor6, 0x10);
       } else if (command == "Up") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x20) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x20) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x20) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x20) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x20) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x20) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x20) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x20) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x20);
+        motor_do(2, Motor2, 0x20);
+        motor_do(3, Motor3, 0x20);
+        motor_do(4, Motor4, 0x20);
+        motor_do(5, Motor5, 0x20);
+        motor_do(6, Motor6, 0x20);
       } else if (command == "Strafe_r") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x40) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x40) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x40) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x40) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x40) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x40) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x40) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x40) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x40);
+        motor_do(2, Motor2, 0x40);
+        motor_do(3, Motor3, 0x40);
+        motor_do(4, Motor4, 0x40);
+        motor_do(5, Motor5, 0x40);
+        motor_do(6, Motor6, 0x40);
       } else if (command == "Strafe_l") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x80) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x80) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x80) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x80) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x80) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x80) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x80) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x80) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x80);
+        motor_do(2, Motor2, 0x80);
+        motor_do(3, Motor3, 0x80);
+        motor_do(4, Motor4, 0x80);
+        motor_do(5, Motor5, 0x80);
+        motor_do(6, Motor6, 0x80);
       } else if (command == "Roll_r") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x40) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x40) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x40) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x40) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x40) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x40) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x40) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x40) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x100);
+        motor_do(2, Motor2, 0x100);
+        motor_do(3, Motor3, 0x100);
+        motor_do(4, Motor4, 0x100);
+        motor_do(5, Motor5, 0x100);
+        motor_do(6, Motor6, 0x100);
       } else if (command == "Roll_l") {
-         if (MOTOR_ARM) {
-           if (Motor1.direction & 0x80) {
-             Serial.print("Motor_1:");
-             if (Motor1.reverse & 0x80) {
-               Motor1.servo.writeMicroseconds(Motor1.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor1.servo.writeMicroseconds(Motor1.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor2.direction & 0x80) {
-             Serial.print("Motor_2:");
-             if (Motor2.reverse & 0x80) {
-               Motor2.servo.writeMicroseconds(Motor2.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor2.servo.writeMicroseconds(Motor2.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor3.direction & 0x80) {
-             Serial.print("Motor_3:");
-             if (Motor3.reverse & 0x80) {
-               Motor3.servo.writeMicroseconds(Motor3.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor3.servo.writeMicroseconds(Motor3.neutral+(4*power));
-               Serial.println(power);
-             }
-           }
-           if (Motor4.direction & 0x80) {
-             Serial.print("Motor_4:");
-             if (Motor4.reverse & 0x80) {
-               Motor4.servo.writeMicroseconds(Motor4.neutral-(4*power));
-               Serial.println(-power);
-             } else {
-               Motor4.servo.writeMicroseconds(Motor4.neutral+(4*power));
-               Serial.println(power);
-             }
-           } 
-         }
+        motor_do(1, Motor1, 0x200);
+        motor_do(2, Motor2, 0x200);
+        motor_do(3, Motor3, 0x200);
+        motor_do(4, Motor4, 0x200);
+        motor_do(5, Motor5, 0x200);
+        motor_do(6, Motor6, 0x200);
       } else if (command == "Light1") {
          Light1.servo.writeMicroseconds(value);  
       } else if (command == "Light2") {
