@@ -70,7 +70,7 @@
             "host": "ARDUINO",
             "proto": 2,
 	    "pole": 6,
-            "address": "0x2a",
+	    "address": "0x2A",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -81,7 +81,7 @@
             "host": "ARDUINO",
             "proto": 2,
 	    "pole": 6,
-            "address": "0x2b",
+	    "address": "0x2B",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -92,30 +92,29 @@
             "host": "ARDUINO",
             "proto": 2,
 	    "pole": 6,
-            "address": "0x2c",
+	    "address": "0x2C",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
             "direction": 15,
             "reverse": 5
-        }
+        },
         "5": {
             "host": "ARDUINO",
             "proto": 2,
 	    "pole": 6,
-            "address": "0x2d",
-            "addr": 0x2d,
+	    "address": "0x2D",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
             "direction": 15,
             "reverse": 5
-        }
+        },
         "6": {
             "host": "ARDUINO",
             "proto": 2,
 	    "pole": 6,
-            "address": "0x2e",
+	    "address": "0x2E",
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
@@ -126,14 +125,14 @@
     "light": {
         "1": {
             "host": "ARDUINO",
-            "proto": "PWM",
+            "proto": 2,
             "pin": 5,
             "off": 1100,
             "on": 1900
         },
         "2": {
             "host": "ARDUINO",
-            "proto": "PWM",
+            "proto": 2,
             "pin": 6,
             "off": 1100,
             "on": 1900
