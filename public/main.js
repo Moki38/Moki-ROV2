@@ -35,6 +35,9 @@ var connected = false;
 
 var x = 80;
 var y = 30;
+
+car rovdata = {};
+
 var mbar = 0;
 var temp = 0;
 var depth = 0;
@@ -162,7 +165,7 @@ function update(rovdata) {
   motor_4 = rovdata.Motor_4;
 }
 
-function display() {
+function display(rovdata) {
   var today=new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
   rov_context.clearRect(0, 0, rov_canvas.width, rov_canvas.height);
   rov_context.font = '14pt Verdana';
@@ -387,6 +390,12 @@ function display() {
   if (motor_4 != 0) {
     rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+125,motor_4,10);
   }
+  if (rovdata.Motor_5 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+145,rovdata.Motor_5,10);
+  }
+  if (rovdata.Motor_6 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+165,rovdata.Motor_6,10);
+  }
   rov_context.fill();
 
 
@@ -451,7 +460,7 @@ function display() {
 }
 
 function mainloop() {
-  display();
+  display(rovdata);
   readgamepad();
 }
 
