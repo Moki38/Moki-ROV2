@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -157,146 +158,43 @@ void displaySensorStatus(void)
 }
 
 /**************************************************************************/
+=======
+>>>>>>> develop
 /*
-    Display sensor calibration status
+
+ Copyright (C) 2017 Eric van Dijken <eric@team-moki.nl>
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy 
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
 */
-/**************************************************************************/
-void displayCalStatus(void)
-{
-  /* Get the four calibration values (0..3) */
-  /* Any sensor data reporting 0 should be ignored, */
-  /* 3 means 'fully calibrated" */
-  uint8_t system, gyro, accel, mag;
-  system = gyro = accel = mag = 0;
-  bno.getCalibration(&system, &gyro, &accel, &mag);
 
-  /* The data should be ignored until the system calibration is > 0 */
-//  if (!system)
-//  {
-//    Serial.print("! ");
-//  }
+#include "main.h"
 
-  /* Display the individual values */
-  Serial.print("Sys:");
-  Serial.println(system, DEC);
-  Serial.print("Gyro:");
-  Serial.println(gyro, DEC);
-  Serial.print("Accel:");
-  Serial.println(accel, DEC);
-  Serial.print("Mag:");
-  Serial.println(mag, DEC);
-}
-
-void motor_stop() {
-  if (Motor1.proto == 1) {
-    Motor1.servo.writeMicroseconds(Motor1.neutral);
-  }
-  if (Motor1.proto == 2) {
-    switch (Motor1.addr) {
-      case 0x29:
-        Motor_29_6.setPWM(Motor1.neutral);
- 	break;
-    } 
-  }
-
-  Motor2.servo.writeMicroseconds(Motor2.neutral);
-  Motor3.servo.writeMicroseconds(Motor3.neutral);
-  Motor4.servo.writeMicroseconds(Motor4.neutral);
-  Serial.print("Stop:");
-  Serial.println(1);
-}
-
-void motor_setup() {
-  motor_time = millis();
-
-  if (Motor1.proto == 1) {
-    Motor1.servo.attach(Motor1.addr);
-    Motor1.servo.writeMicroseconds(Motor1.neutral);
-  }
-  if (Motor1.proto == 2) {
-    switch (Motor1.addr) {
-      case 0x29:
-        Motor_29_6.setPWM(Motor1.neutral);
- 	break;
-    } 
-  }
-//  delay (200); 
-  Motor2.servo.attach(Motor2.addr);
-  Motor2.servo.writeMicroseconds(Motor2.neutral);
-//  delay (200); 
-  Motor3.servo.attach(Motor3.addr);
-  Motor3.servo.writeMicroseconds(Motor3.neutral);
- // delay (200); 
-  Motor4.servo.attach(Motor4.addr);
-  Motor4.servo.writeMicroseconds(Motor4.neutral);
-  Motor5.servo.attach(Motor4.addr);
-  Motor5.servo.writeMicroseconds(Motor4.neutral);
-  Motor6.servo.attach(Motor4.addr);
-  Motor6.servo.writeMicroseconds(Motor4.neutral);
- // delay (200); 
-}
-
-void light_setup() {
-  Light1.servo.attach(Light1.addr);
-  Light1.servo.writeMicroseconds(Light1.off);
-//  delay (200); 
-  Light2.servo.attach(Light2.addr);
-  Light2.servo.writeMicroseconds(Light2.off);
-//  delay (200); 
-}
-
-void cam_setup() {
-  CamX.servo.attach(CamX.addr);
-  CamX.servo.writeMicroseconds(CamX.neutral);
- // delay (200); 
-
-}
-
-void imu_setup() {
-  if (IMU.type == 1) {
-  /* Initialise the sensor */
-    if(bno.begin())
-    {
-       FOUND_BNO = 1; 
-    }
-
-    delay(1000);
-    /* Display some basic information on this sensor */
-    if (FOUND_BNO) {
-      displaySensorDetails();
-    /* Optional: Display current status */
-      displaySensorStatus();
-  
-      bno.setExtCrystalUse(true);
-    }
-  }
-}
-
-void depth_setup() {
-  if (CURRENT.type == 1) {
-    MS5837_sensor.init();
-    MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
-  }
-}
-
-void current_setup() {
-}
-
-void amp_setup() {
-}
-
-void sensor_setup() {
-
-  depth_setup();
-  imu_setup();
-  current_setup();
-  amp_setup();
-
-  sensor_time = millis();
-
-}
+Motor motor;
+Config config;
+Light light;
+Sensor sensor;
+Comms comms;
+Camera camera;
 
 void setup() {
+<<<<<<< HEAD
   delay (6000); 
   serial_command.reserve(200);
   Serial.begin(115200);
@@ -856,19 +754,17 @@ void loop() {
     command_complete = false;
     }
   }
+=======
+  config.setup();
+  comms.setup();
+  motor.setup();
+  light.setup();
+  camera.setup();
+  sensor.setup();
 }
- 
-void serialEvent() {
-  while (Serial.available()) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
-    // add it to the inputString:
-    serial_command += inChar;
-    // if the incoming character is a newline, set a flag
-    // so the main loop can do something about it:
-    if (inChar == '\n') {
-      command_complete = true;
-    }
-  }
+
+void loop() {
+  motor.loop();
+>>>>>>> develop
 }
- 
+
