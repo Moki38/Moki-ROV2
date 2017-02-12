@@ -1,5 +1,8 @@
 # Moki-ROV2 (Working software, with my setup) 
 
+#If you gonna use this code, please let me know by email!
+
+
 Pilot your ROV-PI directly from your PC webbrowser browser.
 
 If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
@@ -210,7 +213,7 @@ The people at http://www.bluerobotics.com/ for building great stuff (makes ROV b
 
 The MIT License
 
-Copyright (c) 2016 by Eric van Dijken <rov-pi@team-moki.nl>
+Copyright (c) 2016 by Eric van Dijken <eric@team-moki.nl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

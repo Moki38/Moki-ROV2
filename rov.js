@@ -465,6 +465,7 @@ var push_config = function() {
 
   rovdata.Config = true;
 // Motor
+  console.log('Config Motor');
   if (arduino) {
     if (config.motor[1].host == 'ARDUINO') {
       port.write('CFG_M1_PROTO:'+config.motor[1].proto+'\n');
@@ -586,6 +587,7 @@ var push_config = function() {
     port.write('LIGHT_SETUP:1\n');
 
 // Sensors
+  console.log('Config Sensor');
     if (config.sensor.IMU.host == 'ARDUINO') {
       if (config.sensor.IMU.proto == 'PWM') {
         port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
@@ -655,6 +657,7 @@ var push_config = function() {
 
     port.write('CAM_SETUP:1\n');
   } // Arduino
+  console.log('Config Done');
 }
 
 var lights = function() {

@@ -43,7 +43,7 @@
             "x": {
                 "host": "ARDUINO",
                 "proto": "PWM",
-                "pin": 9,
+                "pin": 5,
                 "neutral": 1600,
                 "min": 1100,
                 "max": 1900,
@@ -126,14 +126,14 @@
         "1": {
             "host": "ARDUINO",
             "proto": 2,
-            "pin": 5,
+            "pin": 3,
             "off": 1100,
             "on": 1900
         },
         "2": {
             "host": "ARDUINO",
             "proto": 2,
-            "pin": 6,
+            "pin": 4,
             "off": 1100,
             "on": 1900
         }

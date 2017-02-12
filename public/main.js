@@ -36,7 +36,7 @@ var connected = false;
 var x = 80;
 var y = 30;
 
-car rovdata = {};
+var rovdata = {};
 
 var mbar = 0;
 var temp = 0;

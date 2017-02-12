@@ -294,14 +294,21 @@ void sensor_setup() {
 
 }
 
+void requestEvent() {
+  Wire.write("hello "); // respond with message of 6 bytes
+  // as expected by master
+}
+
 void setup() {
   delay (6000); 
   serial_command.reserve(200);
   Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB
-  }
-  Wire.begin();
+//  while (!Serial) {
+//    ; // wait for serial port to connect. Needed for native USB
+//  }
+
+  Wire.begin(8);                // join i2c bus with address #8
+  Wire.onRequest(requestEvent);
 
   Serial.println("Ready!");
   READY = 1;
