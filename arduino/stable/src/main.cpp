@@ -21,6 +21,9 @@ String value_string = "";
 int value = 0;
 boolean command_complete = false;
 
+volatile byte I2C_Byte = 0; //I2C request Byte
+volatile bool I2C_Trigger = 0;
+
 int motor_time = 0;
 int sensor_time = 0;
 int power = 0;
@@ -294,9 +297,13 @@ void sensor_setup() {
 
 }
 
+void receiveEvent(int howMany) {
+  I2C_Byte = Wire.read();    // set the index (or pointer) to the registers.
+}
+
 void requestEvent() {
-  Wire.write("hello "); // respond with message of 6 bytes
-  // as expected by master
+  I2C_Trigger = true;
+  Wire.write(I2C_Byte + 128);
 }
 
 void setup() {
@@ -308,6 +315,8 @@ void setup() {
 //  }
 
   Wire.begin(8);                // join i2c bus with address #8
+
+  Wire.onReceive(receiveEvent);
   Wire.onRequest(requestEvent);
 
   Serial.println("Ready!");
@@ -380,7 +389,7 @@ void imu_run() {
 
 void motor_do(int x, Motor M, int dir) {
   if (MOTOR_ARM) {
-    if (M.direction & 0x01) {
+    if (M.direction & dir) {
        switch(x) {
 	 case 1:
            Serial.print("Motor_1:");
@@ -401,7 +410,7 @@ void motor_do(int x, Motor M, int dir) {
            Serial.print("Motor_6:");
            break;
        }
-       if (M.reverse & 0x01) {
+       if (M.reverse & dir) {
          if (M.proto == 2) {
            switch(x) {
 	     case 1:
@@ -460,6 +469,7 @@ void motor_do(int x, Motor M, int dir) {
 
 void motor_run() {
   motor_time = millis();
+
   Motor_29_6.update();
   Motor1.voltage = Motor_29_6.voltage();
   Serial.print("Motor_1_V:");
@@ -473,6 +483,7 @@ void motor_run() {
   Motor1.rpm = Motor_29_6.rpm();
   Serial.print("Motor_1_RPM:");
   Serial.println(Motor1.rpm);
+
   Motor_2A_6.update();
   Motor2.voltage = Motor_2A_6.voltage();
   Serial.print("Motor_2_V:");
@@ -486,6 +497,7 @@ void motor_run() {
   Motor2.rpm = Motor_2A_6.rpm();
   Serial.print("Motor_2_RPM:");
   Serial.println(Motor2.rpm);
+
   Motor_2B_6.update();
   Motor3.voltage = Motor_2B_6.voltage();
   Serial.print("Motor_3_V:");
@@ -499,6 +511,7 @@ void motor_run() {
   Motor3.rpm = Motor_2B_6.rpm();
   Serial.print("Motor_3_RPM:");
   Serial.println(Motor3.rpm);
+
   Motor_2C_6.update();
   Motor4.voltage = Motor_2C_6.voltage();
   Serial.print("Motor_4_V:");
@@ -512,6 +525,7 @@ void motor_run() {
   Motor4.rpm = Motor_2C_6.rpm();
   Serial.print("Motor_4_RPM:");
   Serial.println(Motor4.rpm);
+
   Motor_2D_6.update();
   Motor5.voltage = Motor_2D_6.voltage();
   Serial.print("Motor_5_V:");
@@ -525,6 +539,7 @@ void motor_run() {
   Motor5.rpm = Motor_2D_6.rpm();
   Serial.print("Motor_5_RPM:");
   Serial.println(Motor5.rpm);
+
   Motor_2E_6.update();
   Motor6.voltage = Motor_2E_6.voltage();
   Serial.print("Motor_6_V:");
@@ -555,6 +570,12 @@ void sensor_run() {
 }
 
 void loop() {
+  if (I2C_Trigger) {
+    Serial.print("I2C:");
+    Serial.println(I2C_Byte);
+    I2C_Trigger = false;
+  }
+
   if (READY) {
     int time = millis();
     if ((time >= (sensor_time + 1000)) || (time < sensor_time)) { 
