@@ -588,20 +588,6 @@ var push_config = function() {
 
 // Sensors
   console.log('Config Sensor');
-    if (config.sensor.IMU.host == 'ARDUINO') {
-      if (config.sensor.IMU.proto == 'PWM') {
-        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
-        port.write('CFG_IMU_PROTO:1\n');
-      }
-      if (config.sensor.IMU.proto == 'I2C') {
-        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.address+'\n');
-        port.write('CFG_IMU_PROTO:2\n');
-      }
-      if (config.sensor.IMU.type == 'BNO055') {
-        port.write('CFG_IMU_TYPE:1\n');
-      }
-    }
-    port.write('IMU_SETUP:1\n');
 
     if (config.sensor.DEPTH.host == 'ARDUINO') {
       if (config.sensor.DEPTH.proto == 'PWM') {
@@ -656,6 +642,21 @@ var push_config = function() {
     }
 
     port.write('CAM_SETUP:1\n');
+    
+    if (config.sensor.IMU.host == 'ARDUINO') {
+      if (config.sensor.IMU.proto == 'PWM') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
+        port.write('CFG_IMU_PROTO:1\n');
+      }
+      if (config.sensor.IMU.proto == 'I2C') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.address+'\n');
+        port.write('CFG_IMU_PROTO:2\n');
+      }
+      if (config.sensor.IMU.type == 'BNO055') {
+        port.write('CFG_IMU_TYPE:1\n');
+      }
+    }
+    port.write('IMU_SETUP:1\n');
   } // Arduino
   console.log('Config Done');
 }

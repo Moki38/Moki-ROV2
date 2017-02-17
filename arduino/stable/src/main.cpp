@@ -191,36 +191,42 @@ void displayCalStatus(void)
 
 void motor_stop() {
   if (Motor1.proto == 1) {
+    Motor1.servo.attach(Motor1.addr);
     Motor1.servo.writeMicroseconds(Motor1.neutral);
   }
   if (Motor1.proto == 2) {
     Motor_29_6.setPWM(Motor1.neutral);
   }
   if (Motor2.proto == 1) {
-    Motor2.servo.writeMicroseconds(Motor1.neutral);
+    Motor2.servo.attach(Motor2.addr);
+    Motor2.servo.writeMicroseconds(Motor2.neutral);
   }
   if (Motor2.proto == 2) {
     Motor_2A_6.setPWM(Motor2.neutral);
   }
   if (Motor3.proto == 1) {
+    Motor3.servo.attach(Motor3.addr);
     Motor3.servo.writeMicroseconds(Motor3.neutral);
   }
   if (Motor3.proto == 2) {
     Motor_2B_6.setPWM(Motor3.neutral);
   }
   if (Motor4.proto == 1) {
+    Motor4.servo.attach(Motor4.addr);
     Motor4.servo.writeMicroseconds(Motor4.neutral);
   }
   if (Motor4.proto == 2) {
     Motor_2C_6.setPWM(Motor4.neutral);
   }
   if (Motor5.proto == 1) {
+    Motor5.servo.attach(Motor5.addr);
     Motor5.servo.writeMicroseconds(Motor5.neutral);
   }
   if (Motor5.proto == 2) {
     Motor_2D_6.setPWM(Motor5.neutral);
   }
   if (Motor6.proto == 1) {
+    Motor6.servo.attach(Motor6.addr);
     Motor6.servo.writeMicroseconds(Motor6.neutral);
   }
   if (Motor6.proto == 2) {

@@ -58,6 +58,8 @@ var motor_1 = 0;
 var motor_2 = 0;
 var motor_3 = 0;
 var motor_4 = 0;
+var motor_5 = 0;
+var motor_6 = 0;
 
 var gamepad_detected = false;
 var gamepadSupportAvailable = navigator.getGamepads || !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
@@ -163,6 +165,8 @@ function update(rovdata) {
   motor_2 = rovdata.Motor_2;
   motor_3 = rovdata.Motor_3;
   motor_4 = rovdata.Motor_4;
+  motor_5 = rovdata.Motor_5;
+  motor_6 = rovdata.Motor_6;
 }
 
 function display(rovdata) {
@@ -365,16 +369,22 @@ function display(rovdata) {
   rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+60,100,20);
   rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+90,100,20);
   rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+120,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+150,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+180,100,20);
   rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+30,100,20);
   rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+60,100,20);
   rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+90,100,20);
   rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+120,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+150,100,20);
+  rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+180,100,20);
   rov_context.stroke();
   rov_context.beginPath();
   rov_context.fillText("1", (rov_canvas.width/4*3), rov_canvas.height/2+45);
   rov_context.fillText("2", (rov_canvas.width/4*3), rov_canvas.height/2+75);
   rov_context.fillText("3", (rov_canvas.width/4*3), rov_canvas.height/2+105);
   rov_context.fillText("4", (rov_canvas.width/4*3), rov_canvas.height/2+135);
+  rov_context.fillText("5", (rov_canvas.width/4*3), rov_canvas.height/2+165);
+  rov_context.fillText("6", (rov_canvas.width/4*3), rov_canvas.height/2+195);
   rov_context.fill();
   rov_context.beginPath();
   rov_context.fillStyle = "#aa0000"; 
@@ -390,11 +400,11 @@ function display(rovdata) {
   if (motor_4 != 0) {
     rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+125,motor_4,10);
   }
-  if (rovdata.Motor_5 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+145,rovdata.Motor_5,10);
+  if (motor_5 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+155,motor_5,10);
   }
-  if (rovdata.Motor_6 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+165,rovdata.Motor_6,10);
+  if (motor_6 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+185,motor_6,10);
   }
   rov_context.fill();
 
@@ -475,6 +485,8 @@ socket.on("connect", function () {
   motor_2 = 0;
   motor_3 = 0;
   motor_4 = 0;
+  motor_5 = 0;
+  motor_6 = 0;
 });
 
 socket.on("disconnect", function () {
