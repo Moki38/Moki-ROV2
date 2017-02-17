@@ -34,9 +34,10 @@
 class Sensor {
 public:
 	void setup();
+        int time();
 	void loop();
 private:
-	int x = 0;
+        int _time = 0;
 };
 
 #endif

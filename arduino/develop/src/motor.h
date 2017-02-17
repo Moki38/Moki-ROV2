@@ -48,9 +48,16 @@ typedef struct {
 class Motor {
 public:
 	void setup();
+	int time();
+	int power();
+        void power(int);
+	int arm();
+	void arm(boolean);
 	void loop();
 private:
-	int x = 0;
+	int _time = 0;
+	int _power = 0;
+	boolean _armed = false;
 };
 
 #endif

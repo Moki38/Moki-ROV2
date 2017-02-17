@@ -27,19 +27,19 @@
 #ifdef COMMS_SERIAL
 void serialEvent() {
 
-  String serial_command = "";
-  boolean command_complete = false;
+  int pos = 0;
 
-  serial_command.reserve(200);
+//  serial_command.reserve(200);
   while (Serial.available()) {
-    // get the new byte:
-    char inChar = (char)Serial.read();
-    // add it to the inputString:
-    serial_command += inChar;
+
+    byte inChar = (byte)Serial.read();
+    _buffer[pos] = inChar;
+
     // if the incoming character is a newline, set a flag
-    // so the main loop can do something about it:
     if (inChar == '\n') {
-      command_complete = true;
+      return;
+    } else {
+      pos++;
     }
   }
 }
@@ -62,16 +62,18 @@ void Comms::setup() {
   Wire.onReceive(receiveEvent); // register event
 #endif
 
-  delay (6000);
-
-
 #ifdef COMMS_SERIAL
   Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB
-  }
 #endif
 
+}
+
+boolean Comms::Available() {
+  if (Serial) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void Comms::loop() {

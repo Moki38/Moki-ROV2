@@ -27,6 +27,11 @@
 void Sensor::setup() {
 }
 
+int Sensor::time() {
+  return _time;
+}
+
 void Sensor::loop() {
+  _time = millis();
 }
 

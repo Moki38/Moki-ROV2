@@ -32,15 +32,49 @@ Comms comms;
 Camera camera;
 
 void setup() {
-  config.setup();
+  int timeout = millis();
+
+//
+// Init comms
+//
   comms.setup();
-  motor.setup();
-  light.setup();
-  camera.setup();
-  sensor.setup();
+//
+// Wait for comms to be available
+//
+  while ((timeout <= millis() + 10000)) {
+    if (comms.Available()) {
+      config.setup();
+      motor.setup();
+      light.setup();
+      camera.setup();
+      sensor.setup();
+      timeout = -1;
+    } else {
+      timeout = millis();
+    }
+  }
+//  if (timeout > 0) {
+//  }
 }
 
 void loop() {
-  motor.loop();
+//
+// Run at "fixed" times
+//  
+  int time = millis();
+//
+// Every 1000 μs run the sensor loop
+//
+  if ((time >= (sensor.time() + 1000)) || (time < sensor.time())) {
+    sensor.loop();
+  }
+//
+// Every 250 μs run the motor loop.
+//
+  if ((time >= (motor.time() + 250)) || (time < motor.time())) {
+    motor.loop();
+  }
+
+
 }
 

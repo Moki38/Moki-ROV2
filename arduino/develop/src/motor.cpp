@@ -25,8 +25,30 @@
 #include "motor.h"
 
 void Motor::setup() {
+  _power = 0;
+  _armed = false;
+}
+
+int Motor::time() {
+  return _time;
+}
+
+int Motor::arm() {
+  return _armed;
+}
+void Motor::arm(boolean a) {
+  _armed = a;
+}
+
+int Motor::power() {
+  return _power;
+}
+
+void Motor::power(int p) {
+  _power = p;
 }
 
 void Motor::loop() {
+  _time = millis();
 }
 

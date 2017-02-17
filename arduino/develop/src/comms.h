@@ -30,7 +30,7 @@
 //
 // Comms Configuration defines
 //
-#define COMMS_I2C               // Enable I2C comms
+#undef  COMMS_I2C               // Enable I2C comms
 #define COMMS_SERIAL            // Enable Serial comms
 #define COMMS_SERIAL_DEBUG      // Enable Serial debug messages
 
@@ -39,8 +39,9 @@ class Comms {
 public:
 	void setup();
 	void loop();
+	boolean Available();
 private:
-	int x = 0;
+	unsigned char _buffer[8];
 };
 
 #endif /* _COMMS_H */
