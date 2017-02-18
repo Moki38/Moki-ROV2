@@ -563,10 +563,10 @@ var push_config = function() {
 
     if (config.light[1].host == 'ARDUINO') {
       port.write('CFG_L1_PROTO:'+config.light[1].proto+'\n');
-      if (config.light[1].proto == 'PWM') {
+      if (config.light[1].proto == 1) {
         port.write('CFG_L1_ADDR:'+config.light[1].pin+'\n');
       }
-      if (config.light[1].proto == 'I2C') {
+      if (config.light[1].proto == 2) {
         port.write('CFG_L1_ADDR:'+config.light[1].address+'\n');
       }
       port.write('CFG_L1_ON:'+config.light[1].on+'\n');
@@ -575,10 +575,10 @@ var push_config = function() {
 
     if (config.light[2].host == 'ARDUINO') {
       port.write('CFG_L2_PROTO:'+config.light[2].proto+'\n');
-      if (config.light[2].proto == 'PWM') {
+      if (config.light[2].proto == 1) {
         port.write('CFG_L2_ADDR:'+config.light[2].pin+'\n');
       }
-      if (config.light[2].proto == 'I2C') {
+      if (config.light[2].proto == 2) {
         port.write('CFG_L2_ADDR:'+config.light[2].address+'\n');
       }
       port.write('CFG_L2_ON:'+config.light[2].on+'\n');

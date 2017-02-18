@@ -64,8 +64,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 207,
-            "reverse": 16
+            "direction": 0,
+            "reverse": 138 
         },
         "2": {
             "host": "ARDUINO",
@@ -77,7 +77,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 207,
-            "reverse": 9
+            "reverse": 138 
         },
         "3": {
             "host": "ARDUINO",
@@ -88,8 +88,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 207,
-            "reverse": 32
+            "direction": 0,
+            "reverse": 0 
         },
         "4": {
             "host": "ARDUINO",
@@ -100,8 +100,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 207,
-            "reverse": 5
+            "direction": 0,
+            "reverse": 0 
         },
         "5": {
             "host": "ARDUINO",
@@ -113,7 +113,7 @@
             "min": 1100,
             "max": 1900,
             "direction": 816,
-            "reverse": 5
+            "reverse": 0 
         },
         "6": {
             "host": "ARDUINO",
@@ -124,8 +124,8 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 816,
-            "reverse": 5
+            "direction": 0,
+            "reverse": 0 
         }
     },
     "light": {
