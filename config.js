@@ -37,7 +37,7 @@
     "camera": {
         "command": "/usr/local/bin/mjpg_streamer",
         "output": "output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www",
-        "input": "input_raspicam.so -x 1366 -y 768",
+        "input": "input_raspicam.so -x 1366 -y 768 -vf -hf",
         "kill": "kill -9 `pidof mjpg_streamer`",
         "tilt": {
             "x": {

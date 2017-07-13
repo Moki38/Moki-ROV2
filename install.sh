@@ -42,6 +42,7 @@ cd
 apt-get install -y subversion libjpeg8-dev imagemagick libav-tools cmake
 git clone https://github.com/jacksonliam/mjpg-streamer.git
 cd mjpg-streamer/mjpg-streamer-experimental
+make
 make install
 echo "disable_camera_led=1" >> /boot/config.txt
 
@@ -50,9 +51,11 @@ echo "disable_camera_led=1" >> /boot/config.txt
 cd
 wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/get-platformio.py
 python get-platformio.py
+pip install -U platformio
 cd 
 cd Moki-ROV2/arduino
 platformio init -b teensy31
+mkdir lib
 cd lib
 git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
 git clone https://github.com/adafruit/Adafruit_Sensor.git
