@@ -11,7 +11,7 @@ var serialport = require('serialport');
 var config_file = 'config.js'
 var config = jsonfile.readFileSync(config_file)
 
-//console.log(config);
+console.log(config);
 
 var rovdata = {};
 
@@ -55,6 +55,229 @@ camera.stdout.on('data', function(data) {
   /* ... do something with data ... */
 });
 
+var push_config_motor = function() {
+  console.log('Push Config Motor');
+  rovdata.Config_Motor = true;
+// Motor
+  console.log('Config Motor');
+  if (arduino) {
+    if (config.motor[1].host == 'ARDUINO') {
+      port.write('CFG_M1_PROTO:'+config.motor[1].proto+'\n');
+      if (config.motor[1].proto == 1) {
+        port.write('CFG_M1_ADDR:'+config.motor[1].pin+'\n');
+      }
+      if (config.motor[1].proto == 2) {
+        port.write('CFG_M1_POLE:'+config.motor[1].pole+'\n');
+        port.write('CFG_M1_ADDR:'+config.motor[1].address+'\n');
+      }
+      port.write('CFG_M1_N:'+config.motor[1].neutral+'\n');
+      port.write('CFG_M1_MIN:'+config.motor[1].min+'\n');
+      port.write('CFG_M1_MAX:'+config.motor[1].max+'\n');
+      port.write('CFG_M1_REV:'+config.motor[1].reverse+'\n');
+      port.write('CFG_M1_DIR:'+config.motor[1].direction+'\n');
+    }
+    if (config.motor[2].host == 'ARDUINO') {
+      port.write('CFG_M2_PROTO:'+config.motor[2].proto+'\n');
+      if (config.motor[2].proto == 1) {
+        port.write('CFG_M2_ADDR:'+config.motor[2].pin+'\n');
+      }
+      if (config.motor[2].proto == 2) {
+        port.write('CFG_M2_POLE:'+config.motor[2].pole+'\n');
+        port.write('CFG_M2_ADDR:'+config.motor[2].address+'\n');
+      }
+      port.write('CFG_M2_N:'+config.motor[2].neutral+'\n');
+      port.write('CFG_M2_MIN:'+config.motor[2].min+'\n');
+      port.write('CFG_M2_MAX:'+config.motor[2].max+'\n');
+      port.write('CFG_M2_REV:'+config.motor[2].reverse+'\n');
+      port.write('CFG_M2_DIR:'+config.motor[2].direction+'\n');
+    }
+    if (config.motor[3].host == 'ARDUINO') {
+      port.write('CFG_M3_PROTO:'+config.motor[3].proto+'\n');
+      if (config.motor[3].proto == 1) {
+        port.write('CFG_M3_ADDR:'+config.motor[3].pin+'\n');
+      }
+      if (config.motor[3].proto == 2) {
+        port.write('CFG_M3_POLE:'+config.motor[3].pole+'\n');
+        port.write('CFG_M3_ADDR:'+config.motor[3].address+'\n');
+      }
+      port.write('CFG_M3_N:'+config.motor[3].neutral+'\n');
+      port.write('CFG_M3_MIN:'+config.motor[3].min+'\n');
+      port.write('CFG_M3_MAX:'+config.motor[3].max+'\n');
+      port.write('CFG_M3_REV:'+config.motor[3].reverse+'\n');
+      port.write('CFG_M3_DIR:'+config.motor[3].direction+'\n');
+    }
+    if (config.motor[4].host == 'ARDUINO') {
+      port.write('CFG_M4_PROTO:'+config.motor[4].proto+'\n');
+      if (config.motor[4].proto == 1) {
+        port.write('CFG_M4_ADDR:'+config.motor[4].pin+'\n');
+      }
+      if (config.motor[4].proto == 2) {
+        port.write('CFG_M4_POLE:'+config.motor[4].pole+'\n');
+        port.write('CFG_M4_ADDR:'+config.motor[4].address+'\n');
+      }
+      port.write('CFG_M4_N:'+config.motor[4].neutral+'\n');
+      port.write('CFG_M4_MIN:'+config.motor[4].min+'\n');
+      port.write('CFG_M4_MAX:'+config.motor[4].max+'\n');
+      port.write('CFG_M4_REV:'+config.motor[4].reverse+'\n');
+      port.write('CFG_M4_DIR:'+config.motor[4].direction+'\n');
+    }
+    if (config.motor[5].host == 'ARDUINO') {
+      port.write('CFG_M5_PROTO:'+config.motor[5].proto+'\n');
+      if (config.motor[5].proto == 1) {
+        port.write('CFG_M5_ADDR:'+config.motor[5].pin+'\n');
+      }
+      if (config.motor[5].proto == 2) {
+        port.write('CFG_M5_POLE:'+config.motor[5].pole+'\n');
+        port.write('CFG_M5_ADDR:'+config.motor[5].address+'\n');
+      }
+      port.write('CFG_M5_N:'+config.motor[5].neutral+'\n');
+      port.write('CFG_M5_MIN:'+config.motor[5].min+'\n');
+      port.write('CFG_M5_MAX:'+config.motor[5].max+'\n');
+      port.write('CFG_M5_REV:'+config.motor[5].reverse+'\n');
+      port.write('CFG_M5_DIR:'+config.motor[5].direction+'\n');
+    }
+    if (config.motor[6].host == 'ARDUINO') {
+      port.write('CFG_M6_PROTO:'+config.motor[6].proto+'\n');
+      if (config.motor[6].proto == 1) {
+        port.write('CFG_M6_ADDR:'+config.motor[6].pin+'\n');
+      }
+      if (config.motor[6].proto == 2) {
+        port.write('CFG_M6_POLE:'+config.motor[6].pole+'\n');
+        port.write('CFG_M6_ADDR:'+config.motor[6].address+'\n');
+      }
+      port.write('CFG_M6_N:'+config.motor[6].neutral+'\n');
+      port.write('CFG_M6_MIN:'+config.motor[6].min+'\n');
+      port.write('CFG_M6_MAX:'+config.motor[6].max+'\n');
+      port.write('CFG_M6_REV:'+config.motor[6].reverse+'\n');
+      port.write('CFG_M6_DIR:'+config.motor[6].direction+'\n');
+    }
+    port.write('MOTOR_SETUP:1\n');
+
+    }
+  console.log('Config Motor Done');
+}
+
+var push_config_light = function() {
+  console.log('Push Config Light');
+  rovdata.Config_Light = true;
+// Light
+
+    if (config.light[1].host == 'ARDUINO') {
+      port.write('CFG_L1_PROTO:'+config.light[1].proto+'\n');
+      if (config.light[1].proto == 1) {
+        port.write('CFG_L1_ADDR:'+config.light[1].pin+'\n');
+      }
+      if (config.light[1].proto == 2) {
+        port.write('CFG_L1_ADDR:'+config.light[1].address+'\n');
+      }
+      port.write('CFG_L1_ON:'+config.light[1].on+'\n');
+      port.write('CFG_L1_OFF:'+config.light[1].off+'\n');
+    }
+
+    if (config.light[2].host == 'ARDUINO') {
+      port.write('CFG_L2_PROTO:'+config.light[2].proto+'\n');
+      if (config.light[2].proto == 1) {
+        port.write('CFG_L2_ADDR:'+config.light[2].pin+'\n');
+      }
+      if (config.light[2].proto == 2) {
+        port.write('CFG_L2_ADDR:'+config.light[2].address+'\n');
+      }
+      port.write('CFG_L2_ON:'+config.light[2].on+'\n');
+      port.write('CFG_L2_OFF:'+config.light[2].off+'\n');
+    }
+    port.write('LIGHT_SETUP:1\n');
+  console.log('Config Light Done');
+}
+
+var push_config_sensor = function() {
+  console.log('Push Config Sensor');
+  rovdata.Config_Sensor = true;
+// Sensors
+  console.log('Config Sensor');
+
+    if (config.sensor.IMU.host == 'ARDUINO') {
+      if (config.sensor.IMU.proto == 'PWM') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
+        port.write('CFG_IMU_PROTO:1\n');
+      }
+      if (config.sensor.IMU.proto == 'I2C') {
+        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.address+'\n');
+        port.write('CFG_IMU_PROTO:2\n');
+      }
+      if (config.sensor.IMU.type == 'BNO055') {
+        port.write('CFG_IMU_TYPE:1\n');
+      }
+    }
+    port.write('IMU_SETUP:1\n');
+
+    if (config.sensor.DEPTH.host == 'ARDUINO') {
+      if (config.sensor.DEPTH.proto == 'PWM') {
+        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.pin+'\n');
+        port.write('CFG_DEPTH_PROTO:1\n');
+      }
+      if (config.sensor.DEPTH.proto == 'I2C') {
+        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.address+'\n');
+        port.write('CFG_DEPTH_PROTO:2\n');
+      }
+      if (config.sensor.DEPTH.type == 'MS5837') {
+        port.write('CFG_DEPTH_TYPE:1\n');
+      }
+      if (config.sensor.DEPTH.water == '0') {
+        port.write('CFG_DEPTH_WATER:0\n');
+      }
+      if (config.sensor.DEPTH.water == '1') {
+        port.write('CFG_DEPTH_WATER:1\n');
+      }
+    }
+    port.write('DEPTH_SETUP:1\n');
+
+    if (config.sensor.CURRENT.host == 'ARDUINO') {
+      if (config.sensor.CURRENT.proto == 'ANALOG') {
+        port.write('CFG_CURRENT_ADDR:'+config.sensor.CURRENT.pin+'\n');
+        port.write('CFG_CURRENT_PROTO:3\n');
+      }
+      if (config.sensor.CURRENT.type == 'ATTOPILOT_A180') {
+        port.write('CFG_CURRENT_TYPE:1\n');
+      }
+    }
+    port.write('CURRENT_SETUP:1\n');
+
+    if (config.sensor.AMP.host == 'ARDUINO') {
+      if (config.sensor.AMP.proto == 'ANALOG') {
+        port.write('CFG_AMP_ADDR:'+config.sensor.AMP.pin+'\n');
+        port.write('CFG_AMP_PROTO:3\n');
+      }
+      if (config.sensor.AMP.type == 'ATTOPILOT_A180') {
+        port.write('CFG_AMP_TYPE:1\n');
+      }
+    }
+    port.write('AMP_SETUP:1\n');
+  console.log('Config Sensor Done');
+}
+
+var push_config_camera = function() {
+  console.log('Push Config Camera');
+  rovdata.Config_Camera = true;
+// Camera Tilt
+
+    if (config.camera.tilt.x.host == 'ARDUINO') {
+      port.write('CFG_CX_PROTO:'+config.camera.tilt.x.proto+'\n');
+      if (config.camera.tilt.x.proto == 'PWM') {
+        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.pin+'\n');
+      }
+      if (config.light[2].proto == 'I2C') {
+        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.address+'\n');
+      }
+      port.write('CFG_CX_N:'+config.camera.tilt.x.neutral+'\n');
+      port.write('CFG_CX_MIN:'+config.camera.tilt.x.on+'\n');
+      port.write('CFG_CX_MAX:'+config.camera.tilt.x.off+'\n');
+    }
+
+    port.write('CAM_SETUP:1\n');
+    
+  console.log('Config Camera Done');
+}
+  
 function parse_serial(line) {
   var res = line.split(":");
   switch(res[0]) {
@@ -198,9 +421,32 @@ function parse_serial(line) {
       rovdata.Motor_5 = 0;
       rovdata.Motor_6 = 0;
       break;
+    case    'Config':
+      res[1] = res[1].replace(/(\r\n|\n|\r)/gm,"");
+      if (res[1] == "Motor") {
+        console.log('Config data: push_config_motor');
+        push_config_motor();
+      }
+      if (res[1] == "Light") {
+        console.log('Config data: push_config_light');
+        push_config_light();
+      }
+
+      if (res[1] == "Sensor") {
+        console.log('Config data: push_config_sensor');
+        push_config_sensor();
+      }
+
+      if (res[1] == "Camera") {
+        console.log('Config data: push_config_camera');
+        push_config_camera();
+      }
+
+      break;
     default:
       console.log('Serial data: ' + line);
   }
+//  console.log('Serial DEBUG: ' + line);
 }
 
 if (arduino) {
@@ -431,8 +677,11 @@ socket.on('disconnect', function () {
 var interval = setInterval(function () {
   socket.emit("rovdata", rovdata);
   if (rovdata.Config == false) {
-    push_config();
+    port.write('CFG_RESET\n');
+    rovdata.Config = true;
   };
+
+
   if (rovdata.Hover) {
     hover();
   };
@@ -459,207 +708,6 @@ socket.on('keydown', function(event) {
   }
 });
 
-var push_config = function() {
-
-  console.log('Push Config');
-
-  rovdata.Config = true;
-// Motor
-  console.log('Config Motor');
-  if (arduino) {
-    if (config.motor[1].host == 'ARDUINO') {
-      port.write('CFG_M1_PROTO:'+config.motor[1].proto+'\n');
-      if (config.motor[1].proto == 1) {
-        port.write('CFG_M1_ADDR:'+config.motor[1].pin+'\n');
-      }
-      if (config.motor[1].proto == 2) {
-        port.write('CFG_M1_POLE:'+config.motor[1].pole+'\n');
-        port.write('CFG_M1_ADDR:'+config.motor[1].address+'\n');
-      }
-      port.write('CFG_M1_N:'+config.motor[1].neutral+'\n');
-      port.write('CFG_M1_MIN:'+config.motor[1].min+'\n');
-      port.write('CFG_M1_MAX:'+config.motor[1].max+'\n');
-      port.write('CFG_M1_REV:'+config.motor[1].reverse+'\n');
-      port.write('CFG_M1_DIR:'+config.motor[1].direction+'\n');
-    }
-    if (config.motor[2].host == 'ARDUINO') {
-      port.write('CFG_M2_PROTO:'+config.motor[2].proto+'\n');
-      if (config.motor[2].proto == 1) {
-        port.write('CFG_M2_ADDR:'+config.motor[2].pin+'\n');
-      }
-      if (config.motor[2].proto == 2) {
-        port.write('CFG_M2_POLE:'+config.motor[2].pole+'\n');
-        port.write('CFG_M2_ADDR:'+config.motor[2].address+'\n');
-      }
-      port.write('CFG_M2_N:'+config.motor[2].neutral+'\n');
-      port.write('CFG_M2_MIN:'+config.motor[2].min+'\n');
-      port.write('CFG_M2_MAX:'+config.motor[2].max+'\n');
-      port.write('CFG_M2_REV:'+config.motor[2].reverse+'\n');
-      port.write('CFG_M2_DIR:'+config.motor[2].direction+'\n');
-    }
-    if (config.motor[3].host == 'ARDUINO') {
-      port.write('CFG_M3_PROTO:'+config.motor[3].proto+'\n');
-      if (config.motor[3].proto == 1) {
-        port.write('CFG_M3_ADDR:'+config.motor[3].pin+'\n');
-      }
-      if (config.motor[3].proto == 2) {
-        port.write('CFG_M3_POLE:'+config.motor[3].pole+'\n');
-        port.write('CFG_M3_ADDR:'+config.motor[3].address+'\n');
-      }
-      port.write('CFG_M3_N:'+config.motor[3].neutral+'\n');
-      port.write('CFG_M3_MIN:'+config.motor[3].min+'\n');
-      port.write('CFG_M3_MAX:'+config.motor[3].max+'\n');
-      port.write('CFG_M3_REV:'+config.motor[3].reverse+'\n');
-      port.write('CFG_M3_DIR:'+config.motor[3].direction+'\n');
-    }
-    if (config.motor[4].host == 'ARDUINO') {
-      port.write('CFG_M4_PROTO:'+config.motor[4].proto+'\n');
-      if (config.motor[4].proto == 1) {
-        port.write('CFG_M4_ADDR:'+config.motor[4].pin+'\n');
-      }
-      if (config.motor[4].proto == 2) {
-        port.write('CFG_M4_POLE:'+config.motor[4].pole+'\n');
-        port.write('CFG_M4_ADDR:'+config.motor[4].address+'\n');
-      }
-      port.write('CFG_M4_N:'+config.motor[4].neutral+'\n');
-      port.write('CFG_M4_MIN:'+config.motor[4].min+'\n');
-      port.write('CFG_M4_MAX:'+config.motor[4].max+'\n');
-      port.write('CFG_M4_REV:'+config.motor[4].reverse+'\n');
-      port.write('CFG_M4_DIR:'+config.motor[4].direction+'\n');
-    }
-    if (config.motor[5].host == 'ARDUINO') {
-      port.write('CFG_M5_PROTO:'+config.motor[5].proto+'\n');
-      if (config.motor[5].proto == 1) {
-        port.write('CFG_M5_ADDR:'+config.motor[5].pin+'\n');
-      }
-      if (config.motor[5].proto == 2) {
-        port.write('CFG_M5_POLE:'+config.motor[5].pole+'\n');
-        port.write('CFG_M5_ADDR:'+config.motor[5].address+'\n');
-      }
-      port.write('CFG_M5_N:'+config.motor[5].neutral+'\n');
-      port.write('CFG_M5_MIN:'+config.motor[5].min+'\n');
-      port.write('CFG_M5_MAX:'+config.motor[5].max+'\n');
-      port.write('CFG_M5_REV:'+config.motor[5].reverse+'\n');
-      port.write('CFG_M5_DIR:'+config.motor[5].direction+'\n');
-    }
-    if (config.motor[6].host == 'ARDUINO') {
-      port.write('CFG_M6_PROTO:'+config.motor[6].proto+'\n');
-      if (config.motor[6].proto == 1) {
-        port.write('CFG_M6_ADDR:'+config.motor[6].pin+'\n');
-      }
-      if (config.motor[6].proto == 2) {
-        port.write('CFG_M6_POLE:'+config.motor[6].pole+'\n');
-        port.write('CFG_M6_ADDR:'+config.motor[6].address+'\n');
-      }
-      port.write('CFG_M6_N:'+config.motor[6].neutral+'\n');
-      port.write('CFG_M6_MIN:'+config.motor[6].min+'\n');
-      port.write('CFG_M6_MAX:'+config.motor[6].max+'\n');
-      port.write('CFG_M6_REV:'+config.motor[6].reverse+'\n');
-      port.write('CFG_M6_DIR:'+config.motor[6].direction+'\n');
-    }
-    port.write('MOTOR_SETUP:1\n');
-  
-// Light
-
-    if (config.light[1].host == 'ARDUINO') {
-      port.write('CFG_L1_PROTO:'+config.light[1].proto+'\n');
-      if (config.light[1].proto == 1) {
-        port.write('CFG_L1_ADDR:'+config.light[1].pin+'\n');
-      }
-      if (config.light[1].proto == 2) {
-        port.write('CFG_L1_ADDR:'+config.light[1].address+'\n');
-      }
-      port.write('CFG_L1_ON:'+config.light[1].on+'\n');
-      port.write('CFG_L1_OFF:'+config.light[1].off+'\n');
-    }
-
-    if (config.light[2].host == 'ARDUINO') {
-      port.write('CFG_L2_PROTO:'+config.light[2].proto+'\n');
-      if (config.light[2].proto == 1) {
-        port.write('CFG_L2_ADDR:'+config.light[2].pin+'\n');
-      }
-      if (config.light[2].proto == 2) {
-        port.write('CFG_L2_ADDR:'+config.light[2].address+'\n');
-      }
-      port.write('CFG_L2_ON:'+config.light[2].on+'\n');
-      port.write('CFG_L2_OFF:'+config.light[2].off+'\n');
-    }
-    port.write('LIGHT_SETUP:1\n');
-
-// Sensors
-  console.log('Config Sensor');
-
-    if (config.sensor.DEPTH.host == 'ARDUINO') {
-      if (config.sensor.DEPTH.proto == 'PWM') {
-        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.pin+'\n');
-        port.write('CFG_DEPTH_PROTO:1\n');
-      }
-      if (config.sensor.DEPTH.proto == 'I2C') {
-        port.write('CFG_DEPTH_ADDR:'+config.sensor.DEPTH.address+'\n');
-        port.write('CFG_DEPTH_PROTO:2\n');
-      }
-      if (config.sensor.DEPTH.type == 'MS5837') {
-        port.write('CFG_DEPTH_TYPE:1\n');
-      }
-    }
-    port.write('DEPTH_SETUP:1\n');
-
-    if (config.sensor.CURRENT.host == 'ARDUINO') {
-      if (config.sensor.CURRENT.proto == 'ANALOG') {
-        port.write('CFG_CURRENT_ADDR:'+config.sensor.CURRENT.pin+'\n');
-        port.write('CFG_CURRENT_PROTO:3\n');
-      }
-      if (config.sensor.CURRENT.type == 'ATTOPILOT_A180') {
-        port.write('CFG_CURRENT_TYPE:1\n');
-      }
-    }
-    port.write('CURRENT_SETUP:1\n');
-
-    if (config.sensor.AMP.host == 'ARDUINO') {
-      if (config.sensor.AMP.proto == 'ANALOG') {
-        port.write('CFG_AMP_ADDR:'+config.sensor.AMP.pin+'\n');
-        port.write('CFG_AMP_PROTO:3\n');
-      }
-      if (config.sensor.AMP.type == 'ATTOPILOT_A180') {
-        port.write('CFG_AMP_TYPE:1\n');
-      }
-    }
-    port.write('AMP_SETUP:1\n');
-
-// Camera Tilt
-
-    if (config.camera.tilt.x.host == 'ARDUINO') {
-      port.write('CFG_CX_PROTO:'+config.camera.tilt.x.proto+'\n');
-      if (config.camera.tilt.x.proto == 'PWM') {
-        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.pin+'\n');
-      }
-      if (config.light[2].proto == 'I2C') {
-        port.write('CFG_CX_ADDR:'+config.camera.tilt.x.address+'\n');
-      }
-      port.write('CFG_CX_N:'+config.camera.tilt.x.neutral+'\n');
-      port.write('CFG_CX_MIN:'+config.camera.tilt.x.on+'\n');
-      port.write('CFG_CX_MAX:'+config.camera.tilt.x.off+'\n');
-    }
-
-    port.write('CAM_SETUP:1\n');
-    
-    if (config.sensor.IMU.host == 'ARDUINO') {
-      if (config.sensor.IMU.proto == 'PWM') {
-        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.pin+'\n');
-        port.write('CFG_IMU_PROTO:1\n');
-      }
-      if (config.sensor.IMU.proto == 'I2C') {
-        port.write('CFG_IMU_ADDR:'+config.sensor.IMU.address+'\n');
-        port.write('CFG_IMU_PROTO:2\n');
-      }
-      if (config.sensor.IMU.type == 'BNO055') {
-        port.write('CFG_IMU_TYPE:1\n');
-      }
-    }
-    port.write('IMU_SETUP:1\n');
-  } // Arduino
-  console.log('Config Done');
-}
 
 var lights = function() {
   if (rovdata.Lights == false) {
@@ -746,6 +794,6 @@ server.listen(80, function () {
   var host = server.address().address
   var port = server.address().port
 
-  console.log("Moki-ROV2 Started, listening at http://%s:%s", host, port);
+  console.log("Moki-ROV2 Started, listening at http://%s:%s", config.network, port);
 })
 

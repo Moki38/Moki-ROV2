@@ -25,6 +25,11 @@ int motor_time = 0;
 int sensor_time = 0;
 int power = 0;
 
+boolean Config_Motor = false;
+boolean Config_Light = false;
+boolean Config_Sensor = false;
+boolean Config_Camera = false;
+
 struct Motor {
   int proto;		// proto:  1:'PWM', 2:I2C
   int addr;		// pin: 3 or i2c address
@@ -95,6 +100,7 @@ struct Sensor {
   int proto;
   int addr;
   int type;
+  int water;		// 0 = fresh water , 1 = sea water
 };
 
 struct Sensor IMU;
@@ -216,47 +222,57 @@ void motor_stop() {
 }
 
 void motor_setup() {
-  motor_time = millis();
+  if (Config_Motor) {
+    motor_time = millis();
 
-  if (Motor1.proto == 1) {
-    Motor1.servo.attach(Motor1.addr);
-    Motor1.servo.writeMicroseconds(Motor1.neutral);
+    if (Motor1.proto == 1) {
+      Motor1.servo.attach(Motor1.addr);
+      Motor1.servo.writeMicroseconds(Motor1.neutral);
+    }
+    if (Motor1.proto == 2) {
+      switch (Motor1.addr) {
+        case 0x29:
+          Motor_29_6.setPWM(Motor1.neutral);
+ 	  break;
+      } 
+    }
+  //  delay (200); 
+    Motor2.servo.attach(Motor2.addr);
+    Motor2.servo.writeMicroseconds(Motor2.neutral);
+  //  delay (200); 
+    Motor3.servo.attach(Motor3.addr);
+    Motor3.servo.writeMicroseconds(Motor3.neutral);
+   // delay (200); 
+    Motor4.servo.attach(Motor4.addr);
+    Motor4.servo.writeMicroseconds(Motor4.neutral);
+    Motor5.servo.attach(Motor5.addr);
+    Motor5.servo.writeMicroseconds(Motor5.neutral);
+    Motor6.servo.attach(Motor6.addr);
+    Motor6.servo.writeMicroseconds(Motor6.neutral);
+   // delay (200); 
+  } else {
+    Serial.println("Config:Motor");
   }
-  if (Motor1.proto == 2) {
-    switch (Motor1.addr) {
-      case 0x29:
-        Motor_29_6.setPWM(Motor1.neutral);
- 	break;
-    } 
-  }
-//  delay (200); 
-  Motor2.servo.attach(Motor2.addr);
-  Motor2.servo.writeMicroseconds(Motor2.neutral);
-//  delay (200); 
-  Motor3.servo.attach(Motor3.addr);
-  Motor3.servo.writeMicroseconds(Motor3.neutral);
- // delay (200); 
-  Motor4.servo.attach(Motor4.addr);
-  Motor4.servo.writeMicroseconds(Motor4.neutral);
-  Motor5.servo.attach(Motor5.addr);
-  Motor5.servo.writeMicroseconds(Motor5.neutral);
-  Motor6.servo.attach(Motor6.addr);
-  Motor6.servo.writeMicroseconds(Motor6.neutral);
- // delay (200); 
 }
 
 void light_setup() {
-  Light1.servo.attach(Light1.addr);
-  Light1.servo.writeMicroseconds(Light1.off);
-//  delay (200); 
-  Light2.servo.attach(Light2.addr);
-  Light2.servo.writeMicroseconds(Light2.off);
-//  delay (200); 
+  if (Config_Light) {
+    Light1.servo.attach(Light1.addr);
+    Light1.servo.writeMicroseconds(Light1.off);
+    Light2.servo.attach(Light2.addr);
+    Light2.servo.writeMicroseconds(Light2.off);
+  } else {
+    Serial.println("Config:Light");
+  }
 }
 
 void cam_setup() {
-  CamX.servo.attach(CamX.addr);
-  CamX.servo.writeMicroseconds(CamX.neutral);
+  if (Config_Camera) {
+    CamX.servo.attach(CamX.addr);
+    CamX.servo.writeMicroseconds(CamX.neutral);
+  } else {
+    Serial.println("Config:Camera");
+  }
  // delay (200); 
 
 }
@@ -283,7 +299,11 @@ void imu_setup() {
 
 void depth_setup() {
     MS5837_sensor.init();
-    MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
+    if (DEPTH.water == 0) {
+      MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
+    } else {
+      MS5837_sensor.setFluidDensity(1029); // kg/m^3 (freshwater, 1029 for seawater)
+    }
 }
 
 void current_setup() {
@@ -295,13 +315,16 @@ void amp_setup() {
 }
 
 void sensor_setup() {
+  if (Config_Sensor) {
+    depth_setup();
+    imu_setup();
+    current_setup();
+    amp_setup();
 
-  depth_setup();
-  imu_setup();
-  current_setup();
-  amp_setup();
-
-  sensor_time = millis();
+    sensor_time = millis();
+  } else {
+    Serial.println("Config:Sensor");
+  }
 
 }
 
@@ -316,6 +339,11 @@ void setup() {
 
   Serial.println("Ready!");
   READY = 1;
+
+  motor_setup();  
+  light_setup();  
+  cam_setup();  
+  sensor_setup();  
 }
 
 void current_run() {
@@ -335,7 +363,8 @@ void amp_run() {
     IRaw = analogRead(AMP.addr);
     if (VRaw < 400) {
       //Conversion
-      IFinal = IRaw/3.7; //180 Amp board
+      IFinal = IRaw/7.4; //180 Amp board
+//      IFinal = IRaw/3.7; //180 Amp board
       Serial.print("Amps:");
       Serial.println(IFinal);
     }
@@ -383,10 +412,16 @@ void imu_run() {
 }
 
 void motor_run() {
+  if (!Config_Motor) {
+    motor_setup();  
+  }
   motor_time = millis();
 }
 
 void sensor_run() {
+  if (!Config_Sensor) {
+    sensor_setup();  
+  }
   Serial.print("Time:");
   sensor_time = millis();
   Serial.println(sensor_time);
@@ -1073,6 +1108,11 @@ void loop() {
          CamY.servo.writeMicroseconds(value);  
 
 // Config part
+      } else if (command == "CFG_RESET") {
+	 Config_Motor = false;
+	 Config_Light = false;
+	 Config_Sensor = false;
+	 Config_Camera = false;
       } else if (command == "CFG_M1_PROTO") {
          Motor1.proto = value;  
       } else if (command == "CFG_M1_ADDR") {
@@ -1171,9 +1211,10 @@ void loop() {
          Motor6.direction = value;  
 
       } else if (command == "MOTOR_SETUP") {
+	 Config_Motor = true;
          serial_command = "";
          command_complete = false;
-         motor_setup();  
+         motor_setup();
 
       } else if (command == "CFG_L1_PROTO") {
          Light1.proto = value;  
@@ -1193,9 +1234,9 @@ void loop() {
          Light2.off = value;  
 
       } else if (command == "LIGHT_SETUP") {
+	 Config_Light = true;
          serial_command = "";
          command_complete = false;
-         light_setup();  
 
       } else if (command == "CFG_CX_PROTO") {
          CamX.proto = value;  
@@ -1209,6 +1250,7 @@ void loop() {
          CamX.max = value;  
 
       } else if (command == "CAM_SETUP") {
+	 Config_Camera = true;
          serial_command = "";
          command_complete = false;
          cam_setup();  
@@ -1221,6 +1263,7 @@ void loop() {
          IMU.type = value;  
       
       } else if (command == "IMU_SETUP") {
+	 Config_Sensor = true;
          serial_command = "";
          command_complete = false;
          imu_setup();  
@@ -1231,6 +1274,8 @@ void loop() {
          DEPTH.addr = value;  
       } else if (command == "CFG_DEPTH_TYPE") {
          DEPTH.type = value;  
+      } else if (command == "CFG_DEPTH_WATER") {
+         DEPTH.water = value;  
       
       } else if (command == "DEPTH_SETUP") {
          serial_command = "";
@@ -1257,6 +1302,7 @@ void loop() {
          AMP.type = value;  
       
       } else if (command == "AMP_SETUP") {
+	 Config_Sensor = true;
          serial_command = "";
          command_complete = false;
          amp_setup();  
