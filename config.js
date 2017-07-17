@@ -9,6 +9,7 @@
         "ipaddr": "172.16.10.20"
     },
     "sensor" : {
+	"config": "0",
         "IMU": {
             "host": "ARDUINO",
             "type": "BNO055",
@@ -19,6 +20,7 @@
             "host": "ARDUINO",
             "type": "MS5837",
             "proto": "I2C",
+            "water": "1",
             "address": "0x76"
         },
         "CURRENT": {
@@ -35,6 +37,7 @@
         }
     },
     "camera": {
+	"config": "0",
         "command": "/usr/local/bin/mjpg_streamer",
         "output": "output_http.so -w /root/mjpg-streamer/mjpg-streamer-experimental/www",
         "input": "input_raspicam.so -x 1366 -y 768 -vf -hf",
@@ -55,6 +58,7 @@
         }
     },
     "motor": {
+	"config": "0",
         "1": {
             "host": "ARDUINO",
             "proto": 1,
@@ -64,7 +68,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 207,
             "reverse": 138 
         },
         "2": {
@@ -88,7 +92,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 207,
             "reverse": 0 
         },
         "4": {
@@ -100,7 +104,7 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 207,
             "reverse": 0 
         },
         "5": {
@@ -124,11 +128,12 @@
             "neutral": 1500,
             "min": 1100,
             "max": 1900,
-            "direction": 0,
+            "direction": 816,
             "reverse": 0 
         }
     },
     "light": {
+	"config": "0",
         "1": {
             "host": "ARDUINO",
             "proto": 1,
