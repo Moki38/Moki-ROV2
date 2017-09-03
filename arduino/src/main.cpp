@@ -107,13 +107,13 @@ void hover_loop() {
 //
       if (hover == true) {
         if (depth_get() > hover_depth+1) {
-          motor_up();
+          motor_up(10);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
 	Serial.println(power);
         } else if (depth_get() < hover_depth-1) {
-          motor_right();
+          motor_down(10);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
@@ -135,7 +135,7 @@ void pilot_loop() {
 //	Serial.println("Debug_Pilot");
         if (imu_heading() > pilot_heading+1) {
 //	  Serial.println("Debug_Pilot_Left");
-          motor_left();
+          motor_left(10);
 	Serial.print("Motor_1:");
 	Serial.println(power);
 	Serial.print("Motor_2:");
@@ -146,7 +146,7 @@ void pilot_loop() {
 	Serial.println(power);
         } else if (imu_heading() < pilot_heading-1) {
 //	  Serial.println("Debug_Pilot_Right");
-          motor_right();
+          motor_right(10);
 	Serial.print("Motor_1:");
 	Serial.println(power);
 	Serial.print("Motor_2:");
@@ -245,12 +245,11 @@ void loop() {
            }
       } else if (command == "Power") {
            power = value;
-           motor_power(value);
 
 // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
       } else if (command == "Forward") {
-        motor_forward();
-	Serial.println("Debug_Forward");
+        motor_forward(power);
+//	Serial.println("Debug_Forward");
 	Serial.print("Motor_1:");
 	Serial.println(-power);
 	Serial.print("Motor_2:");
@@ -261,8 +260,8 @@ void loop() {
 	Serial.println(-power);
         
       } else if (command == "Reverse") {
-        motor_reverse();
-	Serial.println("Debug_Reverse");
+        motor_reverse(power);
+//  	Serial.println("Debug_Reverse");
 	Serial.print("Motor_1:");
 	Serial.println(power);
 	Serial.print("Motor_2:");
@@ -273,43 +272,43 @@ void loop() {
 	Serial.println(power);
 
       } else if (command == "Right") {
-	motor_right();
+	motor_right(power);
 	Serial.print("Motor_1:");
 	Serial.println(power);
 	Serial.print("Motor_2:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_3:");
 	Serial.println(power);
 	Serial.print("Motor_4:");
-	Serial.println(power);
+	Serial.println(-power);
 
       } else if (command == "Left") {
-	motor_left();
+	motor_left(power);
 	Serial.print("Motor_1:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_2:");
 	Serial.println(power);
 	Serial.print("Motor_3:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_4:");
 	Serial.println(power);
 
       } else if (command == "Dive") {
-	motor_dive();
+	motor_dive(power);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
 	Serial.println(-power);
 
       } else if (command == "Up") {
-	motor_up();
+	motor_up(power);
 	Serial.print("Motor_5:");
 	Serial.println(-power);
 	Serial.print("Motor_6:");
 	Serial.println(power);
 
       } else if (command == "Strafe_r") {
-	motor_strafe_right();
+	motor_strafe_right(power);
 	Serial.print("Motor_1:");
 	Serial.println(power);
 	Serial.print("Motor_2:");
@@ -320,29 +319,29 @@ void loop() {
 	Serial.println(power);
 
       } else if (command == "Strafe_l") {
-	motor_strafe_left();
+	motor_strafe_left(power);
 	Serial.print("Motor_1:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_2:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_3:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_4:");
-	Serial.println(power);
+	Serial.println(-power);
 
       } else if (command == "Roll_r") {
-	motor_roll_right();
+	motor_roll_right(power);
 	Serial.print("Motor_5:");
-	Serial.println(power);
+	Serial.println(-power);
 	Serial.print("Motor_6:");
 	Serial.println(power);
 
       } else if (command == "Roll_l") {
-	motor_roll_left();
+	motor_roll_left(power);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
-	Serial.println(power);
+	Serial.println(-power);
 
       } else if (command == "Light1") {
          if (value == LIGHT1_OFF) {
