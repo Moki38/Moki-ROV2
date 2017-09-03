@@ -51,6 +51,7 @@ var current = 0;
 var lights = false;
 var hover = false;
 var pilot = false;
+var pilotset = 0;
 
 var power = 0;
 var motor = 0;
@@ -155,6 +156,9 @@ function update(rovdata) {
   pitch = Math.floor(rovdata.Y);
   roll = Math.floor(rovdata.Z);
   pilot = rovdata.Pilot;
+  pilotset = Math.floor(rovdata.Pilotset);
+  hover = rovdata.Hover;
+  hoverset = Math.floor(rovdata.Hoverset);
   hover = rovdata.Hover;
   lights = rovdata.Lights;
   power = rovdata.Power;
@@ -437,6 +441,7 @@ function display(rovdata) {
   if (hover) {
       rov_context.fillStyle = "#00aa00";
       rov_context.fillText( "ON", (rov_canvas.width/4)*3+80, 250);
+      rov_context.fillText( ": "+hoverset+"  ", (rov_canvas.width/4)*3+140, 250);
   } else {
       rov_context.fillStyle = "#aa0000";
       rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 250);
@@ -447,9 +452,10 @@ function display(rovdata) {
   if (pilot) {
       rov_context.fillStyle = "#00aa00";
       rov_context.fillText( "AUTO", (rov_canvas.width/4)*3+80, 300);
+      rov_context.fillText( ": "+pilotset+"  ", (rov_canvas.width/4)*3+140, 300);
   } else {
       rov_context.fillStyle = "#aa0000";
-      rov_context.fillText( "STANDBY", (rov_canvas.width/4)*3+80, 300);
+      rov_context.fillText( "STANDBY   ", (rov_canvas.width/4)*3+80, 300);
   }
   rov_context.fill();
 

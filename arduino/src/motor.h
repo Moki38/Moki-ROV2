@@ -22,59 +22,30 @@
 
 */
 
-#include "comms.h"
+#ifndef _MOTOR_H
+#define _MOTOR_H
 
-#ifdef COMMS_SERIAL
-void serialEvent() {
+#include <Arduino.h>
+#include <Servo.h>
 
-  int pos = 0;
+void motor_power(int);
+void motor_arm(int);
+int motor_arm();
 
-//  serial_command.reserve(200);
-  while (Serial.available()) {
+// Right Left Reverse Forward Strafe_r Strafe_l Dive Up
+void motor_forward();
+void motor_reverse();
+void motor_right();
+void motor_left();
+void motor_dive();
+void motor_up();
+void motor_strafe_right();
+void motor_strafe_left();
+void motor_roll_right();
+void motor_roll_left();
 
-    byte inChar = (byte)Serial.read();
-    _buffer[pos] = inChar;
+void motor_stop();
+void motor_setup();
 
-    // if the incoming character is a newline, set a flag
-    if (inChar == '\n') {
-      return;
-    } else {
-      pos++;
-    }
-  }
-}
 #endif
 
-#ifdef COMMS_I2C
-void receiveEvent(int howmany) {
-  while (1 < Wire.available()) { // loop through all but the last
-    char c = Wire.read(); // receive byte as a character
-    Serial.print(c);         // print the character
-  }
-  int x = Wire.read();    // receive byte as an integer
-  Serial.println(x);         // print the integer
-}
-#endif
-
-void Comms::setup() {
-#ifdef COMMS_I2C
-  Wire.begin(8);                // join i2c bus with address #8
-  Wire.onReceive(receiveEvent); // register event
-#endif
-
-#ifdef COMMS_SERIAL
-  Serial.begin(115200);
-#endif
-
-}
-
-boolean Comms::Available() {
-  if (Serial) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-void Comms::loop() {
-}

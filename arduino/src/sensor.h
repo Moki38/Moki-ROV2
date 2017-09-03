@@ -22,19 +22,47 @@
 
 */
 
+#ifndef _SENSOR_H
+#define _SENSOR_H
+
+#include "config.h"
+
+#include <Arduino.h>
 #include <Servo.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <Arduino_I2C_ESC.h>
+#include <utility/imumaths.h>
+#include "MS5837.h"
 
-#ifndef _CAMERA_H
-#define _CAMERA_H
+uint8_t imu_system();
+uint8_t imu_gyro();
+uint8_t imu_accel();
+uint8_t imu_mag();
+float imu_X();
+float imu_Y();
+float imu_Z();
+float imu_heading();
+float imu_roll();
+float imu_pitch();
 
-class Camera {
-public:
-	void setup();
-	void loop();
-private:
-	int x = 0;
-};
+void imu_loop();
+void imu_setup();
+
+int pressure_get();
+int temp_get();
+int depth_get();
+int alt_get();
+void depth_loop();
+void depth_setup();
+
+int current_get();
+int amp_get();
+void current_setup();
+void amp_setup();
+
+void sensor_setup();
 
 #endif
-
 

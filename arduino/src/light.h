@@ -22,11 +22,15 @@
 
 */
 
-#include "camera.h"
+#ifndef _LIGHT_H
+#define _LIGHT_H
 
-void Camera::setup() {
-}
+#include <Arduino.h>
+#include <Servo.h>
 
-void Camera::loop() {
-}
+void light_off();
+void light_on();
+void light_setup();
+
+#endif
 

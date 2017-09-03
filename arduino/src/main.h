@@ -22,16 +22,21 @@
 
 */
 
+#define DEBUG
+
+#include <Arduino.h>
+#include <Servo.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <Arduino_I2C_ESC.h>
+#include <utility/imumaths.h>
+#include "MS5837.h"
+
+#include "config.h"
+
+#include "motor.h"
+#include "light.h"
+#include "camera.h"
+
 #include "sensor.h"
-
-void Sensor::setup() {
-}
-
-int Sensor::time() {
-  return _time;
-}
-
-void Sensor::loop() {
-  _time = millis();
-}
-

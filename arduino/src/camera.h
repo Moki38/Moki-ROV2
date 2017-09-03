@@ -22,11 +22,16 @@
 
 */
 
-#include <Arduino.h>
+#ifndef _CAMERA_H
+#define _CAMERA_H
 
-#include "config.h"
-#include "motor.h"
-#include "light.h"
-#include "camera.h"
-#include "sensor.h"
-#include "comms.h"
+#include <Arduino.h>
+#include <Servo.h>
+
+void camera_movex(int);
+void camera_movey(int);
+void camera_center();
+void camera_setup();
+
+#endif
+

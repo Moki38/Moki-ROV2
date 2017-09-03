@@ -22,28 +22,26 @@
 
 */
 
-#include <Wire.h>
+#include "camera.h"
 
-#ifndef _COMMS_H
-#define _COMMS_H
+Servo CameraX;
+Servo CameraY;
 
-//
-// Comms Configuration defines
-//
-#undef  COMMS_I2C               // Enable I2C comms
-#define COMMS_SERIAL            // Enable Serial comms
-#define COMMS_SERIAL_DEBUG      // Enable Serial debug messages
+void camera_movex(int x){
+  CameraX.writeMicroseconds(x);
+}
 
+void camera_movey(int y){
+  CameraY.writeMicroseconds(y);
+}
 
-class Comms {
-public:
-	void setup();
-	void loop();
-	boolean Available();
-private:
-	unsigned char _buffer[8];
-};
-
-#endif /* _COMMS_H */
-
+void camera_center() {
+  CameraX.writeMicroseconds(1500);
+}
+void camera_setup() {
+  CameraX.attach(5);
+  CameraX.writeMicroseconds(1500);
+//  CameraY.attach(CAMERAY_PIN);
+//  CameraY.writeMicroseconds(CAMERAY_NEUTRAL);
+}
 

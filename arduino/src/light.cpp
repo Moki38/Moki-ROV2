@@ -21,12 +21,23 @@
  THE SOFTWARE.
 
 */
+#include "light.h"
 
-#include "config.h"
+Servo Light1;
+Servo Light2;
 
-void Config::setup() {
+void light_off() {
+  Light1.writeMicroseconds(1100);
+  Light2.writeMicroseconds(1100);
 }
-
-void Config::loop() {
+void light_on() {
+  Light1.writeMicroseconds(1900);
+  Light2.writeMicroseconds(1900);
+}
+void light_setup() {
+  Light1.attach(3);
+  Light1.writeMicroseconds(1100);
+  Light2.attach(4);
+  Light2.writeMicroseconds(1100);
 }
 
