@@ -337,14 +337,14 @@ var gamepadctrl = function(gamepad) {
 // 6 Left trigger (0-100)
 // 7 Right trigger (0-100)
     event = 'Stop';
-    if ((res[1] == 6) && (res[3] > 30)) { event = 'Strafe_l'; };
+    if ((res[1] == 6) && (res[3] > 50)) { event = 'Strafe_l'; };
     if (arduino) {
       if (event != last_event) {
         port.write(event+':'+res[3]+'\n');
         last_event = event;
       }
     }
-    if ((res[1] == 7) && (res[3] > 30)) { event = 'Strafe_r'; };
+    if ((res[1] == 7) && (res[3] > 50)) { event = 'Strafe_r'; };
     if (arduino) {
       if (event != last_event) {
         port.write(event+':'+res[3]+'\n');
@@ -438,17 +438,17 @@ var gamepadctrl = function(gamepad) {
   if (res[0] == "axis") {
     event = 'Stop';
 // Axis 0 (LS hor)
-    if ((res[1] == 0) && (res[3] > 30)) { event = 'Right'; };
-    if ((res[1] == 0) && (res[3] < -30)) { event = 'Left'; };
+    if ((res[1] == 0) && (res[3] > 50)) { event = 'Right'; };
+    if ((res[1] == 0) && (res[3] < -50)) { event = 'Left'; };
 // Axis 1 (LS vert)
-    if ((res[1] == 1) && (res[3] > 30)) { event = 'Reverse'; };
-    if ((res[1] == 1) && (res[3] < -30)) { event = 'Forward'; };
+    if ((res[1] == 1) && (res[3] > 50)) { event = 'Reverse'; };
+    if ((res[1] == 1) && (res[3] < -50)) { event = 'Forward'; };
 // Axis 2 (RS hor)
-    if ((res[1] == 2) && (res[3] > 30)) { event = 'Roll_r'; };
-    if ((res[1] == 2) && (res[3] < -30)) { event = 'Roll_l'; };
+    if ((res[1] == 2) && (res[3] > 50)) { event = 'Roll_r'; };
+    if ((res[1] == 2) && (res[3] < -50)) { event = 'Roll_l'; };
 // Axis 3 (RS vert)
-    if ((res[1] == 3) && (res[3] > 30)) { event = 'Dive'; };
-    if ((res[1] == 3) && (res[3] < -30)) { event = 'Up'; };
+    if ((res[1] == 3) && (res[3] > 50)) { event = 'Dive'; };
+    if ((res[1] == 3) && (res[3] < -50)) { event = 'Up'; };
   
     if (arduino) {
       if (event != last_event) {

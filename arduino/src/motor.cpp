@@ -43,23 +43,23 @@ int motor_arm() {
 
 void motor_forward(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-    Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
-    Motor2.writeMicroseconds(1500+(4*MOTOR_POWER));
+    Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
+    Motor2.writeMicroseconds(1500-(4*MOTOR_POWER));
     Motor3.writeMicroseconds(1500+(4*MOTOR_POWER));
-    Motor4.writeMicroseconds(1500-(4*MOTOR_POWER));
+    Motor4.writeMicroseconds(1500+(4*MOTOR_POWER));
   }
 }
 void motor_reverse(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-  Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
-  Motor2.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor2.writeMicroseconds(1500+(4*MOTOR_POWER));
   Motor3.writeMicroseconds(1500-(4*MOTOR_POWER));
-  Motor4.writeMicroseconds(1500+(4*MOTOR_POWER));
+  Motor4.writeMicroseconds(1500-(4*MOTOR_POWER));
   }
 }
 void motor_right(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-  Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
+  Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
   Motor2.writeMicroseconds(1500-(4*MOTOR_POWER));
   Motor3.writeMicroseconds(1500+(4*MOTOR_POWER));
   Motor4.writeMicroseconds(1500-(4*MOTOR_POWER));
@@ -67,7 +67,7 @@ void motor_right(int MOTOR_POWER) {
 }
 void motor_left(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-  Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
   Motor2.writeMicroseconds(1500+(4*MOTOR_POWER));
   Motor3.writeMicroseconds(1500-(4*MOTOR_POWER));
   Motor4.writeMicroseconds(1500+(4*MOTOR_POWER));
@@ -87,17 +87,17 @@ void motor_up(int MOTOR_POWER) {
 }
 void motor_strafe_right(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-  Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
-  Motor2.writeMicroseconds(1500+(4*MOTOR_POWER));
-  Motor3.writeMicroseconds(1500+(4*MOTOR_POWER));
+  Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor2.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor3.writeMicroseconds(1500-(4*MOTOR_POWER));
   Motor4.writeMicroseconds(1500+(4*MOTOR_POWER));
   }
 }
 void motor_strafe_left(int MOTOR_POWER) {
   if (MOTOR_ARM) {
-  Motor1.writeMicroseconds(1500-(4*MOTOR_POWER));
-  Motor2.writeMicroseconds(1500-(4*MOTOR_POWER));
-  Motor3.writeMicroseconds(1500-(4*MOTOR_POWER));
+  Motor1.writeMicroseconds(1500+(4*MOTOR_POWER));
+  Motor2.writeMicroseconds(1500+(4*MOTOR_POWER));
+  Motor3.writeMicroseconds(1500+(4*MOTOR_POWER));
   Motor4.writeMicroseconds(1500-(4*MOTOR_POWER));
   }
 }

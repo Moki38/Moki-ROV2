@@ -37,7 +37,7 @@ int power = 0;
 int pilot = 0;
 int pilot_heading = 0;
 int hover = 0;
-int hover_depth = 0;
+float hover_depth = 0;
 
 void setup() {
   unsigned int timeout = millis();
@@ -107,13 +107,13 @@ void hover_loop() {
 //
       if (hover == true) {
         if (depth_get() > hover_depth+1) {
-          motor_up(10);
+          motor_up(30);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
 	Serial.println(power);
         } else if (depth_get() < hover_depth-1) {
-          motor_dive(10);
+          motor_dive(30);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");

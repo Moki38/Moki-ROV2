@@ -147,7 +147,7 @@ function update(rovdata) {
   var t;
 
   mbar = rovdata.Pressure;
-  t = rovdata.Depth*100;
+  t = rovdata.Depth;
   depth = t.toFixed(2);
   temp = rovdata.Temperature;
   volt = rovdata.Volt;

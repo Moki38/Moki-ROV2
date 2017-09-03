@@ -114,7 +114,7 @@ int temp_get() {
 }
 
 int depth_get() {
-  return(MS5837_sensor.depth());
+  return(MS5837_sensor.depth()*100);
 }
 
 int alt_get() {
