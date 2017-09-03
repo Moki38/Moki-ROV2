@@ -212,6 +212,7 @@ void loop() {
       if (command == "ARM") {
            motor_arm(true);
       } else if (command == "DISARM") {
+	   motor_stop();
            motor_arm(false);
 
       } else if (command == "Stop") {
