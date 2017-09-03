@@ -1,18 +1,5 @@
 # Moki-ROV2 Arduino software
-## The "develop" branch may not even compile! or run!!
-
-There are 2 directories here;
-
-# Develop
-```
-As said before, this may not even run or do anything!
-It should not crash your ROV or do anything worse.
-```
-
-# Stable
-```
-Just use this version and you will be a happy camper!
-```
+Don't forget to update config.h
 
 # PlatformIO cli commands (debug only)
 ```
@@ -47,31 +34,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-# PlatformIO (Arduino CLI)
-#pip install -U platformio
-cd
-wget https://raw.githubusercontent.com/platformio/platformio/develop/scripts/get-platformio.py
-python get-platformio.py
-pip install -U platformio
-cd
-cd Moki-ROV2/arduino
-platformio init -b teensy31
-platformio lib install git+https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
-platformio lib install git+https://github.com/adafruit/Adafruit_Sensor.git
-platformio lib install git+https://github.com/adafruit/Adafruit_BNO055.git
-platformio lib install git+https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
-platformio lib install git+https://github.com/bluerobotics/Arduino_I2C_ESC.git
-
-#mkdir lib
-#cd lib
-#git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
-#git clone https://github.com/adafruit/Adafruit_Sensor.git
-#git clone https://github.com/adafruit/Adafruit_BNO055.git
-#git clone https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
-#git clone https://github.com/bluerobotics/Arduino_I2C_ESC.git
-#cd ..
-
-platformio run
-platformio run --target upload
 
