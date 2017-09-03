@@ -33,16 +33,16 @@ void motor_arm(int);
 int motor_arm();
 
 // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
-void motor_forward();
-void motor_reverse();
-void motor_right();
-void motor_left();
-void motor_dive();
-void motor_up();
-void motor_strafe_right();
-void motor_strafe_left();
-void motor_roll_right();
-void motor_roll_left();
+void motor_forward(int);
+void motor_reverse(int);
+void motor_right(int);
+void motor_left(int);
+void motor_dive(int);
+void motor_up(int);
+void motor_strafe_right(int);
+void motor_strafe_left(int);
+void motor_roll_right(int);
+void motor_roll_left(int);
 
 void motor_stop();
 void motor_setup();

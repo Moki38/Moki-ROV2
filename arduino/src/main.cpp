@@ -113,7 +113,7 @@ void hover_loop() {
 	Serial.print("Motor_6:");
 	Serial.println(power);
         } else if (depth_get() < hover_depth-1) {
-          motor_down(10);
+          motor_dive(10);
 	Serial.print("Motor_5:");
 	Serial.println(power);
 	Serial.print("Motor_6:");
