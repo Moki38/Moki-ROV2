@@ -32,6 +32,8 @@ boolean command_complete = false;
 
 int sensor_time = 0;
 int motor_time = 0;
+int ping_time = 0;
+int pong_time = 0;
 int power = 0;
 
 int pilot = 0;
@@ -56,6 +58,8 @@ void setup() {
     if (Serial) {
       Serial.println("ARDUINO READY");
       timeout = -1;
+      ping_time = millis();
+      pong_time = millis();
     } else {
       timeout = millis();
     }
@@ -174,6 +178,13 @@ void motor_loop() {
 //  motor_stop();
 }
 
+void pingpong_loop() {
+  Serial.println("PONG");
+  if (pong_time >= (ping_time + 2500)) {
+    motor_stop();
+  }
+}
+
 void loop() {
 //
 // Run at "fixed" times
@@ -186,12 +197,18 @@ void loop() {
     sensor_loop();
   }
 //
+// Every 2500 μs run the ping loop
+//
+  if (time >= (pong_time + 2500)) {
+    pingpong_loop();
+  }
+//
 // Every 150 μs run the motor loop.
 //
   if ((time >= (motor_time + 150)) || (time < motor_time)) {
-    motor_loop();
     pilot_loop();
     hover_loop();
+    motor_loop();
   }
 
 //
@@ -211,6 +228,8 @@ void loop() {
 
       if (command == "ARM") {
            motor_arm(true);
+      } else if (command == "PING") {
+         ping_time = millis();
       } else if (command == "DISARM") {
 	   motor_stop();
            motor_arm(false);

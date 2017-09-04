@@ -56,6 +56,10 @@ function parse_serial(line) {
     case    'Time':
       rovdata.Time = res[1];
       break;
+    case    'Pong':
+      rovdata.Pong = res[1];
+      console.log('Serial DEBUG: ' + line);
+      break;
     case    'Pressure':
       rovdata.Pressure = res[1];
       break;
@@ -465,6 +469,7 @@ socket.on('disconnect', function () {
 
 var interval = setInterval(function () {
   socket.emit("rovdata", rovdata);
+  port.write('PING:0\n');
 }, 200);
 
 socket.on('gamepad', function(data) {
