@@ -7,14 +7,14 @@
   </head>
 
   <body>
-    <iframe id="camera" src="http://172.16.10.20:8080/javascript_simple.html" allowtransparency="true" scrolling="no"></iframe>
+    <iframe id="camera" src="http://192.168.1.30:8080/javascript_simple.html" allowtransparency="true" scrolling="no"></iframe>
     <div id="canvasesdiv">
        <canvas id="rovCanvas"></canvas> 
     </div>
 
     <button class="menubutton" onClick="window.open('/menu.html');"><span class="icon">Menu</span></button>
     <button class="zerodepthbutton" onClick="zero_depth_window()"><span class="icon">Zero Depth</span></button>
-    <button class="cambutton" onClick="window.open('http://172.16.10.20:8080/javascript_simple.html');"><span class="icon">Cam Window</span></button>
+    <button class="cambutton" onClick="window.open('http://192.168.1.30:8080/javascript_simple.html');"><span class="icon">Cam Window</span></button>
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>

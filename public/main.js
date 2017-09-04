@@ -149,7 +149,8 @@ function update(rovdata) {
   mbar = rovdata.Pressure;
   t = rovdata.Depth;
   depth = t.toFixed(2);
-  temp = rovdata.Temperature;
+  temp_out = rovdata.Temp_OUT;
+  temp_in = rovdata.Temp_IN;
   volt = rovdata.Volt;
   current = rovdata.Amps;
   heading = Math.floor(rovdata.X);
@@ -225,7 +226,7 @@ function display(rovdata) {
 
   rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
   rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
-  rov_context.fillText( ": "+temp+" °C", (rov_canvas.width/4)*3+80, 60);
+  rov_context.fillText( ": "+temp_out+"/"+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
 
 // Visual Gamepad Axis
   if (!gamepad_detected) {

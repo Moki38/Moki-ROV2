@@ -41,6 +41,15 @@ int pilot_heading = 0;
 int hover = 0;
 float hover_depth = 0;
 
+struct motor_power {
+  float m1;
+  float m2;
+  float m3;
+  float m4;
+  float m5;
+  float m6;
+};
+
 void setup() {
   unsigned int timeout = millis();
 
@@ -83,7 +92,7 @@ void sensor_loop() {
   depth_loop();
   Serial.print("Pressure:");
   Serial.println(pressure_get());
-  Serial.print("Temperature:");
+  Serial.print("Temp_OUT:");
   Serial.println(temp_get());
   Serial.print("Depth:");
   Serial.println(depth_get());
@@ -97,12 +106,20 @@ void sensor_loop() {
   Serial.println(imu_Y(), 4);
   Serial.print("Z:");
   Serial.println(imu_Z(), 4);
+  Serial.print("ACCL_X:");
+  Serial.println(imu_accl_X(), 4);
+  Serial.print("ACCL_Y:");
+  Serial.println(imu_accl_Y(), 4);
+  Serial.print("ACCL_Z:");
+  Serial.println(imu_accl_Z(), 4);
   Serial.print("Heading:");
   Serial.println(imu_heading(), 4);
   Serial.print("Roll:");
   Serial.println(imu_roll(), 4);
   Serial.print("Pitch:");
   Serial.println(imu_pitch(), 4);
+  Serial.print("Temp_IN:");
+  Serial.println(imu_temp_get());
 }
 
 void hover_loop() {

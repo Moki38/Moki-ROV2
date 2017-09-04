@@ -63,8 +63,11 @@ function parse_serial(line) {
     case    'Pressure':
       rovdata.Pressure = res[1];
       break;
-    case    'Temperature':
-      rovdata.Temperature = res[1];
+    case    'Temp_OUT':
+      rovdata.Temp_OUT = res[1];
+      break;
+    case    'Temp_IN':
+      rovdata.Temp_IN = res[1];
       break;
     case    'Depth':
       rovdata.Depth = res[1] - rovdata.Depth_Offset;
@@ -80,6 +83,16 @@ function parse_serial(line) {
       break;
     case    'Z':
       rovdata.Z = res[1];
+      break;
+    case    'ACCL_X':
+      rovdata.Accl_X = res[1];
+      break;
+    case    'ACCL_Y':
+      rovdata.Accl_Y = res[1];
+      break;
+    case    'ACCL_Z':
+      rovdata.Accl_Z = res[1];
+      console.log('Accl DEBUG: ' + rovdata.Accl_X + ' ' + rovdata.Accl_Y + ' ' + rovdata.Accl_Z);
       break;
     case    'Heading':
       rovdata.Heading = res[1];
@@ -225,7 +238,8 @@ if (arduino) {
   rovdata.Y = 0;
   rovdata.Z = 0;
   rovdata.Depth = 0;
-  rovdata.Temperature = 0;
+  rovdata.Temp_OUT = 0;
+  rovdata.Temp_IN = 0;
 }
 
 app.use(express.static('public'));
