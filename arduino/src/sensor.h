@@ -61,8 +61,8 @@ int alt_get();
 void depth_loop();
 void depth_setup();
 
-int current_get();
-int amp_get();
+float current_get();
+float amp_get();
 void current_setup();
 void amp_setup();
 

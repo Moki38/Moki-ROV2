@@ -22,8 +22,7 @@
 
 */
 
-#
-include "main.h"
+#include "main.h"
 
 //
 // Serial vars
@@ -100,10 +99,10 @@ void sensor_loop() {
   Serial.println(sensor_time);
 
   Serial.print("Volt:");
-  Serial.println(current_get());
+  Serial.println(current_get(),4);
 
   Serial.print("Amps:");
-  Serial.println(amp_get());
+  Serial.println(amp_get(),4);
 
   depth_loop();
   Serial.print("Pressure:");
@@ -144,72 +143,40 @@ void hover_loop() {
   //
   if (depth_get() > hover_depth) {
     motor_up(20);
-    Serial.print("Motor_5:");
-    Serial.println(power);
-    Serial.print("Motor_6:");
-    Serial.println(power);
   } else if (depth_get() > hover_depth + 10) {
     motor_up(30);
-    Serial.print("Motor_5:");
-    Serial.println(power);
-    Serial.print("Motor_6:");
-    Serial.println(power);
   } else if (depth_get() < hover_depth) {
     motor_dive(20);
-    Serial.print("Motor_5:");
-    Serial.println(power);
-    Serial.print("Motor_6:");
-    Serial.println(power);
   } else if (depth_get() < hover_depth - 10) {
     motor_dive(30);
-    Serial.print("Motor_5:");
-    Serial.println(power);
-    Serial.print("Motor_6:");
-    Serial.println(power);
   } else {
     motor_stop();
-    Serial.print("Motor_5:");
-    Serial.println(0);
-    Serial.print("Motor_6:");
-    Serial.println(0);
   }
+  Serial.print("Motor_5:");
+  Serial.println(0);
+  Serial.print("Motor_6:");
+  Serial.println(0);
 }
 
 void pilot_loop() {
   //
   // Pilot
   //
-  if (imu_heading() > pilot_heading + 1) {
+  if (imu_heading() >= pilot_heading+1) {
     motor_left(10);
-    Serial.print("Motor_1:");
-    Serial.println(power);
-    Serial.print("Motor_2:");
-     Serial.println(power);
-    Serial.print("Motor_3:");
-    Serial.println(power);
-    Serial.print("Motor_4:");
-    Serial.println(power);
-  } else if (imu_heading() < pilot_heading - 1) {
+  } else if (imu_heading() <= pilot_heading) {
     motor_right(10);
-    Serial.print("Motor_1:");
-    Serial.println(power);
-    Serial.print("Motor_2:");
-    Serial.println(power);
-    Serial.print("Motor_3:");
-    Serial.println(power);
-    Serial.print("Motor_4:");
-    Serial.println(power);
   } else {
     motor_stop();
-    Serial.print("Motor_1:");
-    Serial.println(0);
-    Serial.print("Motor_2:");
-    Serial.println(0);
-    Serial.print("Motor_3:");
-    Serial.println(0);
-    Serial.print("Motor_4:");
-    Serial.println(0);
   }
+  Serial.print("Motor_1:");
+  Serial.println(0);
+  Serial.print("Motor_2:");
+  Serial.println(0);
+  Serial.print("Motor_3:");
+  Serial.println(0);
+  Serial.print("Motor_4:");
+  Serial.println(0);
 }
 
 void motor_loop() {
@@ -218,7 +185,8 @@ void motor_loop() {
 }
 
 void pingpong_loop() {
-  Serial.println("PONG");
+  pong_time = millis();
+  Serial.println("PONG:0");
   if (pong_time >= (ping_time + 2500)) {
     motor_stop();
   }
@@ -275,6 +243,9 @@ void loop() {
       ping_time = millis();
     } else if (command == "DISARM") {
       motor_stop();
+      power = 0;
+      Serial.print("Power:");
+      Serial.println(power);
       motor_arm(false);
 
     } else if (command == "Stop") {
@@ -298,6 +269,7 @@ void loop() {
         pilot_heading = value;
       } else {
         pilot = false;
+        motor_stop();
       }
     } else if (command == "Hover") {
       if (value >= 0) {
@@ -305,6 +277,7 @@ void loop() {
         hover_depth = value;
       } else {
         hover = false;
+        motor_stop();
       }
     } else if (command == "Power") {
       power = value;

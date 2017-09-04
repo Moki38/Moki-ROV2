@@ -56,9 +56,14 @@ function parse_serial(line) {
     case    'Time':
       rovdata.Time = res[1];
       break;
-    case    'Pong':
-      rovdata.Pong = res[1];
-      console.log('Serial DEBUG: ' + line);
+    case    'PING':
+      rovdata.Ping = 1;
+      break;
+    case    'PONG':
+      rovdata.Pong = 1;
+      break;
+    case    'PING2':
+      rovdata.Ping = 1;
       break;
     case    'Pressure':
       rovdata.Pressure = res[1];
@@ -92,7 +97,6 @@ function parse_serial(line) {
       break;
     case    'ACCL_Z':
       rovdata.Accl_Z = res[1];
-      console.log('Accl DEBUG: ' + rovdata.Accl_X + ' ' + rovdata.Accl_Y + ' ' + rovdata.Accl_Z);
       break;
     case    'Heading':
       rovdata.Heading = res[1];
@@ -120,6 +124,9 @@ function parse_serial(line) {
       break;
     case    'Amps':
       rovdata.Amps = res[1];
+      break;
+    case    'Power':
+      rovdata.Power = res[1];
       break;
     case    'Motor_1':
       rovdata.Motor_1 = res[1];
@@ -220,7 +227,7 @@ function parse_serial(line) {
       rovdata.Motor_6 = 0;
       break;
     default:
-      console.log('Serial data: ' + line);
+      console.log('Serial data: '+line);
   }
 //  console.log('Serial DEBUG: ' + line);
 }
@@ -483,8 +490,11 @@ socket.on('disconnect', function () {
 
 var interval = setInterval(function () {
   socket.emit("rovdata", rovdata);
-  port.write('PING:0\n');
 }, 200);
+
+var ping_interval = setInterval(function () {
+  port.write('PING2:0\n');
+}, 2500);
 
 socket.on('gamepad', function(data) {
   gamepadctrl(data);
@@ -533,6 +543,8 @@ var disarmmotor = function() {
     console.log("MOTOR: OFF");
     rovdata.Motor = false;
     port.write('DISARM:0'+'\n');
+    rovdata.Power = 0;
+    port.write('Power:'+rovdata.Power+'\n');
 }
 
 }); /// END io.connection

@@ -156,6 +156,9 @@ function update(rovdata) {
   heading = Math.floor(rovdata.X);
   pitch = Math.floor(rovdata.Y);
   roll = Math.floor(rovdata.Z);
+  accl_x = rovdata.Accl_X;
+  accl_y = rovdata.Accl_Y;
+  accl_z = rovdata.Accl_Z;
   pilot = rovdata.Pilot;
   pilotset = Math.floor(rovdata.Pilotset);
   hover = rovdata.Hover;
@@ -226,7 +229,7 @@ function display(rovdata) {
 
   rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
   rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
-  rov_context.fillText( ": "+temp_out+"/"+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
+  rov_context.fillText( ": "+temp_out+"/ "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
 
 // Visual Gamepad Axis
   if (!gamepad_detected) {
@@ -411,6 +414,20 @@ function display(rovdata) {
   if (motor_6 != 0) {
     rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+185,motor_6,10);
   }
+  rov_context.fill();
+
+
+// IMU Status Text
+  rov_context.beginPath();
+  rov_context.font = '14pt Verdana';
+  rov_context.fillStyle = "#aaaa00";
+  rov_context.fillText("ACCL X:", 150, 150);
+  rov_context.fillText("ACCL Y:", 150, 200);
+  rov_context.fillText("ACCL Z:", 150, 250);
+  rov_context.fillStyle = "#aa0000";
+  rov_context.fillText( accl_x+"  ", 240, 150);
+  rov_context.fillText( accl_y+"  ", 240 ,200);
+  rov_context.fillText( accl_z+"  ", 240, 250);
   rov_context.fill();
 
 

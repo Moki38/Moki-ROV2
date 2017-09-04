@@ -165,7 +165,7 @@ void depth_setup() {
 
 }
 
-int current_get() {
+float current_get() {
   VFinal = -1;
     VRaw = analogRead(CURRENT_PIN);
     if (VRaw < 400) {
@@ -175,7 +175,7 @@ int current_get() {
   return(VFinal);
 }
 
-int amp_get() {
+float amp_get() {
   IFinal = -1;
     IRaw = analogRead(AMP_PIN);
     if (VRaw < 400) {
