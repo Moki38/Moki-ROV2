@@ -27,6 +27,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include <Wire.h>
+
+#include <PID_v1.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <Arduino_I2C_ESC.h>

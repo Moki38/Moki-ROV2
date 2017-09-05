@@ -42,6 +42,23 @@ int ping_time = 0;
 int pong_time = 0;
 
 //
+// PID vars
+//
+double hover_Setpoint, hover_Input, hover_Output;
+double heading_Setpoint, heading_Input, heading_Output;
+
+//Define the aggressive and conservative Tuning Parameters
+double hover_aggKp=4, hover_aggKi=0.2, hover_aggKd=1;
+double hover_consKp=1, hover_consKi=0.05, hover_consKd=0.25;
+double heading_aggKp=4, heading_aggKi=0.2, heading_aggKd=1;
+double heading_consKp=1, heading_consKi=0.05, heading_consKd=0.25;
+
+//Specify the links and initial tuning parameters
+PID hover_PID(&hover_Input, &hover_Output, &hover_Setpoint, hover_consKp, hover_consKi, hover_consKd, DIRECT);
+PID heading_PID(&heading_Input, &heading_Output, &heading_Setpoint, heading_consKp, heading_consKi, heading_consKd, DIRECT);
+
+
+//
 // Pilot vars
 //
 int pilot = 0;
@@ -65,6 +82,13 @@ struct motor_power {
   float m6;
 };
 
+void pid_setup() {
+  hover_PID.SetMode(AUTOMATIC);
+  hover_PID.SetOutputLimits(0, 30);
+  heading_PID.SetMode(AUTOMATIC);
+  hover_PID.SetOutputLimits(0, 20);
+}
+
 void setup() {
   unsigned int timeout = millis();
 
@@ -72,6 +96,7 @@ void setup() {
   light_setup();
   camera_setup();
   sensor_setup();
+  pid_setup();
 
   // Init serial communication
   serial_command.reserve(200);
@@ -141,42 +166,60 @@ void hover_loop() {
   //
   // Hover
   //
+  double gap = abs(depth_get() - hover_depth);
+
+  if (gap < 10) {
+    hover_PID.SetTunings(hover_consKp, hover_consKi, hover_consKd);
+  } else {
+    hover_PID.SetTunings(hover_aggKp, hover_aggKi, hover_aggKd);
+  }
+
+  hover_PID.Compute();
+
   if (depth_get() > hover_depth) {
-    motor_up(20);
-  } else if (depth_get() > hover_depth + 10) {
-    motor_up(30);
+    motor_up(hover_Output);
   } else if (depth_get() < hover_depth) {
-    motor_dive(20);
-  } else if (depth_get() < hover_depth - 10) {
-    motor_dive(30);
+    motor_dive(hover_Output);
   } else {
     motor_stop();
+    hover_Output = 0;
   }
   Serial.print("Motor_5:");
-  Serial.println(0);
+  Serial.println(hover_Output);
   Serial.print("Motor_6:");
-  Serial.println(0);
+  Serial.println(hover_Output);
 }
 
 void pilot_loop() {
   //
   // Pilot
   //
+  double gap = abs(imu_heading() - pilot_heading);
+
+  if (gap < 10) {
+    heading_PID.SetTunings(heading_consKp, heading_consKi, heading_consKd);
+  } else {
+    heading_PID.SetTunings(heading_aggKp, heading_aggKi, heading_aggKd);
+  }
+  
+  heading_PID.Compute();
+
   if (imu_heading() >= pilot_heading+1) {
-    motor_left(10);
+    motor_left(heading_Output);
   } else if (imu_heading() <= pilot_heading) {
-    motor_right(10);
+    motor_right(heading_Output);
   } else {
     motor_stop();
+    heading_Output = 0;
   }
   Serial.print("Motor_1:");
-  Serial.println(0);
+  Serial.println(heading_Output);
   Serial.print("Motor_2:");
-  Serial.println(0);
+  Serial.println(heading_Output);
   Serial.print("Motor_3:");
-  Serial.println(0);
+  Serial.println(heading_Output);
   Serial.print("Motor_4:");
-  Serial.println(0);
+  Serial.println(heading_Output);
 }
 
 void motor_loop() {

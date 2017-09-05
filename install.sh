@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #
-# Moki-ROV2 (Non working software)
+# Moki-ROV2 install script
 #
 # If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
-# Copyright (c) 2016 by Eric van Dijken <rov-pi@team-moki.nl>
+# Copyright (c) 2017 by Eric van Dijken <rov-pi@team-moki.nl>
 
 HOST_IP=`hostname -I`
 
@@ -12,17 +12,17 @@ HOST_IP=`hostname -I`
 # NodeJS
 #
 cd
-wget https://nodejs.org/dist/v6.9.5/node-v6.9.5-linux-armv6l.tar.xz
+wget https://nodejs.org/dist/v6.11.2/node-v6.11.2-linux-armv6l.tar.xz
 cd /usr/local
 rm -rf bin/node bin/npm include/node lib/node
-tar --strip-components 1 -xJf /root/node-v6.9.5-linux-armv6l.tar.xz
+tar --strip-components 1 -xJf /root/node-v6.11.2-linux-armv6l.tar.xz
 
 ## Arduino IDE
 cd
-wget https://downloads.arduino.cc/arduino-1.8.1-linuxarm.tar.xz
+wget https://downloads.arduino.cc/arduino-1.8.4-linuxarm.tar.xz
 cd /usr/share
-tar xfJ ~/arduino-1.8.1-linuxarm.tar.xz
-ln -s arduino-1.8.1 arduino
+tar xfJ ~/arduino-1.8.4-linuxarm.tar.xz
+ln -s arduino-1.8.4 arduino
 
 ## Arduino UDEV Rules
 cd /etc/udev/rules.d/
@@ -55,14 +55,22 @@ pip install -U platformio
 cd 
 cd Moki-ROV2/arduino
 platformio init -b teensy31
-mkdir lib
-cd lib
-git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
-git clone https://github.com/adafruit/Adafruit_Sensor.git
-git clone https://github.com/adafruit/Adafruit_BNO055.git
-git clone https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
-git clone https://github.com/bluerobotics/Arduino_I2C_ESC.git
-cd ..
+platformio lib install git+https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
+platformio lib install git+https://github.com/adafruit/Adafruit_Sensor.git
+platformio lib install git+https://github.com/adafruit/Adafruit_BNO055.git
+platformio lib install git+https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
+platformio lib install git+https://github.com/bluerobotics/Arduino_I2C_ESC.git
+platformio lib install git+https://github.com/br3ttb/Arduino-PID-Library.git
+
+#mkdir lib
+#cd lib
+#git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
+#git clone https://github.com/adafruit/Adafruit_Sensor.git
+#git clone https://github.com/adafruit/Adafruit_BNO055.git
+#git clone https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
+#git clone https://github.com/bluerobotics/Arduino_I2C_ESC.git
+#cd ..
+
 platformio run
 platformio run --target upload
 
