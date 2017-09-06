@@ -7,6 +7,19 @@ var shell = require("shelljs");
 var jsonfile = require('jsonfile')
 jsonfile.spaces = 4
 var serialport = require('serialport');
+var winston = require('winston');
+var now = new Date();
+var jsonDate = now.toJSON();
+var logfile_name = './log/log-' + jsonDate +'.log';
+  var logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.File)({
+        filename: logfile_name,
+        json: true,
+        stringify: (obj) => JSON.stringify(obj),
+      })
+    ]
+  });
 
 var config_file = 'config.js'
 var config = jsonfile.readFileSync(config_file)
@@ -51,6 +64,10 @@ camera.stdout.on('data', function(data) {
 });
 
 function parse_serial(line) {
+
+//  logger.log('info', 'line: %s', line);
+  logger.log('info', rovdata);
+
   var res = line.split(":");
   switch(res[0]) {
     case    'Time':
@@ -478,6 +495,7 @@ var gamepadctrl = function(gamepad) {
     if (arduino) {
       if (event != last_event) {
         port.write(event+':'+res[3]+'\n');
+        rovdata.event = event;
         last_event = event;
       }
     }

@@ -1,8 +1,11 @@
 {
   "name": "Moki-ROV2",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Remote-control environment for a ROV, Raspberry PI powered.",
   "main": "rov.js",
+  "homepage": {
+    "url": "http://wiki.team-moki.nl/display/MOK"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Moki38/Moki-ROV2.git"
@@ -16,6 +19,7 @@
     "serialport": "~4.0.6",
     "jsonfile": "~2.3.1",
     "socket.io": "> 1.0.6",
+    "winston": "~2.3.1",
     "shelljs": "> 0.3.0",
     "sleep": "> 1.1.8"
   },
