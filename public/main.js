@@ -156,6 +156,10 @@ function update(rovdata) {
   heading = Math.floor(rovdata.X);
   pitch = Math.floor(rovdata.Y);
   roll = Math.floor(rovdata.Z);
+  imusys = rovdata.Sys;
+  imugyro = rovdata.Gyro;
+  imuaccel = rovdata.Accel;
+  imumag = rovdata.Mag;
   accl_x = rovdata.Accl_X;
   accl_y = rovdata.Accl_Y;
   accl_z = rovdata.Accl_Z;
@@ -424,10 +428,18 @@ function display(rovdata) {
   rov_context.fillText("ACCL X:", 150, 150);
   rov_context.fillText("ACCL Y:", 150, 200);
   rov_context.fillText("ACCL Z:", 150, 250);
+  rov_context.fillText("IMU SYS:", 150, 300);
+  rov_context.fillText("IMU GYRO:", 150, 350);
+  rov_context.fillText("IMU ACCEL:", 150, 400);
+  rov_context.fillText("IMU MAG:", 150, 450);
   rov_context.fillStyle = "#aa0000";
   rov_context.fillText( accl_x+"  ", 240, 150);
   rov_context.fillText( accl_y+"  ", 240 ,200);
   rov_context.fillText( accl_z+"  ", 240, 250);
+  rov_context.fillText( imusys+"  ", 300, 300);
+  rov_context.fillText( imugyro+"  ", 300, 350);
+  rov_context.fillText( imuaccel+"  ", 300, 400);
+  rov_context.fillText( imumag+"  ", 300, 450);
   rov_context.fill();
 
 

@@ -131,11 +131,11 @@ void sensor_loop() {
 
   depth_loop();
   Serial.print("Pressure:");
-  Serial.println(pressure_get());
+  Serial.println(pressure_get(), 4);
   Serial.print("Temp_OUT:");
   Serial.println(temp_get());
   Serial.print("Depth:");
-  Serial.println(depth_get());
+  Serial.println(depth_get(), 4);
   Serial.print("Altitude:");
   Serial.println(alt_get());
 
@@ -160,6 +160,14 @@ void sensor_loop() {
   Serial.println(imu_pitch(), 4);
   Serial.print("Temp_IN:");
   Serial.println(imu_temp_get());
+  Serial.print("Sys:");
+  Serial.println(imu_system());
+  Serial.print("Gyro:");
+  Serial.println(imu_gyro());
+  Serial.print("Accel:");
+  Serial.println(imu_accel());
+  Serial.print("Mag:");
+  Serial.println(imu_mag());
 }
 
 void hover_loop() {
@@ -275,10 +283,12 @@ void loop() {
     value_string = serial_command.substring(pos + 1);
     value = value_string.toInt();
 
-    Serial.print("Command: ");
-    Serial.print(command);
-    Serial.print(" Value: ");
-    Serial.println(value);
+    if (command != "PING") {
+      Serial.print("Command: ");
+      Serial.print(command);
+      Serial.print(" Value: ");
+      Serial.println(value);
+    }
 
     if (command == "ARM") {
       motor_arm(true);

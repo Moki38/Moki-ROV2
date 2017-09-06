@@ -79,9 +79,6 @@ function parse_serial(line) {
     case    'PONG':
       rovdata.Pong = 1;
       break;
-    case    'PING2':
-      rovdata.Ping = 1;
-      break;
     case    'Pressure':
       rovdata.Pressure = res[1];
       break;
@@ -511,7 +508,7 @@ var interval = setInterval(function () {
 }, 200);
 
 var ping_interval = setInterval(function () {
-  port.write('PING2:0\n');
+  port.write('PING:0\n');
 }, 2500);
 
 socket.on('gamepad', function(data) {

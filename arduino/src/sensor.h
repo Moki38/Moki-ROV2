@@ -54,9 +54,9 @@ float imu_pitch();
 void imu_loop();
 void imu_setup();
 
-int pressure_get();
+float pressure_get();
 int temp_get();
-int depth_get();
+float depth_get();
 int alt_get();
 void depth_loop();
 void depth_setup();

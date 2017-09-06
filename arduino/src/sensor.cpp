@@ -47,7 +47,6 @@ uint8_t system_error = 0;
 sensors_event_t event;
 imu::Vector<3> imu_vec;
 
-
 uint8_t imu_system() {
   return system_imu;
 }
@@ -135,7 +134,7 @@ void imu_setup() {
 
 }
 
-int pressure_get(){
+float pressure_get(){
   return(MS5837_sensor.pressure());
 }
 
@@ -143,7 +142,7 @@ int temp_get() {
   return (MS5837_sensor.temperature());
 }
 
-int depth_get() {
+float depth_get() {
   return(MS5837_sensor.depth()*100);
 }
 
