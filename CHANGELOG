@@ -1,0 +1,15 @@
+# Changelog
+All notable changes to MokiROV2 will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+Added logfile function and analyse.js program (start)
+Added IMU Status display (SYSTEM,GYRO,ACCEL,MAG)
+Fixed Depth/Pressure int to float (may break hover function)
+Fixed PING/PONG ghost echo output
+
+## [1.0.0] - 2017-09-06
+### Added
+- First release :) by @eric.
