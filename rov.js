@@ -65,8 +65,7 @@ camera.stdout.on('data', function(data) {
 
 function parse_serial(line) {
 
-//  logger.log('info', 'line: %s', line);
-  logger.log('info', rovdata);
+  line = line.replace(/[\r$]/g, '');
 
   var res = line.split(":");
   switch(res[0]) {
@@ -244,6 +243,7 @@ function parse_serial(line) {
       console.log('Serial data: '+line);
   }
 //  console.log('Serial DEBUG: ' + line);
+  logger.log('info', rovdata);
 }
 
 if (arduino) {
