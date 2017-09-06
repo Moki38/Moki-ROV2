@@ -86,7 +86,7 @@ void pid_setup() {
   hover_PID.SetMode(AUTOMATIC);
   hover_PID.SetOutputLimits(0, 30);
   heading_PID.SetMode(AUTOMATIC);
-  hover_PID.SetOutputLimits(0, 20);
+  heading_PID.SetOutputLimits(0, 20);
 }
 
 void setup() {
@@ -202,32 +202,93 @@ void pilot_loop() {
   //
   // Pilot
   //
-  double gap = abs(imu_heading() - pilot_heading);
+  int direction = 0;
 
-  if (gap < 10) {
-    heading_PID.SetTunings(heading_consKp, heading_consKi, heading_consKd);
-  } else {
-    heading_PID.SetTunings(heading_aggKp, heading_aggKi, heading_aggKd);
-  }
+  heading_Input = imu_heading();
+  heading_Setpoint = pilot_heading;
+
+  double gap = abs(heading_Setpoint - heading_Input);
+
+  if (gap > 2) {
+    if ((heading_Setpoint - heading_Input) < 0) {
+      direction = 1;
+      heading_Setpoint = heading_Input;
+      heading_Input = pilot_heading;
+    }
+
+    Serial.print("DEBUG_PILOT_GAP:");
+    Serial.println(gap);
+
+    if (gap < 10) {
+      heading_PID.SetTunings(heading_consKp, heading_consKi, heading_consKd);
+    } else {
+      heading_PID.SetTunings(heading_aggKp, heading_aggKi, heading_aggKd);
+    }
   
-  heading_PID.Compute();
+    heading_PID.Compute();
+  
+//    Serial.print("DEBUG_PILOT_HEADING_INPUT:");
+//    Serial.println(heading_Input);
+//    Serial.print("DEBUG_PILOT_HEADING_OUTPUT:");
+//    Serial.println(heading_Output);
+//    Serial.print("DEBUG_PILOT_HEADING_SETPUT:");
+//    Serial.println(heading_Setpoint);
 
-  if (imu_heading() >= pilot_heading+1) {
-    motor_left(heading_Output);
-  } else if (imu_heading() <= pilot_heading) {
-    motor_right(heading_Output);
+    if (heading_Output > 30) {
+//    Serial.print("DEBUG_PILOT_HEADING_OUTPUT_MAX:");
+//    Serial.println(heading_Output);
+      heading_Output = 0;
+    };
+
+    if (direction == 0) {
+//      Serial.print("DEBUG_PILOT_HEADING_OUTPUT_LEFT:");
+//      Serial.println(heading_Output);
+      motor_left(heading_Output);
+      Serial.print("Motor_1:");
+      Serial.println(-heading_Output);
+      Serial.print("Motor_2:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_3:");
+      Serial.println(-heading_Output);
+      Serial.print("Motor_4:");
+      Serial.println(heading_Output);
+  
+  } else if (direction == 1) {
+//      Serial.print("DEBUG_PILOT_HEADING_OUTPUT_RIGHT:");
+//      Serial.println(heading_Output);
+      motor_right(heading_Output);
+      Serial.print("Motor_1:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_2:");
+      Serial.println(-heading_Output);
+      Serial.print("Motor_3:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_4:");
+      Serial.println(-heading_Output);
+    } else {
+      motor_stop();
+      heading_Output = 0;
+      Serial.print("Motor_1:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_2:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_3:");
+      Serial.println(heading_Output);
+      Serial.print("Motor_4:");
+      Serial.println(heading_Output);
+    }
   } else {
     motor_stop();
     heading_Output = 0;
+    Serial.print("Motor_1:");
+    Serial.println(heading_Output);
+    Serial.print("Motor_2:");
+    Serial.println(heading_Output);
+    Serial.print("Motor_3:");
+    Serial.println(heading_Output);
+    Serial.print("Motor_4:");
+    Serial.println(heading_Output);
   }
-  Serial.print("Motor_1:");
-  Serial.println(heading_Output);
-  Serial.print("Motor_2:");
-  Serial.println(heading_Output);
-  Serial.print("Motor_3:");
-  Serial.println(heading_Output);
-  Serial.print("Motor_4:");
-  Serial.println(heading_Output);
 }
 
 void motor_loop() {
@@ -240,6 +301,7 @@ void pingpong_loop() {
   Serial.println("PONG:0");
   if (pong_time >= (ping_time + 2500)) {
     motor_stop();
+    Serial.println("TIMEOUT:1");
   }
 }
 
@@ -317,12 +379,12 @@ void loop() {
       Serial.println(0);
 
     } else if (command == "Pilot") {
-      if (value >= 0) {
-        pilot = true;
-        pilot_heading = value;
-      } else {
+      if (value >= 400) {
         pilot = false;
         motor_stop();
+      } else {
+        pilot = true;
+        pilot_heading = value;
       }
     } else if (command == "Hover") {
       if (value >= 0) {

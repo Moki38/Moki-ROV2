@@ -4,11 +4,22 @@ All notable changes to MokiROV2 will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## ToDo
+Fix HOVER PID
+Expand logfile analysis
+Fix logfile creation fills filesystem to 100%
+
 ## [Unreleased]
-Added logfile function and analyse.js program (start)
+
+
+## [1.0.1] - 2017-09-06
+Added logfile function and analysis.js program (start)
 Added IMU Status display (SYSTEM,GYRO,ACCEL,MAG)
 Fixed Depth/Pressure int to float (may break hover function)
 Fixed PING/PONG ghost echo output
+Fixed HUD horizon movement
+Fixed IMU Orientation (my setup)
+Fixed PILOT PID
 
 ## [1.0.0] - 2017-09-06
 ### Added

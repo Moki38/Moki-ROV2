@@ -92,15 +92,19 @@ float imu_Z() {
 }
 
 float imu_heading() {
-  return event.orientation.roll;
+  return event.orientation.roll-180%360;
 }
 
 float imu_roll() {
-  return event.orientation.pitch;
+  return -event.orientation.pitch;
 }
 
 float imu_pitch() {
-  return event.orientation.heading;
+  if (event.orientation.heading < 0) {
+    return -(event.orientation.heading+180);
+  } else {
+    return abs(event.orientation.heading-180);
+  }
 }
 
 void imu_loop() {

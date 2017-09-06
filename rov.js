@@ -323,11 +323,11 @@ var gamepadctrl = function(gamepad) {
       console.log ('Gamepad Button B');
       if (rovdata.Pilot) {
         rovdata.Pilot = false;
-        port.write('Pilot:'+'-1\n');
+        port.write('Pilot:'+'400\n');
       } else { 
         rovdata.Pilot = true;
-        rovdata.Pilotset = rovdata.X
-        port.write('Pilot:'+rovdata.X+'\n');
+        rovdata.Pilotset = rovdata.Heading;
+        port.write('Pilot:'+rovdata.Heading+'\n');
       } 
     }
 // X Button

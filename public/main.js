@@ -153,9 +153,9 @@ function update(rovdata) {
   temp_in = rovdata.Temp_IN;
   volt = rovdata.Volt;
   current = rovdata.Amps;
-  heading = Math.floor(rovdata.X);
-  pitch = Math.floor(rovdata.Y);
-  roll = Math.floor(rovdata.Z);
+  heading = Math.floor(rovdata.Heading);
+  pitch = Math.floor(rovdata.Pitch);
+  roll = Math.floor(rovdata.Roll);
   imusys = rovdata.Sys;
   imugyro = rovdata.Gyro;
   imuaccel = rovdata.Accel;
@@ -278,10 +278,10 @@ function display(rovdata) {
 // HUD
   rov_context.beginPath();
   rov_context.fillStyle = "#aa0000";
-  if (pitch > 180) {
-     rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)+pitch-360, 50, (roll/180)*Math.PI, Math.PI+((roll/180)*Math.PI), false);
+  if (pitch > 0) {
+     rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-pitch, 50, (roll/180)*Math.PI, Math.PI+((roll/180)*Math.PI), false);
   } else {
-     rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)+pitch, 50, (roll/180)*Math.PI, Math.PI+((roll/180)*Math.PI), false);
+     rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-pitch, 50, (roll/180)*Math.PI, Math.PI+((roll/180)*Math.PI), false);
   }
   rov_context.lineWidth = 3;
   rov_context.strokeStyle = '#aa0000';
@@ -436,9 +436,25 @@ function display(rovdata) {
   rov_context.fillText( accl_x+"  ", 240, 150);
   rov_context.fillText( accl_y+"  ", 240 ,200);
   rov_context.fillText( accl_z+"  ", 240, 250);
+  rov_context.fillStyle = "#aa0000";
+  if (imusys == 3) {
+    rov_context.fillStyle = "#00aa00";
+  }
   rov_context.fillText( imusys+"  ", 300, 300);
+  rov_context.fillStyle = "#aa0000";
+  if (imugyro == 3) {
+    rov_context.fillStyle = "#00aa00";
+  }
   rov_context.fillText( imugyro+"  ", 300, 350);
+  rov_context.fillStyle = "#aa0000";
+  if (imuaccel == 3) {
+    rov_context.fillStyle = "#00aa00";
+  }
   rov_context.fillText( imuaccel+"  ", 300, 400);
+  rov_context.fillStyle = "#aa0000";
+  if (imumag == 3) {
+    rov_context.fillStyle = "#00aa00";
+  }
   rov_context.fillText( imumag+"  ", 300, 450);
   rov_context.fill();
 
