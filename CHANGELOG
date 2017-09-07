@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 Fix HOVER PID
 Expand logfile analysis
 Fix logfile creation fills filesystem to 100%
+Add Kalman filter for IMU
+Add Kalman filter for DEPTH
 
 ## [Unreleased]
-
+Added update.sh
 
 ## [1.0.1] - 2017-09-06
 Added logfile function and analysis.js program (start)

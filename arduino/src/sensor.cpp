@@ -32,6 +32,7 @@ int IRaw;
 float IFinal;
 
 MS5837 MS5837_sensor;
+bool MS5837_status;
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
@@ -47,158 +48,200 @@ uint8_t system_error = 0;
 sensors_event_t event;
 imu::Vector<3> imu_vec;
 
-uint8_t imu_system() {
-  return system_imu;
+uint8_t imu_system()
+{
+    return system_imu;
 }
 
-uint8_t imu_gyro() {
-  return gyro;
+uint8_t imu_gyro()
+{
+    return gyro;
 }
 
-uint8_t imu_accel() {
-  return accel;
+uint8_t imu_accel()
+{
+    return accel;
 }
 
-uint8_t imu_mag() {
-  return mag;
+uint8_t imu_mag()
+{
+    return mag;
 }
 
-int imu_temp_get() {
-  return (imu_temp);
+int imu_temp_get()
+{
+    return (imu_temp);
 }
 
-float imu_accl_X() {
-  return(imu_vec.x());  //x acceleration
+float imu_accl_X()
+{
+    return (imu_vec.x()); //x acceleration
 }
 
-float imu_accl_Y() {
-  return(imu_vec.y());  //x acceleration
+float imu_accl_Y()
+{
+    return (imu_vec.y()); //x acceleration
 }
 
-float imu_accl_Z() {
-  return(imu_vec.z());  //x acceleration
+float imu_accl_Z()
+{
+    return (imu_vec.z()); //x acceleration
 }
 
-float imu_X() {
-  return event.orientation.x;
+float imu_X()
+{
+    return event.orientation.x;
 }
 
-float imu_Y() {
-  return event.orientation.y;
+float imu_Y()
+{
+    return event.orientation.y;
 }
 
-float imu_Z() {
-  return event.orientation.z;
+float imu_Z()
+{
+    return event.orientation.z;
 }
 
-float imu_heading() {
-  return event.orientation.roll-180%360;
+float imu_heading()
+{
+    return event.orientation.roll-180%360;
 }
 
-float imu_roll() {
-  return -event.orientation.pitch;
+float imu_roll()
+{
+    return -event.orientation.pitch;
 }
 
-float imu_pitch() {
-  if (event.orientation.heading < 0) {
-    return -(event.orientation.heading+180);
-  } else {
-    return abs(event.orientation.heading-180);
-  }
+float imu_pitch()
+{
+    if (event.orientation.heading < 0) {
+        return -(event.orientation.heading+180);
+    } else {
+        return abs(event.orientation.heading-180);
+    }
 }
 
-void imu_loop() {
-  bno.getEvent(&event);
-  imu_temp = bno.getTemp();
-  // Possible vector values can be:
-  // - VECTOR_ACCELEROMETER - m/s^2
-  // - VECTOR_MAGNETOMETER  - uT
-  // - VECTOR_GYROSCOPE     - rad/s
-  // - VECTOR_EULER         - degrees
-  // - VECTOR_LINEARACCEL   - m/s^2
-  // - VECTOR_GRAVITY       - m/s^2
+void imu_loop()
+{
+    bno.getEvent(&event);
+    imu_temp = bno.getTemp();
+    // Possible vector values can be:
+    // - VECTOR_ACCELEROMETER - m/s^2
+    // - VECTOR_MAGNETOMETER  - uT
+    // - VECTOR_GYROSCOPE     - rad/s
+    // - VECTOR_EULER         - degrees
+    // - VECTOR_LINEARACCEL   - m/s^2
+    // - VECTOR_GRAVITY       - m/s^2
 
-  imu_vec = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
+    imu_vec = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
 
-  bno.getCalibration(&system_imu, &gyro, &accel, &mag);
+    bno.getCalibration(&system_imu, &gyro, &accel, &mag);
 }
 
-void imu_setup() {
-  sensor_t sensor;
-  if (bno.begin()) {
-           FOUND_BNO = 1;
-  }
-  delay(1000);
-  /* Display some basic information on this sensor */
-  if (FOUND_BNO) {
-    bno.getSensor(&sensor);
-    bno.getSystemStatus(&system_status, &self_test_results, &system_error);
-    bno.setExtCrystalUse(true);
-  }
+void imu_setup()
+{
+    sensor_t sensor;
+    if (bno.begin()) {
+        FOUND_BNO = 1;
+    }
+    delay(1000);
+    /* Display some basic information on this sensor */
+    if (FOUND_BNO) {
+        bno.getSensor(&sensor);
+        bno.getSystemStatus(&system_status, &self_test_results, &system_error);
+        bno.setExtCrystalUse(true);
+    }
 
 }
 
-float pressure_get(){
-  return(MS5837_sensor.pressure());
+float pressure_get()
+{
+    if (MS5837_status) {
+        return (MS5837_sensor.pressure());
+    } else {
+        return -1;
+    }
 }
 
-int temp_get() {
-  return (MS5837_sensor.temperature());
+int temp_get()
+{
+    if (MS5837_status) {
+        return (MS5837_sensor.temperature());
+    } else {
+        return -1;
+    }
 }
 
-float depth_get() {
-  return(MS5837_sensor.depth()*100);
+float depth_get()
+{
+    if (MS5837_status) {
+        return (MS5837_sensor.depth()*100);
+    } else {
+        return -1;
+    }
 }
 
-int alt_get() {
-  return (MS5837_sensor.altitude());
+int alt_get()
+{
+    if (MS5837_status) {
+        return (MS5837_sensor.altitude());
+    } else {
+        return -1;
+    }
 }
 
-void depth_loop() {
+void depth_loop()
+{
     MS5837_sensor.read();
 }
 
-void depth_setup() {
-  MS5837_sensor.init();
+void depth_setup()
+{
+    MS5837_status = MS5837_sensor.init();
     if (DEPTH_WATER == 1) {
-      MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater, 1029 for seawater)
+        MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater)
     } else {
-      MS5837_sensor.setFluidDensity(1029); // kg/m^3 (freshwater, 1029 for seawater)
+        MS5837_sensor.setFluidDensity(1029); // kg/m^3 (sea/saltwater)
     }
-
 }
 
-float current_get() {
-  VFinal = -1;
+float current_get()
+{
+    VFinal = -1;
     VRaw = analogRead(CURRENT_PIN);
     if (VRaw < 400) {
-    //Conversion
-      VFinal = VRaw/12.99; //180 Amp board
+        //Conversion
+        VFinal = VRaw/12.99; //180 Amp board
     }
-  return(VFinal);
+    return (VFinal);
 }
 
-float amp_get() {
-  IFinal = -1;
+float amp_get()
+{
+    IFinal = -1;
     IRaw = analogRead(AMP_PIN);
     if (VRaw < 400) {
-      //Conversion
-      IFinal = IRaw/7.4; //180 Amp board
-//      IFinal = IRaw/3.7; //180 Amp board
+        //Conversion
+        //      IFinal = IRaw/7.4; //180 Amp board
+        IFinal = IRaw/3.7; //180 Amp board
     }
-  return(IFinal);
+    return (IFinal);
 }
 
-void current_setup() {
+void current_setup()
+{
 }
 
-void amp_setup() {
+void amp_setup()
+{
 }
 
-void sensor_setup() {
-  imu_setup();
-  depth_setup();
-  current_setup();
-  amp_setup();
+void sensor_setup()
+{
+    imu_setup();
+    depth_setup();
+    current_setup();
+    amp_setup();
 }
 

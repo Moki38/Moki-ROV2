@@ -27,21 +27,25 @@
 Servo CameraX;
 Servo CameraY;
 
-void camera_movex(int x){
-  CameraX.writeMicroseconds(x);
+void camera_movex(int x)
+{
+    CameraX.writeMicroseconds(x);
 }
 
-void camera_movey(int y){
-  CameraY.writeMicroseconds(y);
+void camera_movey(int y)
+{
+    CameraY.writeMicroseconds(y);
 }
 
-void camera_center() {
-  CameraX.writeMicroseconds(1500);
+void camera_center()
+{
+    CameraX.writeMicroseconds(1500);
 }
-void camera_setup() {
-  CameraX.attach(5);
-  CameraX.writeMicroseconds(1500);
-//  CameraY.attach(CAMERAY_PIN);
-//  CameraY.writeMicroseconds(CAMERAY_NEUTRAL);
+void camera_setup()
+{
+    CameraX.attach(5);
+    CameraX.writeMicroseconds(1500);
+    //  CameraY.attach(CAMERAY_PIN);
+    //  CameraY.writeMicroseconds(CAMERAY_NEUTRAL);
 }
 
