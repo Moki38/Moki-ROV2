@@ -12,7 +12,13 @@ Add Kalman filter for IMU
 Add Kalman filter for DEPTH
 
 ## [Unreleased]
+Fixed HOVER PID
+
+
+## [1.0.2] - 2017-09-08
+Added version on display
 Added update.sh
+Added Sensor error on display 
 
 ## [1.0.1] - 2017-09-06
 Added logfile function and analysis.js program (start)

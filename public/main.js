@@ -146,6 +146,7 @@ function readgamepad() {
 function update(rovdata) {
   var t;
 
+  version = rovdata.Version;
   mbar = rovdata.Pressure;
   t = rovdata.Depth;
   depth = t.toFixed(2);
@@ -153,6 +154,7 @@ function update(rovdata) {
   temp_in = rovdata.Temp_IN;
   volt = rovdata.Volt;
   current = rovdata.Amps;
+  calibrated = rovdata.Calibrated;
   heading = Math.floor(rovdata.Heading);
   pitch = Math.floor(rovdata.Pitch);
   roll = Math.floor(rovdata.Roll);
@@ -223,17 +225,35 @@ function display(rovdata) {
   rov_context.fillText( "Roll", (rov_canvas.width/2), 40);
   rov_context.fillText( "Pitch", (rov_canvas.width/2), 60);
 
-  rov_context.fillText( ": "+heading, (rov_canvas.width/2)+80, 20);
-  rov_context.fillText( ": "+roll, (rov_canvas.width/2)+80, 40);
-  rov_context.fillText( ": "+pitch, (rov_canvas.width/2)+80, 60);
+  if (calibrated) {
+    rov_context.fillText( ": "+heading, (rov_canvas.width/2)+80, 20);
+    rov_context.fillText( ": "+roll, (rov_canvas.width/2)+80, 40);
+    rov_context.fillText( ": "+pitch, (rov_canvas.width/2)+80, 60);
+    rov_context.fill();
+  } else {
+    rov_context.fillStyle = "#aa0000";
+    rov_context.fillText( ": IMU SENSOR", (rov_canvas.width/2)+80, 20);
+    rov_context.fillText( ": CALIBRATION", (rov_canvas.width/2)+80, 40);
+    rov_context.fillText( ": NEEDED", (rov_canvas.width/2)+80, 60);
+    rov_context.fill();
+  }
 
+  rov_context.beginPath();
+  rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( "Mbar", (rov_canvas.width/4)*3, 20);
   rov_context.fillText( "Depth", (rov_canvas.width/4)*3, 40);
   rov_context.fillText( "Temp", (rov_canvas.width/4)*3, 60);
 
-  rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
-  rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
-  rov_context.fillText( ": "+temp_out+"/ "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
+  if (mbar > 0) {
+    rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
+    rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
+    rov_context.fillText( ": "+temp_out+"/ "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
+  } else {
+    rov_context.fillStyle = "#aa0000";
+    rov_context.fillText( ": NO", (rov_canvas.width/4)*3+80, 20);
+    rov_context.fillText( ": DEPTH", (rov_canvas.width/4)*3+80, 40);
+    rov_context.fillText( ": SENSOR", (rov_canvas.width/4)*3+80, 60);
+  }
 
 // Visual Gamepad Axis
   if (!gamepad_detected) {
@@ -505,18 +525,27 @@ function display(rovdata) {
   }
   rov_context.fill();
 
+// Show version on display
+   if (version) {
+      rov_context.beginPath();
+      rov_context.fillStyle = "#00aa00";
+      rov_context.font = '10pt Verdana';
+      rov_context.fillText("Version: "+version,rov_canvas.width/2-70,rov_canvas.height-20);
+      rov_context.fill();
+  }
+
 // Show gamepad support browser
    if (!gamepadSupportAvailable) {
       rov_context.beginPath();
       rov_context.fillStyle = "#aa0000";
       rov_context.font = '10pt Verdana';
-      rov_context.fillText("Gamepad NOT supported",rov_canvas.width-200,rov_canvas.height-21);
+      rov_context.fillText("Gamepad NOT supported",rov_canvas.width-200,rov_canvas.height-20);
       rov_context.fill();
     } else {
       rov_context.beginPath();
       rov_context.fillStyle = "#00aa00";
       rov_context.font = '10pt Verdana';
-      rov_context.fillText("Gamepad enabled",rov_canvas.width-200,rov_canvas.height-21);
+      rov_context.fillText("Gamepad enabled",rov_canvas.width-200,rov_canvas.height-20);
       rov_context.fill();
     }
 }

@@ -28,6 +28,8 @@ var config = jsonfile.readFileSync(config_file)
 
 var rovdata = {};
 
+rovdata.Version = shell.cat('VERSION');
+
 rovdata.Config = false;
 
 rovdata.Hover = false;
@@ -242,6 +244,13 @@ function parse_serial(line) {
     default:
       console.log('Serial data: '+line);
   }
+// Check IMU calibration 
+  if (rovdata.Sys != 3 && rovdata.Gyro != 3 && rovdata.Accel != 3 && rovdata.Mag != 3) {
+    rovdata.Calibrated = 0; 
+  } else {
+    rovdata.Calibrated = 1; 
+  }
+
 //  console.log('Serial DEBUG: ' + line);
   logger.log('info', rovdata);
 }
