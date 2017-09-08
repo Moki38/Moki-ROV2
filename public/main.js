@@ -245,7 +245,7 @@ function display(rovdata) {
   rov_context.fillText( "Temp", (rov_canvas.width/4)*3, 60);
 
   if (mbar > 0) {
-    rov_context.fillText( ": "+mbar, (rov_canvas.width/4)*3+80, 20);
+    rov_context.fillText( ": "+Math.floor(mbar), (rov_canvas.width/4)*3+80, 20);
     rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
     rov_context.fillText( ": "+temp_out+"/ "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
   } else {
@@ -333,12 +333,12 @@ function display(rovdata) {
   rov_context.lineWidth = 1;
   rov_context.beginPath();
   for (i = -8; i <= 8; i++) {
-    if (depth-i >= 0) {
-      if ( (i-depth) % 5) {
+    if (Math.floor(depth)-i >= 0) {
+      if ( (i-Math.floor(depth)) % 5) {
           rov_context.moveTo(10, rov_canvas.height/2-(i*25));
           rov_context.lineTo(20, rov_canvas.height/2-(i*25));
       } else {
-          rov_context.fillText( depth-i, 32, rov_canvas.height/2+5-(i*25));
+          rov_context.fillText( Math.floor(depth)-i, 32, rov_canvas.height/2+5-(i*25));
           rov_context.moveTo(10, rov_canvas.height/2-(i*25));
           rov_context.lineTo(30, rov_canvas.height/2-(i*25));
       }
