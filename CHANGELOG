@@ -13,7 +13,7 @@ Add Kalman filter for DEPTH
 
 ## [Unreleased]
 Fixed HOVER PID
-
+Added winston-logstash logging for data analysis
 
 ## [1.0.2] - 2017-09-08
 Added version on display

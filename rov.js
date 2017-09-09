@@ -8,6 +8,7 @@ var jsonfile = require('jsonfile')
 jsonfile.spaces = 4
 var serialport = require('serialport');
 var winston = require('winston');
+require('winston-logstash');
 var now = new Date();
 var jsonDate = now.toJSON();
 var logfile_name = './log/log-mokirov2.log';
@@ -16,12 +17,19 @@ var logfile_name = './log/log-mokirov2.log';
       new (winston.transports.File)({
         filename: logfile_name,
         json: true,
-        stringify: (obj) => JSON.stringify(obj),
+//        stringify: (obj) => JSON.stringify(obj),
         maxsize: 5242880, //5MB
         maxFiles: 5,
         colorize: false
       })
     ]
+  });
+
+  logger.add(winston.transports.Logstash, {
+    json: true,
+    port: 1520,
+    node_name: 'wiki-team-moki.nl',
+    host: '82.72.116.14'
   });
 
 var config_file = 'config.js'
