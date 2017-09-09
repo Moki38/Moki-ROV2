@@ -76,4 +76,8 @@ platformio run --target upload
 
 cd
 cd Moki-ROV2
-echo "Start the ROV software, with \"node rov.js\""
+cp mokirov.service /lib/systemd/system
+#systemctl enable mokirov
+#systemctl start mokirov
+
+echo "Start the ROV software, with \"systemctl start mokirov\""

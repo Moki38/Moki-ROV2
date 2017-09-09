@@ -48,10 +48,21 @@ double hover_Setpoint, hover_Input, hover_Output;
 double heading_Setpoint, heading_Input, heading_Output;
 
 //Define the aggressive and conservative Tuning Parameters
-double hover_aggKp=4, hover_aggKi=0.2, hover_aggKd=1;
-double hover_consKp=1, hover_consKi=0.05, hover_consKd=0.25;
+//double hover_aggKp=4, hover_aggKi=0.2, hover_aggKd=1;
+double hover_aggKp=2, hover_aggKi=0.1, hover_aggKd=.5;
+
+// Depth -5 +2  Gap: 1 - 3
+//double hover_consKp=1, hover_consKi=0.05, hover_consKd=0.25;
+
+// Depth -2 +1  Gap: 0 - 1.7 
+//double hover_consKp=2, hover_consKi=0.05, hover_consKd=0.25;
+
+double hover_consKp=4, hover_consKi=0.05, hover_consKd=0.25;
+
+
+
 double heading_aggKp=4, heading_aggKi=0.2, heading_aggKd=1;
-double heading_consKp=1, heading_consKi=0.05, heading_consKd=0.25;
+double heading_consKp=4, heading_consKi=0.05, heading_consKd=0.25;
 
 //Specify the links and initial tuning parameters
 PID hover_PID(&hover_Input, &hover_Output, &hover_Setpoint, hover_consKp, hover_consKi, hover_consKd, DIRECT);
@@ -178,7 +189,17 @@ void hover_loop()
     //
     // Hover
     //
-    double gap = abs(depth_get() - hover_depth);
+    hover_Input = depth_get();
+//    Serial.print("DEBUG_HOVER_DEPTH:");
+//    Serial.println(hover_Input);
+    hover_Setpoint = hover_depth;
+//    Serial.print("DEBUG_HOVER_SET  :");
+//    Serial.println(hover_depth);
+
+    double gap = abs(hover_Setpoint - hover_Input);
+
+//    Serial.print("DEBUG_HOVER_GAP:");
+//    Serial.println(gap);
 
     if (gap < 10) {
         hover_PID.SetTunings(hover_consKp, hover_consKi, hover_consKd);
@@ -188,56 +209,71 @@ void hover_loop()
 
     hover_PID.Compute();
 
+//    Serial.print("DEBUG_HOVER_OUTPUT:");
+//    Serial.println(hover_Output);
+
     if (depth_get() > hover_depth) {
+//        Serial.println("DEBUG_HOVER_UP:");
         motor_up(hover_Output);
+        Serial.print("Motor_5:");
+        Serial.println(hover_Output);
+        Serial.print("Motor_6:");
+        Serial.println(-hover_Output);
     } else if (depth_get() < hover_depth) {
+//        Serial.println("DEBUG_HOVER_DIVE:");
         motor_dive(hover_Output);
+        Serial.print("Motor_5:");
+        Serial.println(-hover_Output);
+        Serial.print("Motor_6:");
+        Serial.println(hover_Output);
     } else {
         motor_stop();
         hover_Output = 0;
+        Serial.print("Motor_5:");
+        Serial.println(hover_Output);
+        Serial.print("Motor_6:");
+        Serial.println(hover_Output);
     }
-    Serial.print("Motor_5:");
-    Serial.println(hover_Output);
-    Serial.print("Motor_6:");
-    Serial.println(hover_Output);
 }
 
-void pilot_loop()
-{
+void pilot_loop() {
     //
     // Pilot
     //
     int direction = 0;
 
-    heading_Input = imu_heading();
-    heading_Setpoint = pilot_heading;
+    heading_Input = imu_heading() + 360;
+    heading_Setpoint = pilot_heading + 360;
 
     double gap = abs(heading_Setpoint - heading_Input);
 
-    if (gap > 2) {
-        if ((heading_Setpoint - heading_Input) < 0) {
-            direction = 1;
-            heading_Setpoint = heading_Input;
-            heading_Input = pilot_heading;
-        }
+    Serial.print("DEBUG_PILOT_GAP:");
+    Serial.println(gap);
 
-        Serial.print("DEBUG_PILOT_GAP:");
-        Serial.println(gap);
+    if (heading_Input > heading_Setpoint) {
+        direction = 2;
+        heading_Input = pilot_heading + 360;
+        heading_Setpoint = imu_heading() + 360;
+    }
+    if (heading_Input < heading_Setpoint) {
+        direction = 1;
+    }
 
-        if (gap < 10) {
+
+//        if (gap < 10) {
             heading_PID.SetTunings(heading_consKp, heading_consKi, heading_consKd);
-        } else {
-            heading_PID.SetTunings(heading_aggKp, heading_aggKi, heading_aggKd);
-        }
+//        } else {
+//            heading_PID.SetTunings(heading_aggKp, heading_aggKi, heading_aggKd);
+//        }
 
         heading_PID.Compute();
 
-        //    Serial.print("DEBUG_PILOT_HEADING_INPUT:");
-        //    Serial.println(heading_Input);
-        //    Serial.print("DEBUG_PILOT_HEADING_OUTPUT:");
-        //    Serial.println(heading_Output);
-        //    Serial.print("DEBUG_PILOT_HEADING_SETPUT:");
-        //    Serial.println(heading_Setpoint);
+            Serial.print("DEBUG_PILOT_HEADING_INPUT:");
+            Serial.println(heading_Input);
+            Serial.print("DEBUG_PILOT_HEADING_OUTPUT:");
+            Serial.println(heading_Output);
+            Serial.print("DEBUG_PILOT_HEADING_SETPUT:");
+            Serial.println(heading_Setpoint);
 
         if (heading_Output > 30) {
             //    Serial.print("DEBUG_PILOT_HEADING_OUTPUT_MAX:");
@@ -245,9 +281,9 @@ void pilot_loop()
             heading_Output = 0;
         };
 
-        if (direction == 0) {
-            //      Serial.print("DEBUG_PILOT_HEADING_OUTPUT_LEFT:");
-            //      Serial.println(heading_Output);
+    if (direction == 2) {
+            Serial.print("DEBUG_PILOT_HEADING_OUTPUT_LEFT:");
+            Serial.println(heading_Output);
             motor_left(heading_Output);
             Serial.print("Motor_1:");
             Serial.println(-heading_Output);
@@ -258,9 +294,9 @@ void pilot_loop()
             Serial.print("Motor_4:");
             Serial.println(heading_Output);
 
-        } else if (direction == 1) {
-            //      Serial.print("DEBUG_PILOT_HEADING_OUTPUT_RIGHT:");
-            //      Serial.println(heading_Output);
+    } else if (direction == 1) {
+            Serial.print("DEBUG_PILOT_HEADING_OUTPUT_RIGHT:");
+            Serial.println(heading_Output);
             motor_right(heading_Output);
             Serial.print("Motor_1:");
             Serial.println(heading_Output);
@@ -282,18 +318,6 @@ void pilot_loop()
             Serial.print("Motor_4:");
             Serial.println(heading_Output);
         }
-    } else {
-        motor_stop();
-        heading_Output = 0;
-        Serial.print("Motor_1:");
-        Serial.println(heading_Output);
-        Serial.print("Motor_2:");
-        Serial.println(heading_Output);
-        Serial.print("Motor_3:");
-        Serial.println(heading_Output);
-        Serial.print("Motor_4:");
-        Serial.println(heading_Output);
-    }
 }
 
 void motor_loop()
@@ -366,6 +390,7 @@ void loop()
             ping_time = millis();
         } else if (command == "DISARM") {
             motor_stop();
+            light_off();
             power = 0;
             Serial.print("Power:");
             Serial.println(power);

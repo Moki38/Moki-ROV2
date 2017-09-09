@@ -105,7 +105,7 @@ float imu_Z()
 
 float imu_heading()
 {
-    return event.orientation.roll-180%360;
+    return event.orientation.roll;
 }
 
 float imu_roll()

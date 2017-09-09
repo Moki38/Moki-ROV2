@@ -247,7 +247,7 @@ function display(rovdata) {
   if (mbar > 0) {
     rov_context.fillText( ": "+Math.floor(mbar), (rov_canvas.width/4)*3+80, 20);
     rov_context.fillText( ": "+depth+" cm", (rov_canvas.width/4)*3+80, 40);
-    rov_context.fillText( ": "+temp_out+"/ "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
+    rov_context.fillText( ": "+temp_out+" / "+temp_in+" °C", (rov_canvas.width/4)*3+80, 60);
   } else {
     rov_context.fillStyle = "#aa0000";
     rov_context.fillText( ": NO", (rov_canvas.width/4)*3+80, 20);
@@ -322,7 +322,9 @@ function display(rovdata) {
   rov_context.fillStyle = "#aa0000";
   rov_context.arc((rov_canvas.width/2), (rov_canvas.height/2)-Math.floor(camx/10*2), 5, 0, 2*Math.PI);
   rov_context.fill();
+
 // Depth
+  if (mbar > 0) {
   rov_context.beginPath();
   rov_context.fillStyle = "#000000";
   rov_context.rect(10,rov_canvas.height/2-220,60,440);
@@ -353,6 +355,8 @@ function display(rovdata) {
   rov_context.lineTo(50, rov_canvas.height/2);
   rov_context.stroke();
   // rov_context.fillText( depth, 90, rov_canvas.height/2 + 5);
+  }
+
 // Heading
   rov_context.fillStyle = "#00aa00";
   rov_context.strokeStyle = "#00aa00";
@@ -363,18 +367,20 @@ function display(rovdata) {
           rov_context.moveTo((rov_canvas.width/2)+(i*35),65);
           rov_context.lineTo((rov_canvas.width/2)+(i*35),75);
       } else {
-          var heading_tmp = (heading+i).toString();
-          var heading_length = heading_tmp.length;
+//          var heading_tmp = (heading+i).toString();
+//          var heading_length = heading_tmp.length;
           if (heading+i < 0) {
-            rov_context.fillText(Math.floor(heading+i+360), (rov_canvas.width/2)+(i*35)-18, 100);
-          } else {
-            if (heading+i >= 100) {
+          //  rov_context.fillText(Math.floor(heading+i+360), (rov_canvas.width/2)+(i*35)-18, 100);
+          } else if (heading+i >= 360) {
+            rov_context.fillText(Math.floor(heading+i-360), (rov_canvas.width/2)+(i*35)-18, 100);
+          } 
+
+          if ((heading+i >= 100) && (heading+i < 360)) {
               rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-18, 100);
-            } else if (heading+i >= 10) {
+            } else if ((heading+i >= 10) && (heading+i < 360)) {
               rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
             } else if (heading+i < 10) {
               rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
-            }
           }
           rov_context.moveTo((rov_canvas.width/2)+(i*35), 65);
           rov_context.lineTo((rov_canvas.width/2)+(i*35), 85);
@@ -507,7 +513,8 @@ function display(rovdata) {
   if (hover) {
       rov_context.fillStyle = "#00aa00";
       rov_context.fillText( "ON", (rov_canvas.width/4)*3+80, 250);
-      rov_context.fillText( ": "+hoverset+"  ", (rov_canvas.width/4)*3+140, 250);
+      rov_context.fillStyle = "#aa0000";
+      rov_context.fillText( " ("+hoverset+")  ", (rov_canvas.width/4)*3+110, 250);
   } else {
       rov_context.fillStyle = "#aa0000";
       rov_context.fillText( "OFF", (rov_canvas.width/4)*3+80, 250);

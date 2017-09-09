@@ -10,13 +10,16 @@ var serialport = require('serialport');
 var winston = require('winston');
 var now = new Date();
 var jsonDate = now.toJSON();
-var logfile_name = './log/log-' + jsonDate +'.log';
+var logfile_name = './log/log-mokirov2.log';
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.File)({
         filename: logfile_name,
         json: true,
         stringify: (obj) => JSON.stringify(obj),
+        maxsize: 5242880, //5MB
+        maxFiles: 5,
+        colorize: false
       })
     ]
   });
@@ -28,7 +31,7 @@ var config = jsonfile.readFileSync(config_file)
 
 var rovdata = {};
 
-rovdata.Version = shell.cat('VERSION');
+rovdata.Version = shell.cat('VERSION').stdout.trim();
 
 rovdata.Config = false;
 
@@ -366,7 +369,7 @@ var gamepadctrl = function(gamepad) {
     if ((res[1] == 4) && (res[3] == 1)) {
       console.log('LB Button, pressed');
       if (rovdata.Power > 0) {
-        rovdata.Power = rovdata.Power - 10;
+        rovdata.Power = parseInt(rovdata.Power, 10) - 10;
       }
       if (arduino) {
         port.write('Power:'+rovdata.Power+'\n');
@@ -376,7 +379,7 @@ var gamepadctrl = function(gamepad) {
     if ((res[1] == 5) && (res[3] == 1)) {
       console.log('RB Button, pressed');
       if (rovdata.Power < 100) {
-        rovdata.Power = rovdata.Power + 10;
+        rovdata.Power = parseInt(rovdata.Power, 10) + 10;
       }
       if (arduino) {
         port.write('Power:'+rovdata.Power+'\n');
@@ -407,8 +410,8 @@ var gamepadctrl = function(gamepad) {
       port.write('Hover:'+rovdata.Hoverset+'\n');
     } else {
       if (rovdata.Camx_move == 0) {
-        if (rovdata.Camx_pos > 1100) {
-          rovdata.Camx_pos -= 100;
+        if (rovdata.Camx_pos < 1900) {
+          rovdata.Camx_pos += 100;
           port.write('Camx:'+rovdata.Camx_pos+'\n');
         }
       }
@@ -426,8 +429,8 @@ var gamepadctrl = function(gamepad) {
       port.write('Hover:'+rovdata.Hoverset+'\n');
     } else {
       if (rovdata.Camx_move == 0) {
-        if (rovdata.Camx_pos < 1900) {
-          rovdata.Camx_pos += 100;
+        if (rovdata.Camx_pos > 1100) {
+          rovdata.Camx_pos -= 100;
           port.write('Camx:'+rovdata.Camx_pos+'\n');
         }
       }
