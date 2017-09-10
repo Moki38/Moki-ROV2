@@ -28,7 +28,7 @@ var logfile_name = './log/log-mokirov2.log';
   logger.add(winston.transports.Logstash, {
     json: true,
     port: 1520,
-    node_name: 'wiki-team-moki.nl',
+    node_name: 'MokiROV2',
     host: '82.72.116.14'
   });
 
@@ -49,6 +49,12 @@ rovdata.Lights = false;
 rovdata.Pilot = false;
 rovdata.Motor = false;
 rovdata.Depth_Offset = 0;
+rovdata.Motor_1 = 0;
+rovdata.Motor_2 = 0;
+rovdata.Motor_3 = 0;
+rovdata.Motor_4 = 0;
+rovdata.Motor_5 = 0;
+rovdata.Motor_6 = 0;
 
 var arduino = 0;
 var port;
@@ -83,7 +89,7 @@ function parse_serial(line) {
   var res = line.split(":");
   switch(res[0]) {
     case    'Time':
-      rovdata.Time = res[1];
+      rovdata.Time = Number(res[1]);
       break;
     case    'PING':
       rovdata.Ping = 1;
@@ -92,70 +98,106 @@ function parse_serial(line) {
       rovdata.Pong = 1;
       break;
     case    'Pressure':
-      rovdata.Pressure = res[1];
+      rovdata.Pressure = Number(res[1]);
+      break;
+    case    'HOVER_GAP':
+      rovdata.Hover_Gap = Number(res[1]);
+      break;
+    case    'HOVER_INPUT':
+      rovdata.Hover_Input = Number(res[1]);
+      break;
+    case    'HOVER_OUTPUT':
+      rovdata.Hover_Output = Number(res[1]);
+      break;
+    case    'HOVER_SETPUT':
+      rovdata.Hover_Setput = Number(res[1]);
+      break;
+    case    'HOVER_UP':
+      rovdata.Hover_Up = Number(res[1]);
+      break;
+    case    'HOVER_DIVE':
+      rovdata.Hover_Dive = Number(res[1]);
+      break;
+    case    'PILOT_GAP':
+      rovdata.Pilot_Gap = Number(res[1]);
+      break;
+    case    'PILOT_HEADING_INPUT':
+      rovdata.Pilot_Input = Number(res[1]);
+      break;
+    case    'PILOT_HEADING_OUTPUT':
+      rovdata.Pilot_Output = Number(res[1]);
+      break;
+    case    'PILOT_HEADING_SETPUT':
+      rovdata.Pilot_Setput = Number(res[1]);
+      break;
+    case    'PILOT_HEADING_OUTPUT_LEFT':
+      rovdata.Pilot_Left = Number(res[1]);
+      break;
+    case    'PILOT_HEADING_OUTPUT_RIGHT':
+      rovdata.Pilot_Right = Number(res[1]);
       break;
     case    'Temp_OUT':
-      rovdata.Temp_OUT = res[1];
+      rovdata.Temp_Out = Number(res[1]);
       break;
     case    'Temp_IN':
-      rovdata.Temp_IN = res[1];
+      rovdata.Temp_In = Number(res[1]);
       break;
     case    'Depth':
-      rovdata.Depth = res[1] - rovdata.Depth_Offset;
+      rovdata.Depth = Number(res[1] - rovdata.Depth_Offset);
       break;
     case    'Altitude':
-      rovdata.Altitude = res[1];
+      rovdata.Altitude = Number(res[1]);
       break;
     case    'X':
-      rovdata.X = res[1];
+      rovdata.X = Number(res[1]);
       break;
     case    'Y':
-      rovdata.Y = res[1];
+      rovdata.Y = Number(res[1]);
       break;
     case    'Z':
-      rovdata.Z = res[1];
+      rovdata.Z = Number(res[1]);
       break;
     case    'ACCL_X':
-      rovdata.Accl_X = res[1];
+      rovdata.Accl_X = Number(res[1]);
       break;
     case    'ACCL_Y':
-      rovdata.Accl_Y = res[1];
+      rovdata.Accl_Y = Number(res[1]);
       break;
     case    'ACCL_Z':
-      rovdata.Accl_Z = res[1];
+      rovdata.Accl_Z = Number(res[1]);
       break;
     case    'Heading':
-      rovdata.Heading = res[1];
+      rovdata.Heading = Number(res[1]);
       break;
     case    'Roll':
-      rovdata.Roll = res[1];
+      rovdata.Roll = Number(res[1]);
       break;
     case    'Pitch':
-      rovdata.Pitch = res[1];
+      rovdata.Pitch = Number(res[1]);
       break;
     case    'Sys':
-      rovdata.Sys = res[1];
+      rovdata.Sys = Number(res[1]);
       break;
     case    'Gyro':
-      rovdata.Gyro = res[1];
+      rovdata.Gyro = Number(res[1]);
       break;
     case    'Accel':
-      rovdata.Accel = res[1];
+      rovdata.Accel = Number(res[1]);
       break;
     case    'Mag':
-      rovdata.Mag = res[1];
+      rovdata.Mag = Number(res[1]);
       break;
     case    'Volt':
-      rovdata.Volt = res[1];
+      rovdata.Volt = Number(res[1]);
       break;
     case    'Amps':
-      rovdata.Amps = res[1];
+      rovdata.Amps = Number(res[1]);
       break;
     case    'Power':
-      rovdata.Power = res[1];
+      rovdata.Power = Number(res[1]);
       break;
     case    'Motor_1':
-      rovdata.Motor_1 = res[1];
+      rovdata.Motor_1 = Number(res[1]);
       break;
     case    'Motor_1_RPM':
       rovdata.Motor_1_RPM = res[1];
@@ -170,7 +212,7 @@ function parse_serial(line) {
       rovdata.Motor_1_Temp = res[1];
       break;
     case    'Motor_2':
-      rovdata.Motor_2 = res[1];
+      rovdata.Motor_2 = Number(res[1]);
       break;
     case    'Motor_2_RPM':
       rovdata.Motor_2_RPM = res[1];
@@ -185,7 +227,7 @@ function parse_serial(line) {
       rovdata.Motor_2_Temp = res[1];
       break;
     case    'Motor_3':
-      rovdata.Motor_3 = res[1];
+      rovdata.Motor_3 = Number(res[1]);
       break;
     case    'Motor_3_RPM':
       rovdata.Motor_3_RPM = res[1];
@@ -200,7 +242,7 @@ function parse_serial(line) {
       rovdata.Motor_3_Temp = res[1];
       break;
     case    'Motor_4':
-      rovdata.Motor_4 = res[1];
+      rovdata.Motor_4 = Number(res[1]);
       break;
     case    'Motor_4_RPM':
       rovdata.Motor_4_RPM = res[1];
@@ -215,7 +257,7 @@ function parse_serial(line) {
       rovdata.Motor_4_Temp = res[1];
       break;
     case    'Motor_5':
-      rovdata.Motor_5 = res[1];
+      rovdata.Motor_5 = Number(res[1]);
       break;
     case    'Motor_5_RPM':
       rovdata.Motor_5_RPM = res[1];
@@ -230,7 +272,7 @@ function parse_serial(line) {
       rovdata.Motor_5_Temp = res[1];
       break;
     case    'Motor_6':
-      rovdata.Motor_6 = res[1];
+      rovdata.Motor_6 = Number(res[1]);
       break;
     case    'Motor_6_RPM':
       rovdata.Motor_6_RPM = res[1];

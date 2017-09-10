@@ -190,16 +190,12 @@ void hover_loop()
     // Hover
     //
     hover_Input = depth_get();
-//    Serial.print("DEBUG_HOVER_DEPTH:");
-//    Serial.println(hover_Input);
     hover_Setpoint = hover_depth;
-//    Serial.print("DEBUG_HOVER_SET  :");
-//    Serial.println(hover_depth);
 
     double gap = abs(hover_Setpoint - hover_Input);
 
-//    Serial.print("DEBUG_HOVER_GAP:");
-//    Serial.println(gap);
+    Serial.print("HOVER_GAP:");
+    Serial.println(gap);
 
     if (gap < 10) {
         hover_PID.SetTunings(hover_consKp, hover_consKi, hover_consKd);
@@ -209,18 +205,24 @@ void hover_loop()
 
     hover_PID.Compute();
 
-//    Serial.print("DEBUG_HOVER_OUTPUT:");
-//    Serial.println(hover_Output);
+    Serial.print("HOVER_INPUT:");
+    Serial.println(hover_Input);
+    Serial.print("HOVER_SETPUT:");
+    Serial.println(hover_Setpoint);
+    Serial.print("HOVER_OUTPUT:");
+    Serial.println(hover_Output);
 
     if (depth_get() > hover_depth) {
-//        Serial.println("DEBUG_HOVER_UP:");
+        Serial.println("HOVER_UP:");
+        Serial.println(hover_Output);
         motor_up(hover_Output);
         Serial.print("Motor_5:");
         Serial.println(hover_Output);
         Serial.print("Motor_6:");
         Serial.println(-hover_Output);
     } else if (depth_get() < hover_depth) {
-//        Serial.println("DEBUG_HOVER_DIVE:");
+        Serial.println("HOVER_DIVE:");
+        Serial.println(hover_Output);
         motor_dive(hover_Output);
         Serial.print("Motor_5:");
         Serial.println(-hover_Output);
@@ -229,6 +231,8 @@ void hover_loop()
     } else {
         motor_stop();
         hover_Output = 0;
+        Serial.print("HOVER_OUTPUT:");
+        Serial.println(hover_Output);
         Serial.print("Motor_5:");
         Serial.println(hover_Output);
         Serial.print("Motor_6:");
@@ -247,7 +251,7 @@ void pilot_loop() {
 
     double gap = abs(heading_Setpoint - heading_Input);
 
-    Serial.print("DEBUG_PILOT_GAP:");
+    Serial.print("PILOT_GAP:");
     Serial.println(gap);
 
     if (heading_Input > heading_Setpoint) {
@@ -268,11 +272,11 @@ void pilot_loop() {
 
         heading_PID.Compute();
 
-            Serial.print("DEBUG_PILOT_HEADING_INPUT:");
+            Serial.print("PILOT_HEADING_INPUT:");
             Serial.println(heading_Input);
-            Serial.print("DEBUG_PILOT_HEADING_OUTPUT:");
+            Serial.print("PILOT_HEADING_OUTPUT:");
             Serial.println(heading_Output);
-            Serial.print("DEBUG_PILOT_HEADING_SETPUT:");
+            Serial.print("PILOT_HEADING_SETPUT:");
             Serial.println(heading_Setpoint);
 
         if (heading_Output > 30) {
@@ -282,7 +286,7 @@ void pilot_loop() {
         };
 
     if (direction == 2) {
-            Serial.print("DEBUG_PILOT_HEADING_OUTPUT_LEFT:");
+            Serial.print("PILOT_HEADING_OUTPUT_LEFT:");
             Serial.println(heading_Output);
             motor_left(heading_Output);
             Serial.print("Motor_1:");
@@ -295,7 +299,7 @@ void pilot_loop() {
             Serial.println(heading_Output);
 
     } else if (direction == 1) {
-            Serial.print("DEBUG_PILOT_HEADING_OUTPUT_RIGHT:");
+            Serial.print("PILOT_HEADING_OUTPUT_RIGHT:");
             Serial.println(heading_Output);
             motor_right(heading_Output);
             Serial.print("Motor_1:");

@@ -150,8 +150,8 @@ function update(rovdata) {
   mbar = rovdata.Pressure;
   t = rovdata.Depth;
   depth = t.toFixed(2);
-  temp_out = rovdata.Temp_OUT;
-  temp_in = rovdata.Temp_IN;
+  temp_out = rovdata.Temp_Out;
+  temp_in = rovdata.Temp_In;
   volt = rovdata.Volt;
   current = rovdata.Amps;
   calibrated = rovdata.Calibrated;
