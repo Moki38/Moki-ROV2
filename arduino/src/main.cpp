@@ -33,6 +33,8 @@ String value_string = "";
 int value = 0;
 boolean command_complete = false;
 
+Thruster T;
+
 //
 // Timeout vars
 //
@@ -84,14 +86,6 @@ float hover_depth = 0;
 // Motor vars
 //
 int power = 0;
-struct motor_power {
-    float m1;
-    float m2;
-    float m3;
-    float m4;
-    float m5;
-    float m6;
-};
 
 void pid_setup()
 {
@@ -104,6 +98,14 @@ void pid_setup()
 void setup()
 {
     unsigned int timeout = millis();
+
+//    T.Arm(true);
+//    Serial.println("R");
+    //T.Run(10,THRUSTER_STRAFE_RIGHT);
+    //Serial.println("L");
+    //T.Run(5,THRUSTER_STRAFE_LEFT);
+    //Serial.println("RR");
+    //T.Run(15,THRUSTER_ROLL_RIGHT);
 
     motor_setup();
     light_setup();

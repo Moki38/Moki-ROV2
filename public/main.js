@@ -400,7 +400,7 @@ function display(rovdata) {
   rov_context.strokeStyle = "#00aa00";
   rov_context.lineWidth = 1;
   rov_context.font = '14pt Verdana';
-  rov_context.fillText("Motor", (rov_canvas.width/4*3), rov_canvas.height/2+10);
+  rov_context.fillText("Thrusters", (rov_canvas.width/4*3), rov_canvas.height/2+10);
   rov_context.beginPath();
   rov_context.font = '10pt Verdana';
   rov_context.rect((rov_canvas.width/4*3)+20, rov_canvas.height/2+30,100,20);

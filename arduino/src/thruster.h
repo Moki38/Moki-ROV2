@@ -22,27 +22,49 @@
 
 */
 
-#define DEBUG
+#pragma once
+#ifndef _THRUSTER_H
+#define _THRUSTER_H
 
 #include <Arduino.h>
 #include <Servo.h>
-#include <Wire.h>
-
-#include <PID_v1.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BNO055.h>
-#include <Arduino_I2C_ESC.h>
-#include <utility/imumaths.h>
-#include "MS5837.h"
-
 #include "config.h"
 
-#include "thruster.h"
-#include "motor.h"
-#include "light.h"
-#include "camera.h"
+#define THRUSTER_FORWARD	0b0000000001
+#define THRUSTER_REVERSE	0b0000000010
+#define THRUSTER_RIGHT		0b0000000100
+#define THRUSTER_LEFT		0b0000001000
+#define THRUSTER_DIVE		0b0000010000
+#define THRUSTER_UP		0b0000100000
+#define THRUSTER_STRAFE_RIGHT	0b0001000000
+#define THRUSTER_STRAFE_LEFT	0b0010000000
+#define THRUSTER_ROLL_RIGHT	0b0100000000
+#define THRUSTER_ROLL_LEFT	0b1000000000
 
-#include "sensor.h"
+class Thruster {
+    public:
+        void Power(int);
+        int Power();
+        void Arm(bool);
+        bool Arm();
+// Right Left Reverse Forward Strafe_r Strafe_l Dive Up
+        void Run(int, int);
+        void Strafe_Right(int);
+        void Strafe_Left(int);
+        void Roll_Right(int);
+        void Roll_Left(int);
 
-//enum Directions {STOP, FORWARD, REVERSE, RIGHT, LEFT, DIVE, UP,STRAFE_RIGHT,STRAFE_LEFT,ROLL_RIGHT,ROLL_LEFT};
+        void Stop();
+        void Setup();
+    private:
+        bool ARMED = false;
+        int POWER = 0;
+        Servo T1;
+        Servo T2;
+        Servo T3;
+        Servo T4;
+        Servo T5;
+        Servo T6;
+};
+#endif
 
