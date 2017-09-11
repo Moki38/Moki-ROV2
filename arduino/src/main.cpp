@@ -34,7 +34,7 @@ int value = 0;
 boolean command_complete = false;
 
 //
-// Tiemout vars
+// Timeout vars
 //
 int sensor_time = 0;
 int motor_time = 0;
