@@ -23,23 +23,28 @@
 */
 
 #pragma once
-#ifndef _LIGHT_H
-#define _LIGHT_H
+#ifndef _HOVER_H
+#define _HOVER_H
 
 #include <Arduino.h>
 #include <Servo.h>
+#include <PID_v1.h>
 #include "config.h"
+#include "thruster.h"
+#include "sensor.h"
 
-class Light {
+class Hover {
     public:
-        void Off();
         void On();
+        void Off();
+        bool Active();
+        void Depth(int);
+        void Loop(Thruster&, Sensor&);
         void Setup();
     private:
-        Servo L1;
-        Servo L2;
-        Servo L3;
-        Servo L4;
+        bool active = false;
+        int hover = 0;
+        float hover_depth = 0;
 };
 #endif
 

@@ -24,28 +24,60 @@
 
 #include "camera.h"
 
-Servo CameraX;
-Servo CameraY;
-
-void camera_movex(int x)
-{
-    CameraX.writeMicroseconds(x);
+//
+// Move_X
+//
+void Camera::Move_X(int x) {
+#ifdef CAMERAX_PWM
+    C1.writeMicroseconds(x);
+    Serial.print("Camx:");
+    Serial.println(x);
+#endif
 }
 
-void camera_movey(int y)
-{
-    CameraY.writeMicroseconds(y);
+//
+// Move_Y
+//
+void Camera::Move_Y(int y) {
+#ifdef CAMERAY_PWM
+    C2.writeMicroseconds(y);
+    Serial.print("Camy:");
+    Serial.println(y);
+#endif
 }
 
-void camera_center()
-{
-    CameraX.writeMicroseconds(1500);
-}
-void camera_setup()
-{
-    CameraX.attach(5);
-    CameraX.writeMicroseconds(1500);
-    //  CameraY.attach(CAMERAY_PIN);
-    //  CameraY.writeMicroseconds(CAMERAY_NEUTRAL);
+//
+// Center
+//
+void Camera::Center() {
+#ifdef CAMERAX_PWM
+    C1.attach(CAMERAX_PIN);
+    C1.writeMicroseconds(CAMERAX_NEUTRAL);
+    Serial.print("Camx:");
+    Serial.println(CAMERAX_NEUTRAL);
+#endif
+#ifdef CAMERAY_PWM
+    C2.attach(CAMERAY_PIN);
+    C2.writeMicroseconds(CAMERAY_NEUTRAL);
+    Serial.print("Camy:");
+    Serial.println(CAMERAY_NEUTRAL);
+#endif
 }
 
+//
+// Setup
+//
+void Camera::Setup() {
+#ifdef CAMERAX_PWM
+    C1.attach(CAMERAX_PIN);
+    C1.writeMicroseconds(CAMERAX_NEUTRAL);
+    Serial.print("Camx:");
+    Serial.println(CAMERAX_NEUTRAL);
+#endif
+#ifdef CAMERAY_PWM
+    C2.attach(CAMERAY_PIN);
+    C2.writeMicroseconds(CAMERAY_NEUTRAL);
+    Serial.print("Camy:");
+    Serial.println(CAMERAY_NEUTRAL);
+#endif
+}

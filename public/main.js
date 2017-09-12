@@ -54,13 +54,13 @@ var pilot = false;
 var pilotset = 0;
 
 var power = 0;
-var motor = 0;
-var motor_1 = 0;
-var motor_2 = 0;
-var motor_3 = 0;
-var motor_4 = 0;
-var motor_5 = 0;
-var motor_6 = 0;
+var armed = 0;
+var thruster_1 = 0;
+var thruster_2 = 0;
+var thruster_3 = 0;
+var thruster_4 = 0;
+var thruster_5 = 0;
+var thruster_6 = 0;
 
 var gamepad_detected = false;
 var gamepadSupportAvailable = navigator.getGamepads || !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
@@ -85,13 +85,8 @@ function readgamepad() {
   var axes = gamepad.axes.length;
   var buttons = gamepad.buttons.length;
   if (gamepad) {
-//       socket.emit("gamepad","gamepad loop");
 // Init
     if (!gamepad_detected) { 
-//       socket.emit("gamepad",gamepad.id);
-//       socket.emit("gamepad","index "+gamepad.index);
-//       socket.emit("gamepad",axes+" Axes" );
-//       socket.emit("gamepad",buttons+" Buttons" );
        for (i=0 ; i < axes ; i++) {
          axis_value[i] = 0.0;
        }
@@ -152,7 +147,7 @@ function update(rovdata) {
   depth = t.toFixed(2);
   temp_out = rovdata.Temp_Out;
   temp_in = rovdata.Temp_In;
-  volt = rovdata.Volt;
+  volt = rovdata.Volt.toFixed(2);
   current = rovdata.Amps;
   calibrated = rovdata.Calibrated;
   heading = Math.floor(rovdata.Heading);
@@ -162,9 +157,9 @@ function update(rovdata) {
   imugyro = rovdata.Gyro;
   imuaccel = rovdata.Accel;
   imumag = rovdata.Mag;
-  accl_x = rovdata.Accl_X;
-  accl_y = rovdata.Accl_Y;
-  accl_z = rovdata.Accl_Z;
+  accl_x = rovdata.Accl_X.toFixed(2);
+  accl_y = rovdata.Accl_Y.toFixed(2);
+  accl_z = rovdata.Accl_Z.toFixed(2);
   pilot = rovdata.Pilot;
   pilotset = Math.floor(rovdata.Pilotset);
   hover = rovdata.Hover;
@@ -172,26 +167,26 @@ function update(rovdata) {
   hover = rovdata.Hover;
   lights = rovdata.Lights;
   power = rovdata.Power;
-  motor = rovdata.Motor;
+  armed = rovdata.Armed;
   camx = rovdata.Camx_pos-1500;
 
-  motor_1 = rovdata.Motor_1;
-  motor_2 = rovdata.Motor_2;
-  motor_3 = rovdata.Motor_3;
-  motor_4 = rovdata.Motor_4;
-  motor_5 = rovdata.Motor_5;
-  motor_6 = rovdata.Motor_6;
+  thruster_1 = rovdata.Thruster_1;
+  thruster_2 = rovdata.Thruster_2;
+  thruster_3 = rovdata.Thruster_3;
+  thruster_4 = rovdata.Thruster_4;
+  thruster_5 = rovdata.Thruster_5;
+  thruster_6 = rovdata.Thruster_6;
 }
 
 function display(rovdata) {
-  var today=new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+  var today=new Date();
   rov_context.clearRect(0, 0, rov_canvas.width, rov_canvas.height);
   rov_context.font = '14pt Verdana';
   rov_context.lineWidth = 1;
   rov_context.fillStyle = "#aaaa55";
-  rov_context.fillText( today, 10, 20);
-  rov_context.fillText( "GPS: N/A", 10, 40);
-  rov_context.fillText( "Moki ROV (Raspberry PI)", 10, 60);
+  rov_context.fillText( today.toLocaleDateString()+" "+today.toLocaleTimeString(), 10, 20);
+  rov_context.fillText( "Site :      Groningen,NL", 10, 40);
+  rov_context.fillText( "MokiROV2 (RaspPI/Arduino)", 10, 60);
   if (constatus == 'Disonnected') {
     rov_context.beginPath();
     rov_context.fillStyle = "#aa0000";
@@ -210,7 +205,7 @@ function display(rovdata) {
   rov_context.fillText( ":", (rov_canvas.width/4) + 80, 60);
   rov_context.fill();
   rov_context.beginPath();
-  if (motor) {
+  if (armed) {
     rov_context.fillStyle = "#00aa00";
     rov_context.fillText( "  "+power+" %", (rov_canvas.width/4) + 80, 60);
   } else {
@@ -227,14 +222,18 @@ function display(rovdata) {
 
   if (calibrated) {
     rov_context.fillText( ": "+heading, (rov_canvas.width/2)+80, 20);
-    rov_context.fillText( ": "+roll, (rov_canvas.width/2)+80, 40);
+    if (roll >= 0) {
+        rov_context.fillText( ": "+roll, (rov_canvas.width/2)+80, 40);
+    } else {
+        rov_context.fillText( ":"+roll, (rov_canvas.width/2)+80, 40);
+    }
     rov_context.fillText( ": "+pitch, (rov_canvas.width/2)+80, 60);
     rov_context.fill();
   } else {
     rov_context.fillStyle = "#aa0000";
     rov_context.fillText( ": IMU SENSOR", (rov_canvas.width/2)+80, 20);
-    rov_context.fillText( ": CALIBRATION", (rov_canvas.width/2)+80, 40);
-    rov_context.fillText( ": NEEDED", (rov_canvas.width/2)+80, 60);
+    rov_context.fillText( ": CALIBRATION", (rov_canvas.width/2)+76, 40);
+    rov_context.fillText( ":   NEEDED", (rov_canvas.width/2)+80, 60);
     rov_context.fill();
   }
 
@@ -377,9 +376,9 @@ function display(rovdata) {
 
           if ((heading+i >= 100) && (heading+i < 360)) {
               rov_context.fillText(Math.floor(heading+i), (rov_canvas.width/2)+(i*35)-18, 100);
-            } else if ((heading+i >= 10) && (heading+i < 360)) {
+          } else if ((heading+i >= 10) && (heading+i < 360)) {
               rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
-            } else if (heading+i < 10) {
+          } else if (heading+i < 10) {
               rov_context.fillText(zeroPad(Math.floor(heading+i),3), (rov_canvas.width/2)+(i*35)-18, 100);
           }
           rov_context.moveTo((rov_canvas.width/2)+(i*35), 65);
@@ -395,7 +394,7 @@ function display(rovdata) {
   rov_context.lineTo(rov_canvas.width/2, 110);
   rov_context.stroke();
   
-// Motor
+// Thruster
   rov_context.fillStyle = "#00aa00";
   rov_context.strokeStyle = "#00aa00";
   rov_context.lineWidth = 1;
@@ -426,23 +425,23 @@ function display(rovdata) {
   rov_context.fill();
   rov_context.beginPath();
   rov_context.fillStyle = "#aa0000"; 
-  if (motor_1 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+35,motor_1,10);
+  if (thruster_1 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+35,thruster_1,10);
   }
-  if (motor_2 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+65,motor_2,10);
+  if (thruster_2 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+65,thruster_2,10);
   }
-  if (motor_3 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+95,motor_3,10);
+  if (thruster_3 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+95,thruster_3,10);
   }
-  if (motor_4 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+125,motor_4,10);
+  if (thruster_4 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+125,thruster_4,10);
   }
-  if (motor_5 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+155,motor_5,10);
+  if (thruster_5 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+155,thruster_5,10);
   }
-  if (motor_6 != 0) {
-    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+185,motor_6,10);
+  if (thruster_6 != 0) {
+    rov_context.rect((rov_canvas.width/4*3)+120, rov_canvas.height/2+185,thruster_6,10);
   }
   rov_context.fill();
 
@@ -459,9 +458,21 @@ function display(rovdata) {
   rov_context.fillText("IMU ACCEL:", 150, 400);
   rov_context.fillText("IMU MAG:", 150, 450);
   rov_context.fillStyle = "#aa0000";
-  rov_context.fillText( accl_x+"  ", 240, 150);
-  rov_context.fillText( accl_y+"  ", 240 ,200);
-  rov_context.fillText( accl_z+"  ", 240, 250);
+  if (accl_x >= 0) {
+      rov_context.fillText( accl_x+"  ", 248, 150);
+  } else {
+      rov_context.fillText( accl_x+"  ", 240, 150);
+  }
+  if (accl_y >= 0) {
+      rov_context.fillText( accl_y+"  ", 248 ,200);
+  } else {
+      rov_context.fillText( accl_y+"  ", 240 ,200);
+  }
+  if (accl_z >= 0) {
+      rov_context.fillText( accl_z+"  ", 248, 250);
+  } else {
+      rov_context.fillText( accl_z+"  ", 240, 250);
+  }
   rov_context.fillStyle = "#aa0000";
   if (imusys == 3) {
     rov_context.fillStyle = "#00aa00";
@@ -490,7 +501,7 @@ function display(rovdata) {
   rov_context.font = '14pt Verdana';
   rov_context.fillStyle = "#aaaa00";
   rov_context.fillText("MOTOR:", (rov_canvas.width/4)*3, 150);
-  if (motor) {
+  if (armed) {
       rov_context.fillStyle = "#00aa00";
       rov_context.fillText( "ARMED", (rov_canvas.width/4)*3+80, 150);
   } else {
@@ -569,12 +580,12 @@ function init() {
 socket.on("connect", function () {
   constatus = 'Connected';
   power = 0;
-  motor_1 = 0;
-  motor_2 = 0;
-  motor_3 = 0;
-  motor_4 = 0;
-  motor_5 = 0;
-  motor_6 = 0;
+  thruster_1 = 0;
+  thruster_2 = 0;
+  thruster_3 = 0;
+  thruster_4 = 0;
+  thruster_5 = 0;
+  thruster_6 = 0;
 });
 
 socket.on("disconnect", function () {

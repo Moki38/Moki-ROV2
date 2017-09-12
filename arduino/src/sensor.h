@@ -22,10 +22,9 @@
 
 */
 
+#pragma once
 #ifndef _SENSOR_H
 #define _SENSOR_H
-
-#include "config.h"
 
 #include <Arduino.h>
 #include <Servo.h>
@@ -34,39 +33,69 @@
 #include <Adafruit_BNO055.h>
 #include <Arduino_I2C_ESC.h>
 #include <utility/imumaths.h>
-#include "MS5837.h"
+#include <MS5837.h>
+#include "config.h"
 
-uint8_t imu_system();
-uint8_t imu_gyro();
-uint8_t imu_accel();
-uint8_t imu_mag();
-int imu_temp_get();
-float imu_X();
-float imu_Y();
-float imu_Z();
-float imu_accl_X();
-float imu_accl_Y();
-float imu_accl_Z();
-float imu_heading();
-float imu_roll();
-float imu_pitch();
-
-void imu_loop();
-void imu_setup();
-
-float pressure_get();
-int temp_get();
-float depth_get();
-int alt_get();
-void depth_loop();
-void depth_setup();
-
-float current_get();
-float amp_get();
-void current_setup();
-void amp_setup();
-
-void sensor_setup();
-
+class Sensor {
+    public:
+        // IMU
+        uint8_t Imu_System();
+        uint8_t Imu_Gyro();
+        uint8_t Imu_Accel();
+        uint8_t Imu_Mag();
+        int Imu_Temp();
+        float Imu_X();
+        float Imu_Y();
+        float Imu_Z();
+        float Imu_Accl_X();
+        float Imu_Accl_Y();
+        float Imu_Accl_Z();
+        float Imu_Heading();
+        float Imu_Roll();
+        float Imu_Pitch();
+        void Imu_Loop();
+        void Imu_Setup();
+        // Depth
+        float Pressure();
+        int Temp();
+        float Depth();
+        int Alt();
+        void Depth_Loop();
+        void Depth_Setup();
+        // Current/Amps
+        float Current();
+        float Amps();
+        void Current_Setup();
+        void Amps_Setup();
+        // Overall Setup All
+        void Loop();
+        void Setup();
+        int Time();
+        void Time(int);
+    private:
+        // IMU
+        int FOUND_BNO = 0;
+        /* Set the delay between fresh samples */
+        #define BNO055_SAMPLERATE_DELAY_MS (100)
+        Adafruit_BNO055 bno = Adafruit_BNO055(IMU_ADDR);
+        uint8_t system_imu = 0;
+        uint8_t gyro = 0;
+        uint8_t accel = 0;
+        uint8_t mag = 0;
+        int8_t imu_temp = 0;
+        uint8_t system_status = 0;
+        uint8_t self_test_results = 0;
+        uint8_t system_error = 0;
+        sensors_event_t event;
+        imu::Vector<3> imu_vec;
+        // Depth
+        MS5837 MS5837_sensor;
+        bool MS5837_status;
+        // Current/Amps
+        int VRaw; //This will store our raw ADC data
+        float VFinal; //This will store the converted data
+        int IRaw;
+        float IFinal;
+        int sensor_time = 0;
+};
 #endif
-

@@ -22,30 +22,29 @@
 
 */
 
-#ifndef _MOTOR_H
-#define _MOTOR_H
+#pragma once
+#ifndef _PILOT_H
+#define _PILOT_H
 
 #include <Arduino.h>
 #include <Servo.h>
+#include <PID_v1.h>
+#include "config.h"
+#include "thruster.h"
+#include "sensor.h"
 
-void motor_power(int);
-void motor_arm(int);
-int motor_arm();
-
-// Right Left Reverse Forward Strafe_r Strafe_l Dive Up
-void motor_forward(int);
-void motor_reverse(int);
-void motor_right(int);
-void motor_left(int);
-void motor_dive(int);
-void motor_up(int);
-void motor_strafe_right(int);
-void motor_strafe_left(int);
-void motor_roll_right(int);
-void motor_roll_left(int);
-
-void motor_stop();
-void motor_setup();
-
+class Pilot {
+    public:
+        void On();
+        void Off();
+        bool Active();
+        void Heading(int);
+        void Loop(Thruster&, Sensor&);
+        void Setup();
+    private:
+        bool active = false;
+        int hover = 0;
+        float pilot_heading = 0;
+};
 #endif
 

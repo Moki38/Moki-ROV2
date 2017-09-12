@@ -38,11 +38,11 @@
 #include "config.h"
 
 #include "thruster.h"
-#include "motor.h"
 #include "light.h"
 #include "camera.h"
-
 #include "sensor.h"
+#include "hover.h"
+#include "pilot.h"
 
 //enum Directions {STOP, FORWARD, REVERSE, RIGHT, LEFT, DIVE, UP,STRAFE_RIGHT,STRAFE_LEFT,ROLL_RIGHT,ROLL_LEFT};
 

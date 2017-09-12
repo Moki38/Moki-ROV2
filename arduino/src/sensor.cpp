@@ -24,97 +24,59 @@
 
 #include "sensor.h"
 
-int FOUND_BNO = 0;
-
-int VRaw; //This will store our raw ADC data
-float VFinal; //This will store the converted data
-int IRaw;
-float IFinal;
-
-MS5837 MS5837_sensor;
-bool MS5837_status;
-
-/* Set the delay between fresh samples */
-#define BNO055_SAMPLERATE_DELAY_MS (100)
-Adafruit_BNO055 bno = Adafruit_BNO055(IMU_ADDR);
-uint8_t system_imu = 0;
-uint8_t gyro = 0;
-uint8_t accel = 0;
-uint8_t mag = 0;
-int8_t imu_temp = 0;
-uint8_t system_status = 0;
-uint8_t self_test_results = 0;
-uint8_t system_error = 0;
-sensors_event_t event;
-imu::Vector<3> imu_vec;
-
-uint8_t imu_system()
-{
+uint8_t Sensor::Imu_System() {
     return system_imu;
 }
 
-uint8_t imu_gyro()
-{
+uint8_t Sensor::Imu_Gyro() {
     return gyro;
 }
 
-uint8_t imu_accel()
-{
+uint8_t Sensor::Imu_Accel() {
     return accel;
 }
 
-uint8_t imu_mag()
-{
+uint8_t Sensor::Imu_Mag() {
     return mag;
 }
 
-int imu_temp_get()
-{
+int Sensor::Imu_Temp() {
     return (imu_temp);
 }
 
-float imu_accl_X()
-{
+float Sensor::Imu_Accl_X() {
     return (imu_vec.x()); //x acceleration
 }
 
-float imu_accl_Y()
-{
+float Sensor::Imu_Accl_Y() {
     return (imu_vec.y()); //x acceleration
 }
 
-float imu_accl_Z()
-{
+float Sensor::Imu_Accl_Z() {
     return (imu_vec.z()); //x acceleration
 }
 
-float imu_X()
-{
+float Sensor::Imu_X() {
     return event.orientation.x;
 }
 
-float imu_Y()
-{
+float Sensor::Imu_Y() {
     return event.orientation.y;
 }
 
-float imu_Z()
-{
+float Sensor::Imu_Z() {
     return event.orientation.z;
 }
 
-float imu_heading()
-{
+float Sensor::Imu_Heading() {
     return event.orientation.roll;
 }
 
-float imu_roll()
-{
+float Sensor::Imu_Roll() {
     return -event.orientation.pitch;
 }
 
-float imu_pitch()
-{
+float Sensor::Imu_Pitch() {
     if (event.orientation.heading < 0) {
         return -(event.orientation.heading+180);
     } else {
@@ -122,8 +84,7 @@ float imu_pitch()
     }
 }
 
-void imu_loop()
-{
+void Sensor::Imu_Loop() {
     bno.getEvent(&event);
     imu_temp = bno.getTemp();
     // Possible vector values can be:
@@ -139,8 +100,7 @@ void imu_loop()
     bno.getCalibration(&system_imu, &gyro, &accel, &mag);
 }
 
-void imu_setup()
-{
+void Sensor::Imu_Setup() {
     sensor_t sensor;
     if (bno.begin()) {
         FOUND_BNO = 1;
@@ -155,8 +115,7 @@ void imu_setup()
 
 }
 
-float pressure_get()
-{
+float Sensor::Pressure() {
     if (MS5837_status) {
         return (MS5837_sensor.pressure());
     } else {
@@ -164,8 +123,7 @@ float pressure_get()
     }
 }
 
-int temp_get()
-{
+int Sensor::Temp() {
     if (MS5837_status) {
         return (MS5837_sensor.temperature());
     } else {
@@ -173,8 +131,7 @@ int temp_get()
     }
 }
 
-float depth_get()
-{
+float Sensor::Depth() {
     if (MS5837_status) {
         return (MS5837_sensor.depth()*100);
     } else {
@@ -182,8 +139,7 @@ float depth_get()
     }
 }
 
-int alt_get()
-{
+int Sensor::Alt() {
     if (MS5837_status) {
         return (MS5837_sensor.altitude());
     } else {
@@ -191,13 +147,11 @@ int alt_get()
     }
 }
 
-void depth_loop()
-{
+void Sensor::Depth_Loop() {
     MS5837_sensor.read();
 }
 
-void depth_setup()
-{
+void Sensor::Depth_Setup() {
     MS5837_status = MS5837_sensor.init();
     if (DEPTH_WATER == 1) {
         MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater)
@@ -206,8 +160,7 @@ void depth_setup()
     }
 }
 
-float current_get()
-{
+float Sensor::Current() {
     VFinal = -1;
     VRaw = analogRead(CURRENT_PIN);
     if (VRaw < 400) {
@@ -217,10 +170,11 @@ float current_get()
     return (VFinal);
 }
 
-float amp_get()
-{
+float Sensor::Amps() {
     IFinal = -1;
     IRaw = analogRead(AMP_PIN);
+//    Serial.print("Amps_RAW:");
+//    Serial.println(IRaw);
     if (VRaw < 400) {
         //Conversion
         //      IFinal = IRaw/7.4; //180 Amp board
@@ -229,19 +183,74 @@ float amp_get()
     return (IFinal);
 }
 
-void current_setup()
-{
+void Sensor::Current_Setup() {
 }
 
-void amp_setup()
-{
+void Sensor::Amps_Setup() {
 }
 
-void sensor_setup()
-{
-    imu_setup();
-    depth_setup();
-    current_setup();
-    amp_setup();
+int Sensor::Time() {
+    return sensor_time;
 }
 
+void Sensor::Time(int time) {
+    sensor_time = time;
+}
+
+void Sensor::Setup() {
+    Imu_Setup();
+    Depth_Setup();
+    Current_Setup();
+    Amps_Setup();
+}
+
+void Sensor::Loop() {
+    Serial.print("Time:");
+    sensor_time = millis();
+    Serial.println(sensor_time);
+
+    Serial.print("Volt:");
+    Serial.println(Current(),4);
+    Serial.print("Amps:");
+    Serial.println(Amps(),4);
+
+    Depth_Loop();
+    Serial.print("Pressure:");
+    Serial.println(Pressure(), 4);
+    Serial.print("Temp_Out:");
+    Serial.println(Temp());
+    Serial.print("Depth:");
+    Serial.println(Depth(), 4);
+    Serial.print("Altitude:");
+    Serial.println(Alt());
+
+    Imu_Loop();
+    Serial.print("X:");
+    Serial.println(Imu_X(), 4);
+    Serial.print("Y:");
+    Serial.println(Imu_Y(), 4);
+    Serial.print("Z:");
+    Serial.println(Imu_Z(), 4);
+    Serial.print("ACCL_X:");
+    Serial.println(Imu_Accl_X(), 4);
+    Serial.print("ACCL_Y:");
+    Serial.println(Imu_Accl_Y(), 4);
+    Serial.print("ACCL_Z:");
+    Serial.println(Imu_Accl_Z(), 4);
+    Serial.print("Heading:");
+    Serial.println(Imu_Heading(), 4);
+    Serial.print("Roll:");
+    Serial.println(Imu_Roll(), 4);
+    Serial.print("Pitch:");
+    Serial.println(Imu_Pitch(), 4);
+    Serial.print("Temp_In:");
+    Serial.println(Imu_Temp());
+    Serial.print("Sys:");
+    Serial.println(Imu_System());
+    Serial.print("Gyro:");
+    Serial.println(Imu_Gyro());
+    Serial.print("Accel:");
+    Serial.println(Imu_Accel());
+    Serial.print("Mag:");
+    Serial.println(Imu_Mag());
+}

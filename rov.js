@@ -49,16 +49,15 @@ var rovdata = {};
 rovdata.Version = shell.cat('VERSION').stdout.trim();
 rovdata.Hover = false;
 rovdata.Power = 0;
-rovdata.Lights = false;
 rovdata.Pilot = false;
-rovdata.Motor = false;
 rovdata.Depth_Offset = 0;
-rovdata.Motor_1 = 0;
-rovdata.Motor_2 = 0;
-rovdata.Motor_3 = 0;
-rovdata.Motor_4 = 0;
-rovdata.Motor_5 = 0;
-rovdata.Motor_6 = 0;
+rovdata.Armed = 0;
+rovdata.Thruster_1 = 0;
+rovdata.Thruster_2 = 0;
+rovdata.Thruster_3 = 0;
+rovdata.Thruster_4 = 0;
+rovdata.Thruster_5 = 0;
+rovdata.Thruster_6 = 0;
 
 //
 // arduino found (or not)
@@ -99,55 +98,55 @@ function parse_serial(line) {
       case    'Time':
           rovdata.Time = Number(res[1]);
           break;
-      case    'PING':
+      case    'Ping':
           rovdata.Ping = 1;
           break;
-      case    'PONG':
+      case    'Pong':
           rovdata.Pong = 1;
           break;
       case    'Pressure':
           rovdata.Pressure = Number(res[1]);
           break;
-      case    'HOVER_GAP':
+      case    'Hover_Gag':
           rovdata.Hover_Gap = Number(res[1]);
           break;
-      case    'HOVER_INPUT':
+      case    'Hover_Input':
           rovdata.Hover_Input = Number(res[1]);
           break;
-      case    'HOVER_OUTPUT':
+      case    'Hover_Output':
           rovdata.Hover_Output = Number(res[1]);
           break;
-      case    'HOVER_SETPUT':
-          rovdata.Hover_Setput = Number(res[1]);
+      case    'Hover_Setpoint':
+          rovdata.Hover_Setpoint = Number(res[1]);
           break;
-      case    'HOVER_UP':
+      case    'Hover_Up':
           rovdata.Hover_Up = Number(res[1]);
           break;
-      case    'HOVER_DIVE':
+      case    'Hover_Dive':
           rovdata.Hover_Dive = Number(res[1]);
           break;
-      case    'PILOT_GAP':
+      case    'Pilot_Gap':
           rovdata.Pilot_Gap = Number(res[1]);
           break;
-      case    'PILOT_HEADING_INPUT':
+      case    'Pilot_Heading_Input':
           rovdata.Pilot_Input = Number(res[1]);
           break;
-      case    'PILOT_HEADING_OUTPUT':
+      case    'Pilot_Heading_Output':
           rovdata.Pilot_Output = Number(res[1]);
           break;
-      case    'PILOT_HEADING_SETPUT':
-          rovdata.Pilot_Setput = Number(res[1]);
+      case    'Pilot_Heading_Setpoint':
+          rovdata.Pilot_Setpoint = Number(res[1]);
           break;
-      case    'PILOT_HEADING_OUTPUT_LEFT':
+      case    'Pilot_Heading_Output_Left':
           rovdata.Pilot_Left = Number(res[1]);
           break;
-      case    'PILOT_HEADING_OUTPUT_RIGHT':
+      case    'Pilot_Heading_Output_Right':
           rovdata.Pilot_Right = Number(res[1]);
           break;
-      case    'Temp_OUT':
+      case    'Temp_Out':
           rovdata.Temp_Out = Number(res[1]);
           break;
-      case    'Temp_IN':
+      case    'Temp_In':
           rovdata.Temp_In = Number(res[1]);
           break;
       case    'Depth':
@@ -204,31 +203,31 @@ function parse_serial(line) {
       case    'Power':
           rovdata.Power = Number(res[1]);
           break;
-      case    'Motor_1':
-          rovdata.Motor_1 = Number(res[1]);
+      case    'Thruster_1':
+          rovdata.Thruster_1 = Number(res[1]);
           break;
-      case    'Motor_2':
-          rovdata.Motor_2 = Number(res[1]);
+      case    'Thruster_2':
+          rovdata.Thruster_2 = Number(res[1]);
           break;
-      case    'Motor_3':
-          rovdata.Motor_3 = Number(res[1]);
+      case    'Thruster_3':
+          rovdata.Thruster_3 = Number(res[1]);
           break;
-      case    'Motor_4':
-          rovdata.Motor_4 = Number(res[1]);
+      case    'Thruster_4':
+          rovdata.Thruster_4 = Number(res[1]);
           break;
-      case    'Motor_5':
-          rovdata.Motor_5 = Number(res[1]);
+      case    'Thruster_5':
+          rovdata.Thruster_5 = Number(res[1]);
           break;
-      case    'Motor_6':
-          rovdata.Motor_6 = Number(res[1]);
+      case    'Thruster_6':
+          rovdata.Thruster_6 = Number(res[1]);
           break;
       case    'Stop':
-          rovdata.Motor_1 = 0;
-          rovdata.Motor_2 = 0;
-          rovdata.Motor_3 = 0;
-          rovdata.Motor_4 = 0;
-          rovdata.Motor_5 = 0;
-          rovdata.Motor_6 = 0;
+          rovdata.Thruster_1 = 0;
+          rovdata.Thruster_2 = 0;
+          rovdata.Thruster_3 = 0;
+          rovdata.Thruster_4 = 0;
+          rovdata.Thruster_5 = 0;
+          rovdata.Thruster_6 = 0;
           break;
       default:
           console.log('Serial data: '+line);
@@ -261,8 +260,8 @@ if (arduino) {
     rovdata.Y = 0;
     rovdata.Z = 0;
     rovdata.Depth = 0;
-    rovdata.Temp_OUT = 0;
-    rovdata.Temp_IN = 0;
+    rovdata.Temp_Out = 0;
+    rovdata.Temp_In = 0;
 }
 
 app.use(express.static('public'));
@@ -530,7 +529,7 @@ var interval = setInterval(function () {
 // Send PING to arduino, every 2500ms
 //
 var ping_interval = setInterval(function () {
-    port.write('PING:0\n');
+    port.write('Ping:0\n');
 }, 2500);
 
 //
@@ -566,14 +565,14 @@ socket.on('keydown', function(event) {
 var lights = function() {
     if (rovdata.Lights == false) {
         if (arduino) {
-            port.write('Light1:'+config.light[1].on+'\n');
-            port.write('Light2:'+config.light[2].on+'\n');
+            port.write('Light1:1\n');
+            port.write('Light2:1\n');
         }
         rovdata.Lights = true;
     } else {
         if (arduino) {
-            port.write('Light1:'+config.light[1].off+'\n');
-            port.write('Light2:'+config.light[1].off+'\n');
+            port.write('Light1:0\n');
+            port.write('Light2:0\n');
         }
         rovdata.Lights = false;
     }
@@ -583,7 +582,7 @@ var lights = function() {
 // Thruster ARM
 //
 var armmotor = function() {
-    rovdata.Motor = true;
+    rovdata.Armed = 1;
     port.write('ARM:1'+'\n');
 }
 
@@ -591,7 +590,7 @@ var armmotor = function() {
 // Thruster DISARM
 //
 var disarmmotor = function() {
-    rovdata.Motor = false;
+    rovdata.Armed = 0;
     port.write('DISARM:0'+'\n');
     rovdata.Power = 0;
     port.write('Power:'+rovdata.Power+'\n');

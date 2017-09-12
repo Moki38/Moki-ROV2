@@ -22,16 +22,24 @@
 
 */
 
+#pragma once
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
 #include <Arduino.h>
 #include <Servo.h>
+#include "config.h"
 
-void camera_movex(int);
-void camera_movey(int);
-void camera_center();
-void camera_setup();
-
+class Camera {
+    public:
+        void Move_X(int);
+        void Move_Y(int);
+        void Center();
+        void Setup();
+    private:
+        Servo C1;
+        Servo C2;
+};
 #endif
+
 

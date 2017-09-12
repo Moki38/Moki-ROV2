@@ -22,56 +22,60 @@
 
 */
 
-#define MOTOR1_PWM
-#define MOTOR1_PIN	9
-#undef  MOTOR1_I2C
-#undef  MOTOR1_ADDR	//0x29
-#undef  MOTOR1_POLE	//6
-#define MOTOR1_NEUTRAL	1500
-#define MOTOR1_MIN	1100
-#define MOTOR1_MAX	1900
-#define MOTOR1_DIR	207
-#define MOTOR1_REVERSE	138
+#pragma once
+#ifndef _CONFIG_H
+#define _CONFIG_H
 
-#define MOTOR2_PWM
-#define MOTOR2_PIN	10
-#define MOTOR2_NEUTRAL	1500
-#define MOTOR2_MIN	1100
-#define MOTOR2_MAX	1900
-#define MOTOR2_DIR	207
-#define MOTOR2_REVERSE	138
+#define  THRUSTER1_PWM
+#define  THRUSTER1_PIN		9
+#undef   THRUSTER1_I2C
+#undef   THRUSTER1_ADDR	//0x29
+#undef   THRUSTER1_POLE	//6
+#define  THRUSTER1_NEUTRAL	1500
+#define  THRUSTER1_MIN		1100
+#define  THRUSTER1_MAX		1900
+#define  THRUSTER1_DIR          0b0011001111	// if bit is set, thruster will run (see thruster.h) 
+#define  THRUSTER1_REVERSE      0b0001000110	// if bit is set, thruster will reverse
 
-#define MOTOR3_PWM
-#define MOTOR3_PIN	20
-#define MOTOR3_NEUTRAL	1500
-#define MOTOR3_MIN	1100
-#define MOTOR3_MAX	1900
-#define MOTOR3_DIR	207
-#define MOTOR3_REVERSE	138
+#define THRUSTER2_PWM
+#define THRUSTER2_PIN	10
+#define THRUSTER2_NEUTRAL	1500
+#define THRUSTER2_MIN	1100
+#define THRUSTER2_MAX	1900
+#define THRUSTER2_DIR           0b0011001111	// if bit is set, thruster will run (see thruster.h) 
+#define THRUSTER2_REVERSE       0b0001000101	// if bit is set, thruster will reverse
 
-#define MOTOR4_PWM
-#define MOTOR4_PIN	21
-#define MOTOR4_NEUTRAL	1500
-#define MOTOR4_MIN	1100
-#define MOTOR4_MAX	1900
-#define MOTOR4_DIR	207
-#define MOTOR4_REVERSE	138
+#define THRUSTER3_PWM
+#define THRUSTER3_PIN	20
+#define THRUSTER3_NEUTRAL	1500
+#define THRUSTER3_MIN	1100
+#define THRUSTER3_MAX	1900
+#define THRUSTER3_DIR		0b0011001111	// if bit is set, thruster will run (see thruster.h) 
+#define THRUSTER3_REVERSE	0b0001001010	// if bit is set, thruster will reverse
 
-#define MOTOR5_PWM
-#define MOTOR5_PIN	22
-#define MOTOR5_NEUTRAL	1500
-#define MOTOR5_MIN	1100
-#define MOTOR5_MAX	1900
-#define MOTOR5_DIR	816
-#define MOTOR5_REVERSE	0
+#define THRUSTER4_PWM
+#define THRUSTER4_PIN	21
+#define THRUSTER4_NEUTRAL	1500
+#define THRUSTER4_MIN	1100
+#define THRUSTER4_MAX	1900
+#define THRUSTER4_DIR		0b0011001111	// if bit is set, thruster will run (see thruster.h) 
+#define THRUSTER4_REVERSE	0b0010100110	// if bit is set, thruster will reverse
 
-#define MOTOR6_PWM
-#define MOTOR6_PIN	23
-#define MOTOR6_NEUTRAL	1500
-#define MOTOR6_MIN	1100
-#define MOTOR6_MAX	1900
-#define MOTOR6_DIR	816
-#define MOTOR6_REVERSE	0
+#define THRUSTER5_PWM
+#define THRUSTER5_PIN	22
+#define THRUSTER5_NEUTRAL	1500
+#define THRUSTER5_MIN	1100
+#define THRUSTER5_MAX	1900
+#define THRUSTER5_DIR		0b1100110000	// if bit is set, thruster will run (see thruster.h) 
+#define THRUSTER5_REVERSE	0b0100101111	// if bit is set, thruster will reverse
+
+#define THRUSTER6_PWM
+#define THRUSTER6_PIN	23
+#define THRUSTER6_NEUTRAL	1500
+#define THRUSTER6_MIN	1100
+#define THRUSTER6_MAX	1900
+#define THRUSTER6_DIR		0b1100110000	// if bit is set, thruster will run (see thruster.h) 
+#define THRUSTER6_REVERSE	0b1000011111	// if bit is set, thruster will reverse
 
 #define LIGHT1_PWM
 #define LIGHT1_PIN	3
@@ -107,4 +111,6 @@
 #define AMP_ANALOG
 #define	AMP_TYPE	1	// 1 ATTOPILOT_A180
 #define AMP_PIN		1	// A1
+
+#endif
 

@@ -49,10 +49,26 @@ class Thruster {
         bool Arm();
 // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
         void Run(int, int);
+        void Forward(int);
+        void Reverse(int);
+        void Right(int);
+        void Left(int);
+        void Up(int);
+        void Dive(int);
         void Strafe_Right(int);
         void Strafe_Left(int);
         void Roll_Right(int);
         void Roll_Left(int);
+        void Forward();
+        void Reverse();
+        void Right();
+        void Left();
+        void Up();
+        void Dive();
+        void Strafe_Right();
+        void Strafe_Left();
+        void Roll_Right();
+        void Roll_Left();
 
         void Stop();
         void Setup();
