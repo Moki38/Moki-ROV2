@@ -175,7 +175,7 @@ float Sensor::Amps() {
     IRaw = analogRead(AMP_PIN);
 //    Serial.print("Amps_RAW:");
 //    Serial.println(IRaw);
-    if (VRaw < 400) {
+    if (IRaw < 400) {
         //Conversion
         //      IFinal = IRaw/7.4; //180 Amp board
         IFinal = IRaw/3.7; //180 Amp board
