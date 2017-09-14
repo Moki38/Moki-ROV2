@@ -22,7 +22,7 @@
 
 */
 
-#include "thruster.h"
+#include "Thruster.h"
 
 void Thruster::Power(int p) {
     POWER=p;

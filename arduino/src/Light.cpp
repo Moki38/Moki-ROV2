@@ -21,7 +21,7 @@
  THE SOFTWARE.
 
 */
-#include "light.h"
+#include "Light.h"
 
 //
 // Off

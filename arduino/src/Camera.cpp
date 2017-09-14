@@ -22,29 +22,62 @@
 
 */
 
-#pragma once
-#ifndef _PILOT_H
-#define _PILOT_H
+#include "Camera.h"
 
-#include <Arduino.h>
-#include <Servo.h>
-#include <PID_v1.h>
-#include "config.h"
-#include "thruster.h"
-#include "sensor.h"
-
-class Pilot {
-    public:
-        void On();
-        void Off();
-        bool Active();
-        void Heading(int);
-        void Loop(Thruster&, Sensor&);
-        void Setup();
-    private:
-        bool active = false;
-        int hover = 0;
-        float pilot_heading = 0;
-};
+//
+// Move_X
+//
+void Camera::Move_X(int x) {
+#ifdef CAMERAX_PWM
+    C1.writeMicroseconds(x);
+    Serial.print("Camx:");
+    Serial.println(x);
 #endif
+}
 
+//
+// Move_Y
+//
+void Camera::Move_Y(int y) {
+#ifdef CAMERAY_PWM
+    C2.writeMicroseconds(y);
+    Serial.print("Camy:");
+    Serial.println(y);
+#endif
+}
+
+//
+// Center
+//
+void Camera::Center() {
+#ifdef CAMERAX_PWM
+    C1.attach(CAMERAX_PIN);
+    C1.writeMicroseconds(CAMERAX_NEUTRAL);
+    Serial.print("Camx:");
+    Serial.println(CAMERAX_NEUTRAL);
+#endif
+#ifdef CAMERAY_PWM
+    C2.attach(CAMERAY_PIN);
+    C2.writeMicroseconds(CAMERAY_NEUTRAL);
+    Serial.print("Camy:");
+    Serial.println(CAMERAY_NEUTRAL);
+#endif
+}
+
+//
+// Setup
+//
+void Camera::Setup() {
+#ifdef CAMERAX_PWM
+    C1.attach(CAMERAX_PIN);
+    C1.writeMicroseconds(CAMERAX_NEUTRAL);
+    Serial.print("Camx:");
+    Serial.println(CAMERAX_NEUTRAL);
+#endif
+#ifdef CAMERAY_PWM
+    C2.attach(CAMERAY_PIN);
+    C2.writeMicroseconds(CAMERAY_NEUTRAL);
+    Serial.print("Camy:");
+    Serial.println(CAMERAY_NEUTRAL);
+#endif
+}

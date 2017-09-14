@@ -21,7 +21,7 @@
  THE SOFTWARE.
 
 */
-#include "hover.h"
+#include "Hover.h"
 
 double H_Setpoint;
 double H_Input;

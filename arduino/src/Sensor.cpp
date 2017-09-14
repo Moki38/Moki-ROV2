@@ -22,7 +22,7 @@
 
 */
 
-#include "sensor.h"
+#include "Sensor.h"
 
 uint8_t Sensor::Imu_System() {
     return system_imu;

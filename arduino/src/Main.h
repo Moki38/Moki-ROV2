@@ -22,29 +22,27 @@
 
 */
 
-#pragma once
-#ifndef _HOVER_H
-#define _HOVER_H
+#define DEBUG
 
 #include <Arduino.h>
 #include <Servo.h>
-#include <PID_v1.h>
-#include "config.h"
-#include "thruster.h"
-#include "sensor.h"
+#include <Wire.h>
 
-class Hover {
-    public:
-        void On();
-        void Off();
-        bool Active();
-        void Depth(int);
-        void Loop(Thruster&, Sensor&);
-        void Setup();
-    private:
-        bool active = false;
-        int hover = 0;
-        float hover_depth = 0;
-};
-#endif
+#include <PID_v1.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <Arduino_I2C_ESC.h>
+#include <utility/imumaths.h>
+#include "MS5837.h"
+
+#include "Config.h"
+
+#include "Thruster.h"
+#include "Light.h"
+#include "Camera.h"
+#include "Sensor.h"
+#include "Hover.h"
+#include "Pilot.h"
+
+//enum Directions {STOP, FORWARD, REVERSE, RIGHT, LEFT, DIVE, UP,STRAFE_RIGHT,STRAFE_LEFT,ROLL_RIGHT,ROLL_LEFT};
 

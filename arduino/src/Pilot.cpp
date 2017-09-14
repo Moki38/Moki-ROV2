@@ -21,7 +21,7 @@
  THE SOFTWARE.
 
 */
-#include "pilot.h"
+#include "Pilot.h"
 
 double P_Setpoint;
 double P_Input;
