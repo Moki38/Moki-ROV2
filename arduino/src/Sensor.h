@@ -34,7 +34,7 @@
 #include <Arduino_I2C_ESC.h>
 #include <utility/imumaths.h>
 #include <MS5837.h>
-#include "config.h"
+#include "Config.h"
 
 class Sensor {
     public:

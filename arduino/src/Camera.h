@@ -28,7 +28,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "config.h"
+#include "Config.h"
 
 class Camera {
     public:

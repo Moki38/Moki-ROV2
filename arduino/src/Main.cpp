@@ -22,7 +22,7 @@
 
 */
 
-#include "main.h"
+#include "Main.h"
 
 //
 // Serial vars

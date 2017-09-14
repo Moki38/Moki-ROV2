@@ -28,7 +28,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "config.h"
+#include "Config.h"
 
 #define THRUSTER_FORWARD	0b0000000001
 #define THRUSTER_REVERSE	0b0000000010
