@@ -1,14 +1,14 @@
-# Moki-ROV2 (Working software, with my setup) 
+# Moki-ROV2 (Pilot your ROV directly from your PC webbrowser browser)
 
 If you gonna use this code, please let me know by email!
 
 Warning: This is NOT out-of-the-box software, it will need advanced linux/arduino/hardware skills to get it working!
 
-Pilot your ROV-PI directly from your PC webbrowser browser.
-
 If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
 
 This software was build on a Raspberry PI (Model B+)
+
+Wiki can be found at: http://wiki.team-moki.nl/display/MOK
 
 ## Currenty supported/tested (aka, my setup)
 
@@ -23,14 +23,14 @@ This software was build on a Raspberry PI (Model B+)
 * Pololu attopilot 180A
 * Adafruit BNO055 IMU
 
-* BlueESC (PWM/I2C) with T100 Thrusters
+* BlueROV2 Frame (6 thrusters)
 ```
 ## Install
 
 #
 # Raspberry PI
 #
-Download "RASPBIAN JESSIE LITE" from https://www.raspberrypi.org/downloads/raspbian/
+Download "RASPBIAN LITE" from https://www.raspberrypi.org/downloads/raspbian/
 Put the image on a SD card (ymmv)
 
 Boot, login using pi/raspberry
@@ -76,10 +76,11 @@ cd Moki-ROV2
  
 # Check/Update the Moki-ROV config.js file, for your settings/config.
 vi config.js
+vi arduino/src/config.h
 
 # Start the ROV software
 node rov.js
-(Open browser to Raspberry PI IP adress, port 80 => http://172.16.10.20)
+(Open browser to Raspberry PI's IP adress, port 80 => http://172.16.10.20)
 ```
 
 ## Controls
