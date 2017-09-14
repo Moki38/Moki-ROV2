@@ -1,4 +1,4 @@
-# Moki-ROV2 (Pilot your ROV directly from your PC webbrowser browser)
+# Moki-ROV2 (Pilot your ROV directly from your PC)
 
 If you gonna use this code, please let me know by email!
 
