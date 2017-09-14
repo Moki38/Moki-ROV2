@@ -373,7 +373,7 @@ var gamepadctrl = function(gamepad) {
 // 6 Left trigger (0-100)
         event = 'Stop';
         if ((res[1] == 6) && (res[3] > 50)) {
-            event = 'Strafe_l';
+            event = 'Left';
         }
         if (arduino) {
             if (event != last_event) {
@@ -383,7 +383,7 @@ var gamepadctrl = function(gamepad) {
         }
 // 7 Right trigger (0-100)
         if ((res[1] == 7) && (res[3] > 50)) {
-           event = 'Strafe_r';
+           event = 'Right';
         }
         if (arduino) {
             if (event != last_event) {
@@ -475,10 +475,10 @@ var gamepadctrl = function(gamepad) {
         event = 'Stop';
 // Axis 0 (LS hor)
         if ((res[1] == 0) && (res[3] > 50)) {
-            event = 'Right';
+            event = 'Strafe_r';
         };
         if ((res[1] == 0) && (res[3] < -50)) {
-           event = 'Left';
+           event = 'Strafe_l';
         };
 // Axis 1 (LS vert)
         if ((res[1] == 1) && (res[3] > 50)) {
