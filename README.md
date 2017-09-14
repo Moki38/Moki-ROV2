@@ -34,7 +34,7 @@ Download "RASPBIAN LITE" from https://www.raspberrypi.org/downloads/raspbian/
 Put the image on a SD card (ymmv)
 
 Boot, login using pi/raspberry
-change the password
+Change the password
 
 Update your Raspberry PI distribution.
 ```
@@ -74,7 +74,7 @@ git clone https://github.com/Moki38/Moki-ROV2.git
 cd Moki-ROV2
 ./install.sh
  
-# Check/Update the Moki-ROV config.js file, for your settings/config.
+# Check/Update the Moki-ROV config files, for your settings/config.
 vi config.js
 vi arduino/src/config.h
 
