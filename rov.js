@@ -44,6 +44,16 @@ if (config.datalogger.logstash == true) {
 var rovdata = {};
 
 //
+// Set the Site name
+//
+
+if (config.site.name) {
+    rovdata.Site = config.site.name;
+} else {
+    rovdata.Site = "Unknown,TST";
+}
+
+//
 // Init rovdata vars
 //
 rovdata.Version = shell.cat('VERSION').stdout.trim();

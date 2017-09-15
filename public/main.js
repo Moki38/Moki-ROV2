@@ -38,6 +38,7 @@ var y = 30;
 
 var rovdata = {};
 
+var site="Unknown,TST";
 var mbar = 0;
 var temp = 0;
 var depth = 0;
@@ -142,6 +143,7 @@ function update(rovdata) {
   var t;
 
   version = rovdata.Version;
+  site = rovdata.Site;
   mbar = rovdata.Pressure;
   t = rovdata.Depth;
   depth = t.toFixed(2);
@@ -185,7 +187,7 @@ function display(rovdata) {
   rov_context.lineWidth = 1;
   rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( today.toLocaleDateString()+" "+today.toLocaleTimeString(), 10, 20);
-  rov_context.fillText( "Site :      Groningen,NL", 10, 40);
+  rov_context.fillText( "Site : "+site, 10, 40);
   rov_context.fillText( "MokiROV2 (RaspPI/Arduino)", 10, 60);
   if (constatus == 'Disonnected') {
     rov_context.beginPath();
