@@ -30,16 +30,16 @@
 #include <Servo.h>
 #include <PID_v1.h>
 #include "Config.h"
-#include "Thruster.h"
 #include "Sensor.h"
+#include "Thruster.h"
 
-class Pilot {
+class Pilot : public Sensor, public Thruster {
     public:
         void On();
         void Off();
         bool Active();
         void Heading(int);
-        void Loop(Thruster&, Sensor&);
+        void Loop();
         void Setup();
     private:
         bool active = false;

@@ -111,10 +111,11 @@ void loop()
     //
     if ((time >= (thruster_time + 150)) || (time < thruster_time)) {
         if (P.Active() == true) {
-            P.Loop(T, S);
+            P.Loop();
         }
         if (H.Active() == true) {
-            H.Loop(T, S);
+//            H.Loop(T, S);
+            H.Loop();
         }
         thruster_time = millis();
     }

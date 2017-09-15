@@ -30,16 +30,17 @@
 #include <Servo.h>
 #include <PID_v1.h>
 #include "Config.h"
-#include "Thruster.h"
 #include "Sensor.h"
+#include "Thruster.h"
 
-class Hover {
+class Hover : public Sensor, public Thruster {
     public:
         void On();
         void Off();
         bool Active();
         void Depth(int);
-        void Loop(Thruster&, Sensor&);
+//        void Loop(Thruster&, Sensor&);
+        void Loop();
         void Setup();
     private:
         bool active = false;

@@ -67,11 +67,11 @@ void Hover::Depth(int d) {
 //
 // Loop
 //
-void Hover::Loop(Thruster &T, Sensor &S) {
+void Hover::Loop() {
     //
     // Hover
     //
-    H_Input = S.Depth();
+    H_Input = Sensor::Depth();
     H_Setpoint = hover_depth;
 
     double gap = abs(H_Setpoint - H_Input);
@@ -93,16 +93,16 @@ void Hover::Loop(Thruster &T, Sensor &S) {
     Serial.println(H_Setpoint);
     Serial.print("Hover_Output:");
     Serial.println(H_Output);
-    if (S.Depth() > hover_depth) {
+    if (Sensor::Depth() > hover_depth) {
         Serial.println("Hover_Up:");
         Serial.println(H_Output);
-        T.Up(H_Output);
-    } else if (S.Depth() < hover_depth) {
+        Thruster::Up(H_Output);
+    } else if (Sensor::Depth() < hover_depth) {
         Serial.println("Hover_Dive:");
         Serial.println(H_Output);
-        T.Dive(H_Output);
+        Thruster::Dive(H_Output);
     } else {
-        T.Stop();
+        Thruster::Stop();
         H_Output = 0;
         Serial.print("Hover_Output:");
         Serial.println(H_Output);
