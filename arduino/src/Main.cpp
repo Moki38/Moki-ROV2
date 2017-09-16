@@ -84,6 +84,11 @@ void pingpong_loop()
     Serial.println("Pong:0");
     if (pong_time >= (ping_time + 2500)) {
         T.Stop();
+        P.Stop();
+        H.Stop();
+        L.Off();
+        T.Power(0);
+        T.Arm(false);
         Serial.println("Timeout:1");
     }
 }
@@ -190,25 +195,25 @@ void loop()
             T.Roll_Right(T.Power());
         } else if (command == "Roll_l") {
             T.Roll_Left(T.Power());
-        } else if (command == "Light1") {
+        } else if (command == "Light_1") {
             if (value == 0) {
                 L.Off();
             } else {
                 L.On();
             }
-        } else if (command == "Light2") {
+        } else if (command == "Light_2") {
             if (value == 0) {
                 L.Off();
             } else {
                 L.On();
             }
-        } else if (command == "Light3") {
+        } else if (command == "Light_3") {
             if (value == 0) {
                 L.Off();
             } else {
                 L.On();
             }
-        } else if (command == "Light4") {
+        } else if (command == "Light_4") {
             if (value == 0) {
                 L.Off();
             } else {

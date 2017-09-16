@@ -35,6 +35,7 @@ void Light::Off() {
 #ifdef LIGHT2_PWM
     L2.writeMicroseconds(LIGHT2_OFF);
 #endif
+    Serial.print("Light_2:");
     Serial.println(0);
 #ifdef LIGHT3_PWM
     L3.writeMicroseconds(LIGHT3_OFF);
@@ -60,6 +61,7 @@ void Light::On() {
 #ifdef LIGHT2_PWM
     L2.writeMicroseconds(LIGHT2_ON);
 #endif
+    Serial.print("Light_2:");
     Serial.println(1);
 #ifdef LIGHT3_PWM
     L3.writeMicroseconds(LIGHT3_ON);

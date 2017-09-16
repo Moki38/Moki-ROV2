@@ -2,28 +2,34 @@
 All notable changes to MokiROV2 will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
+html).
 
 ## ToDo
 Fix HOVER PID
 Fix PILOT PID
 Add Kalman filter for IMU
 Add Kalman filter for DEPTH
+Fix PONG Timeout
 
 ## [Unreleased]
 
+## [2.0.1] - 2017-09-12
+Fixed PING Timeout (PI -> Arduino)
+Added support for 4 lights
+
 ## [2.0.0] - 2017-09-12
 Major rewrite of the Arduino Code (Now with Classes and C++)
-Got rid of the dutch/english mixup of motor and thruster :) 
+Got rid of the dutch/english mixup of motor and thruster :)
 Fixed HOVER PID
 Added winston-logstash logging for data analysis
-Expand logfile analysis
+Expanded logfile analysis
 Fix logfile creation fills filesystem to 100%
 
 ## [1.0.2] - 2017-09-08
 Added version on display
 Added update.sh
-Added Sensor error on display 
+Added Sensor error on display
 
 ## [1.0.1] - 2017-09-06
 Added logfile function and analysis.js program (start)
@@ -37,3 +43,4 @@ Fixed PILOT PID
 ## [1.0.0] - 2017-09-06
 ### Added
 - First release :) by @eric.
+

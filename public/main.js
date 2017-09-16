@@ -53,6 +53,7 @@ var lights = false;
 var hover = false;
 var pilot = false;
 var pilotset = 0;
+var timeout = 0;
 
 var power = 0;
 var armed = 0;
@@ -171,6 +172,7 @@ function update(rovdata) {
   power = rovdata.Power;
   armed = rovdata.Armed;
   camx = rovdata.Camx_pos-1500;
+  timeout = rovdata.Timeout;
 
   thruster_1 = rovdata.Thruster_1;
   thruster_2 = rovdata.Thruster_2;
@@ -189,11 +191,20 @@ function display(rovdata) {
   rov_context.fillText( today.toLocaleDateString()+" "+today.toLocaleTimeString(), 10, 20);
   rov_context.fillText( "Site : "+site, 10, 40);
   rov_context.fillText( "MokiROV2 (RaspPI/Arduino)", 10, 60);
+
   if (constatus == 'Disonnected') {
     rov_context.beginPath();
     rov_context.fillStyle = "#aa0000";
     rov_context.font = '20pt Verdana';
     rov_context.fillText("DISCONNECTED", (rov_canvas.width/2-110), rov_canvas.height/2-140);
+    rov_context.fill();
+  }
+
+  if (timeout == 1) {
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.font = '20pt Verdana';
+    rov_context.fillText("TIMEOUT", (rov_canvas.width/2-60), rov_canvas.height/2-110);
     rov_context.fill();
   }
 

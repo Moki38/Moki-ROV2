@@ -112,7 +112,11 @@ function parse_serial(line) {
           rovdata.Ping = 1;
           break;
       case    'Pong':
+          rovdata.Timeout = 0;
           rovdata.Pong = 1;
+          break;
+      case    'Timeout':
+          rovdata.Timeout = 1;
           break;
       case    'Pressure':
           rovdata.Pressure = Number(res[1]);
@@ -212,6 +216,18 @@ function parse_serial(line) {
           break;
       case    'Power':
           rovdata.Power = Number(res[1]);
+          break;
+      case    'Light_1':
+          rovdata.Light_1 = Number(res[1]);
+          break;
+      case    'Light_2':
+          rovdata.Light_2 = Number(res[1]);
+          break;
+      case    'Light_3':
+          rovdata.Light_3 = Number(res[1]);
+          break;
+      case    'Light_4':
+          rovdata.Light_4 = Number(res[1]);
           break;
       case    'Thruster_1':
           rovdata.Thruster_1 = Number(res[1]);
@@ -575,14 +591,18 @@ socket.on('keydown', function(event) {
 var lights = function() {
     if (rovdata.Lights == false) {
         if (arduino) {
-            port.write('Light1:1\n');
-            port.write('Light2:1\n');
+            port.write('Light_1:1\n');
+            port.write('Light_2:1\n');
+            port.write('Light_3:1\n');
+            port.write('Light_4:1\n');
         }
         rovdata.Lights = true;
     } else {
         if (arduino) {
-            port.write('Light1:0\n');
-            port.write('Light2:0\n');
+            port.write('Light_1:0\n');
+            port.write('Light_2:0\n');
+            port.write('Light_3:0\n');
+            port.write('Light_4:0\n');
         }
         rovdata.Lights = false;
     }

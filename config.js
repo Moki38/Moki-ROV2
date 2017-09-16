@@ -16,7 +16,7 @@
         "logfile_name": "./log/log-mokirov2.log",
         "maxsize": 5242880,
         "maxfiles": 5,
-        "logstash": false,
+        "logstash": true,
         "host": "82.72.116.14",
         "port": 1520,
         "nodename": "MokiROV2"
