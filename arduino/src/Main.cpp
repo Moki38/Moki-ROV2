@@ -85,9 +85,9 @@ void pingpong_loop()
     Serial.println("Pong:0");
     if (pong_time >= (ping_time + 2500)) {
         T.Stop(R);
-        P.Stop(R);
-        H.Stop(R);
         L.Off(R);
+        R.Pilot = false;
+        R.Hover = false;
         R.Power = 0;
         R.Armed = false;
         Serial.println("Timeout:1");

@@ -117,7 +117,7 @@
 #define	IMU_ADDR	55
 
 #define DEPTH_I2C
-#define DEPTH_TYPE	1	// 1 = MS5837
+#define DEPTH_TYPE	1	// 1 = MS5837_30BA
 #define DEPTH_WATER	1	// 1 = fresh, 2 = salt
 #define DEPTH_ADDR	0x76
 

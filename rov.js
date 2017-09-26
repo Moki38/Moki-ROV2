@@ -144,7 +144,10 @@ function parse_serial(line) {
       case    'Pressure':
           rovdata.Pressure = Number(res[1]);
           break;
-      case    'Hover_Gag':
+      case    'Hover':
+          rovdata.Hover = Number(res[1]);
+          break;
+      case    'Hover_Gap':
           rovdata.Hover_Gap = Number(res[1]);
           break;
       case    'Hover_Input':
@@ -161,6 +164,9 @@ function parse_serial(line) {
           break;
       case    'Hover_Dive':
           rovdata.Hover_Dive = Number(res[1]);
+          break;
+      case    'Pilot':
+          rovdata.Pilot = Number(res[1]);
           break;
       case    'Pilot_Gap':
           rovdata.Pilot_Gap = Number(res[1]);

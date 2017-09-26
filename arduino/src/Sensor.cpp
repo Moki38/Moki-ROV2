@@ -153,6 +153,17 @@ void Sensor::Depth_Loop() {
 
 void Sensor::Depth_Setup() {
     MS5837_status = MS5837_sensor.init();
+
+//
+// Blue Robotics Bar30 / MS5837_30BA
+//
+    if (DEPTH_TYPE == 1) {
+        MS5837_sensor.setModel(MS5837::MS5837_30BA);
+    }
+
+//
+// Set Type of Water
+//
     if (DEPTH_WATER == 1) {
         MS5837_sensor.setFluidDensity(997); // kg/m^3 (freshwater)
     } else {

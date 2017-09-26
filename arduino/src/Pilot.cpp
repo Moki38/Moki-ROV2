@@ -49,55 +49,59 @@ void Pilot::Loop(Rov &R) {
     //
     // Pilot
     //
-    int direction = 0;
+    Serial.print("Pilot:");
+    Serial.println(R.Pilot);
+    if (R.Pilot) {
+        int direction = 0;
 
-    P_Input = R.Heading + 360;
-    P_Setpoint = pilot_heading + 360;
+        P_Input = R.Heading + 360;
+        P_Setpoint = pilot_heading + 360;
 
-    double gap = abs(P_Setpoint - P_Input);
+        double gap = abs(P_Setpoint - P_Input);
 
-    Serial.print("Pilot_Gap:");
-    Serial.println(gap);
+        Serial.print("Pilot_Gap:");
+        Serial.println(gap);
 
-    if (P_Input > P_Setpoint) {
-        direction = 2;
-        P_Input = pilot_heading + 360;
-        P_Setpoint = R.Heading + 360;
-    }
-    if (P_Input < P_Setpoint) {
-        direction = 1;
-    }
-
+        if (P_Input > P_Setpoint) {
+            direction = 2;
+            P_Input = pilot_heading + 360;
+            P_Setpoint = R.Heading + 360;
+        }
+        if (P_Input < P_Setpoint) {
+            direction = 1;
+        }
 
 //        if (gap < 10) {
             P_PID.SetTunings(P_consKp, P_consKi, P_consKd);
 //        } else {
 //            P_PID.SetTunings(aggKp, aggKi, aggKd);
 //        }
-    P_PID.Compute();
+        P_PID.Compute();
 
-    Serial.print("Pilot_Heading_Input:");
-    Serial.println(P_Input);
-    Serial.print("Pilot_Heading_Output:");
-    Serial.println(P_Output);
-    Serial.print("Pilot_Heading_Setpoint:");
-    Serial.println(P_Setpoint);
+        Serial.print("Pilot_Heading_Input:");
+        Serial.println(P_Input);
+        Serial.print("Pilot_Heading_Output:");
+        Serial.println(P_Output);
+        Serial.print("Pilot_Heading_Setpoint:");
+        Serial.println(P_Setpoint);
 
-    if (P_Output > 30) {
+        if (P_Output > 30) {
             //    Serial.print("DEBUG_PILOT_HEADING_OUTPUT_MAX:");
             //    Serial.println(P_Output);
-         P_Output = 0;
-    };
+             P_Output = 0;
+        };
 
-    if (direction == 2) {
-        Serial.print("Pilot_Heading_Output_Left:");
-        Serial.println(P_Output);
-        Thruster::Left(R, P_Output);
+        if (direction == 2) {
+            Serial.print("Pilot_Heading_Output_Left:");
+            Serial.println(P_Output);
+            Thruster::Left(R, P_Output);
 
-    } else if (direction == 1) {
-        Serial.print("Pilot_Heading_Output_Right:");
-        Serial.println(P_Output);
-        Thruster::Right(R, P_Output);
+        } else if (direction == 1) {
+            Serial.print("Pilot_Heading_Output_Right:");
+            Serial.println(P_Output);
+            Thruster::Right(R, P_Output);
+        }
+
     } else {
         Thruster::Stop(R);
         P_Output = 0;

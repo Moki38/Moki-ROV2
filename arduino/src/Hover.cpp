@@ -49,36 +49,41 @@ void Hover::Loop(Rov &R) {
     //
     // Hover
     //
-    H_Input = R.Depth;
-    H_Setpoint = hover_depth;
+    Serial.print("Hover:");
+    Serial.println(R.Hover);
+    if (R.Hover) {
 
-    double gap = abs(H_Setpoint - H_Input);
+        H_Input = R.Depth;
+        H_Setpoint = hover_depth;
 
-    Serial.print("Hover_Gap:");
-    Serial.println(gap);
+        double gap = abs(H_Setpoint - H_Input);
 
-    if (gap < 10) {
-        H_PID.SetTunings(H_consKp, H_consKi, H_consKd);
-    } else {
-        H_PID.SetTunings(H_aggKp, H_aggKi, H_aggKd);
-    }
+        Serial.print("Hover_Gap:");
+        Serial.println(gap);
 
-    H_PID.Compute();
+        if (gap < 10) {
+            H_PID.SetTunings(H_consKp, H_consKi, H_consKd);
+        } else {
+            H_PID.SetTunings(H_aggKp, H_aggKi, H_aggKd);
+        }
 
-    Serial.print("Hover_Input:");
-    Serial.println(H_Input);
-    Serial.print("Hover_Setpoint:");
-    Serial.println(H_Setpoint);
-    Serial.print("Hover_Output:");
-    Serial.println(H_Output);
-    if (R.Depth > hover_depth) {
-        Serial.println("Hover_Up:");
+        H_PID.Compute();
+
+        Serial.print("Hover_Input:");
+        Serial.println(H_Input);
+        Serial.print("Hover_Setpoint:");
+        Serial.println(H_Setpoint);
+        Serial.print("Hover_Output:");
         Serial.println(H_Output);
-        Thruster::Up(R, H_Output);
-    } else if (R.Depth < hover_depth) {
-        Serial.println("Hover_Dive:");
-        Serial.println(H_Output);
-        Thruster::Dive(R, H_Output);
+        if (R.Depth > hover_depth) {
+            Serial.println("Hover_Up:");
+            Serial.println(H_Output);
+            Thruster::Up(R, H_Output);
+        } else if (R.Depth < hover_depth) {
+            Serial.println("Hover_Dive:");
+            Serial.println(H_Output);
+            Thruster::Dive(R, H_Output);
+        }
     } else {
         Thruster::Stop(R);
         H_Output = 0;
