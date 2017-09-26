@@ -36,6 +36,7 @@
 #include "MS5837.h"
 
 #include "Config.h"
+#include "Rov.h"
 
 #include "Thruster.h"
 #include "Light.h"

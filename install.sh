@@ -62,15 +62,6 @@ platformio lib install git+https://github.com/sparkfun/SparkFun_MPU-9250_Breakou
 platformio lib install git+https://github.com/bluerobotics/Arduino_I2C_ESC.git
 platformio lib install git+https://github.com/br3ttb/Arduino-PID-Library.git
 
-#mkdir lib
-#cd lib
-#git clone https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
-#git clone https://github.com/adafruit/Adafruit_Sensor.git
-#git clone https://github.com/adafruit/Adafruit_BNO055.git
-#git clone https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
-#git clone https://github.com/bluerobotics/Arduino_I2C_ESC.git
-#cd ..
-
 platformio run
 platformio run --target upload
 

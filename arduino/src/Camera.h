@@ -29,16 +29,15 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "Config.h"
+#include "Rov.h"
 
 class Camera {
     public:
-        void Move_X(int);
-        void Move_Y(int);
-        void Center();
-        void Setup();
+        void Move_X(Rov&, int);
+        void Move_Y(Rov&, int);
+        void Center(Rov&);
+        void Setup(Rov&);
     private:
-        Servo C1;
-        Servo C2;
 };
 #endif
 

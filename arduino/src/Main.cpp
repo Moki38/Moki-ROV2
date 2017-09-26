@@ -33,6 +33,7 @@ String value_string = "";
 int value = 0;
 boolean command_complete = false;
 
+Rov R;
 Thruster T;
 Light L;
 Camera C;
@@ -51,12 +52,12 @@ void setup()
 {
     unsigned int timeout = millis();
 
-    T.Setup();
-    L.Setup();
-    C.Setup();
-    S.Setup();
-    P.Setup();
-    H.Setup();
+    T.Setup(R);
+    L.Setup(R);
+    C.Setup(R);
+    S.Setup(R);
+    P.Setup(R);
+    H.Setup(R);
  
     // Init serial communication
     serial_command.reserve(200);
@@ -83,12 +84,12 @@ void pingpong_loop()
     pong_time = millis();
     Serial.println("Pong:0");
     if (pong_time >= (ping_time + 2500)) {
-        T.Stop();
-        P.Stop();
-        H.Stop();
-        L.Off();
-        T.Power(0);
-        T.Arm(false);
+        T.Stop(R);
+        P.Stop(R);
+        H.Stop(R);
+        L.Off(R);
+        R.Power = 0;
+        R.Armed = false;
         Serial.println("Timeout:1");
     }
 }
@@ -103,7 +104,7 @@ void loop()
     // Every 500 μs run the sensor loop
     //
     if ((time >= (S.Time() + 500)) || (time < S.Time())) {
-        S.Loop();
+        S.Loop(R);
     }
     //
     // Every 2500 μs run the ping loop
@@ -115,18 +116,17 @@ void loop()
     // Every 150 μs run the thruster loop.
     //
     if ((time >= (thruster_time + 150)) || (time < thruster_time)) {
-        if (P.Active() == true) {
-            P.Loop();
+        if (R.Pilot == true) {
+            P.Loop(R);
         }
-        if (H.Active() == true) {
-//            H.Loop(T, S);
-            H.Loop();
+        if (R.Hover == true) {
+            H.Loop(R);
         }
         thruster_time = millis();
     }
 
     //
-    // Command
+    // Incoming Serial Command from PI.
     //
     if (command_complete) {
         serial_command.trim();
@@ -143,86 +143,89 @@ void loop()
         }
 
         if (command == "ARM") {
-            T.Arm(true);
+            R.Armed = true;
+
         } else if (command == "Ping") {
             ping_time = millis();
+
         } else if (command == "Disarm") {
-            T.Stop();
-            L.Off();
-            T.Power(0);
-            T.Arm(false);
+            T.Stop(R);
+            L.Off(R);
+            R.Power = 0;
+            R.Armed = false;
 
         } else if (command == "Stop") {
-            T.Stop();
+            T.Stop(R);
 
         } else if (command == "Pilot") {
             if (value >= 400) {
-                P.Off();
-                T.Stop();
+                R.Pilot = false;
             } else {
-                P.On();
+                R.Pilot = true;
                 P.Heading(value);
             }
+
         } else if (command == "Hover") {
             if (value >= 0) {
-                H.On();
+                R.Hover = true;
                 H.Depth(value);
             } else {
-                H.Off();
-                T.Stop();
+                R.Hover = false;
             }
+
         } else if (command == "Power") {
-            T.Power(value);
+            R.Power = value;
 
             // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
         } else if (command == "Forward") {
-            T.Forward(T.Power());
+            T.Forward(R);
         } else if (command == "Reverse") {
-            T.Reverse(T.Power());
+            T.Reverse(R);
         } else if (command == "Right") {
-            T.Right(T.Power());
+            T.Right(R);
         } else if (command == "Left") {
-            T.Left(T.Power());
+            T.Left(R);
         } else if (command == "Dive") {
-            T.Dive(T.Power());
+            T.Dive(R);
         } else if (command == "Up") {
-            T.Up(T.Power());
+            T.Up(R);
         } else if (command == "Strafe_r") {
-            T.Strafe_Right(T.Power());
+            T.Strafe_Right(R);
         } else if (command == "Strafe_l") {
-            T.Strafe_Left(T.Power());
+            T.Strafe_Left(R);
         } else if (command == "Roll_r") {
-            T.Roll_Right(T.Power());
+            T.Roll_Right(R);
         } else if (command == "Roll_l") {
-            T.Roll_Left(T.Power());
+            T.Roll_Left(R);
         } else if (command == "Light_1") {
             if (value == 0) {
-                L.Off();
+                L.Off(R);
             } else {
-                L.On();
+                L.On(R);
             }
         } else if (command == "Light_2") {
             if (value == 0) {
-                L.Off();
+                L.Off(R);
             } else {
-                L.On();
+                L.On(R);
             }
         } else if (command == "Light_3") {
             if (value == 0) {
-                L.Off();
+                L.Off(R);
             } else {
-                L.On();
+                L.On(R);
             }
         } else if (command == "Light_4") {
             if (value == 0) {
-                L.Off();
+                L.Off(R);
             } else {
-                L.On();
+                L.On(R);
             }
+
         } else if (command == "Camx") {
-            C.Move_X(value);
+            C.Move_X(R, value);
         } else if (command == "Camy") {
-            C.Move_Y(value);
+            C.Move_Y(R, value);
         }
 
         serial_command = "";

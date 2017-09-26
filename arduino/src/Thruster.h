@@ -29,6 +29,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "Config.h"
+#include "Rov.h"
 
 #define THRUSTER_FORWARD	0b0000000001
 #define THRUSTER_REVERSE	0b0000000010
@@ -43,44 +44,31 @@
 
 class Thruster {
     public:
-        void Power(int);
-        int Power();
-        void Arm(bool);
-        bool Arm();
-// Right Left Reverse Forward Strafe_r Strafe_l Dive Up
-        void Run(int, int);
-        void Forward(int);
-        void Reverse(int);
-        void Right(int);
-        void Left(int);
-        void Up(int);
-        void Dive(int);
-        void Strafe_Right(int);
-        void Strafe_Left(int);
-        void Roll_Right(int);
-        void Roll_Left(int);
-        void Forward();
-        void Reverse();
-        void Right();
-        void Left();
-        void Up();
-        void Dive();
-        void Strafe_Right();
-        void Strafe_Left();
-        void Roll_Right();
-        void Roll_Left();
+        void Run(Rov&, int, int);
+        void Forward(Rov&);
+        void Forward(Rov&, int);
+        void Reverse(Rov&);
+        void Reverse(Rov&, int);
+        void Right(Rov&);
+        void Right(Rov&, int);
+        void Left(Rov&);
+        void Left(Rov&, int);
+        void Up(Rov&);
+        void Up(Rov&, int);
+        void Dive(Rov&);
+        void Dive(Rov&, int);
+        void Strafe_Right(Rov&);
+        void Strafe_Right(Rov&, int);
+        void Strafe_Left(Rov&);
+        void Strafe_Left(Rov&, int);
+        void Roll_Right(Rov&);
+        void Roll_Right(Rov&, int);
+        void Roll_Left(Rov&);
+        void Roll_Left(Rov&, int);
 
-        void Stop();
-        void Setup();
+        void Stop(Rov&);
+        void Setup(Rov&);
     private:
-        bool ARMED = false;
-        int POWER = 0;
-        Servo T1;
-        Servo T2;
-        Servo T3;
-        Servo T4;
-        Servo T5;
-        Servo T6;
 };
 #endif
 

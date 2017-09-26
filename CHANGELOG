@@ -10,9 +10,13 @@ Fix HOVER PID
 Fix PILOT PID
 Add Kalman filter for IMU
 Add Kalman filter for DEPTH
-Fix PONG Timeout
+BUG: Fast switching gamepad directions, crashes rov.js
 
 ## [Unreleased]
+Fixed PONG Timeout
+
+## [2.0.2] - 2017-09-26
+Fixed Arduino code, diamond of classes (New class Rov introduced)
 
 ## [2.0.1] - 2017-09-12
 Fixed PING Timeout (PI -> Arduino)

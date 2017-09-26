@@ -35,6 +35,7 @@
 #include <utility/imumaths.h>
 #include <MS5837.h>
 #include "Config.h"
+#include "Rov.h"
 
 class Sensor {
     public:
@@ -68,8 +69,8 @@ class Sensor {
         void Current_Setup();
         void Amps_Setup();
         // Overall Setup All
-        void Loop();
-        void Setup();
+        void Loop(Rov&);
+        void Setup(Rov&);
         int Time();
         void Time(int);
     private:

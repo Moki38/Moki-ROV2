@@ -197,32 +197,38 @@ void Sensor::Time(int time) {
     sensor_time = time;
 }
 
-void Sensor::Setup() {
+void Sensor::Setup(Rov &R) {
     Imu_Setup();
     Depth_Setup();
     Current_Setup();
     Amps_Setup();
 }
 
-void Sensor::Loop() {
+void Sensor::Loop(Rov &R) {
     Serial.print("Time:");
     sensor_time = millis();
     Serial.println(sensor_time);
 
+    R.Current = Current();
     Serial.print("Volt:");
-    Serial.println(Current(),4);
+    Serial.println(R.Current,4);
+    R.Amps = Amps();
     Serial.print("Amps:");
-    Serial.println(Amps(),4);
+    Serial.println(R.Amps,4);
 
     Depth_Loop();
+    R.Pressure = Pressure();
     Serial.print("Pressure:");
-    Serial.println(Pressure(), 4);
+    Serial.println(R.Pressure, 4);
+    R.Temp_OUT = Temp();
     Serial.print("Temp_Out:");
-    Serial.println(Temp());
+    Serial.println(R.Temp_OUT);
+    R.Depth = Depth();
     Serial.print("Depth:");
-    Serial.println(Depth(), 4);
+    Serial.println(R.Depth, 4);
+    R.Altitude = Alt();
     Serial.print("Altitude:");
-    Serial.println(Alt());
+    Serial.println(R.Altitude);
 
     Imu_Loop();
     Serial.print("X:");
@@ -237,14 +243,18 @@ void Sensor::Loop() {
     Serial.println(Imu_Accl_Y(), 4);
     Serial.print("ACCL_Z:");
     Serial.println(Imu_Accl_Z(), 4);
+    R.Heading = Imu_Heading();
     Serial.print("Heading:");
-    Serial.println(Imu_Heading(), 4);
+    Serial.println(R.Heading, 4);
+    R.Roll = Imu_Roll();
     Serial.print("Roll:");
-    Serial.println(Imu_Roll(), 4);
+    Serial.println(R.Roll, 4);
+    R.Pitch = Imu_Pitch();
     Serial.print("Pitch:");
-    Serial.println(Imu_Pitch(), 4);
+    Serial.println(R.Pitch, 4);
+    R.Temp_IN = Imu_Temp();
     Serial.print("Temp_In:");
-    Serial.println(Imu_Temp());
+    Serial.println(R.Temp_IN);
     Serial.print("Sys:");
     Serial.println(Imu_System());
     Serial.print("Gyro:");

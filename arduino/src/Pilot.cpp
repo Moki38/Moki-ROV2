@@ -36,29 +36,7 @@ double P_consKd=0.25;
 PID P_PID(&P_Input, &P_Output, &P_Setpoint, P_consKp, P_consKi, P_consKd, DIRECT);
 
 //
-// On
-//
-void Pilot::On() {
-     active = true;
-}
-
-//
-// Off
-//
-void Pilot::Off() {
-     active = false;
-}
-
-
-//
-// Active
-//
-bool Pilot::Active() {
-    return active;
-}
-
-//
-// Heading
+// Set Pilot Heading
 //
 void Pilot::Heading(int h) {
      pilot_heading = h;
@@ -67,13 +45,13 @@ void Pilot::Heading(int h) {
 //
 // Loop
 //
-void Pilot::Loop() {
+void Pilot::Loop(Rov &R) {
     //
     // Pilot
     //
     int direction = 0;
 
-    P_Input = Sensor::Imu_Heading() + 360;
+    P_Input = R.Heading + 360;
     P_Setpoint = pilot_heading + 360;
 
     double gap = abs(P_Setpoint - P_Input);
@@ -84,7 +62,7 @@ void Pilot::Loop() {
     if (P_Input > P_Setpoint) {
         direction = 2;
         P_Input = pilot_heading + 360;
-        P_Setpoint = Sensor::Imu_Heading() + 360;
+        P_Setpoint = R.Heading + 360;
     }
     if (P_Input < P_Setpoint) {
         direction = 1;
@@ -114,14 +92,14 @@ void Pilot::Loop() {
     if (direction == 2) {
         Serial.print("Pilot_Heading_Output_Left:");
         Serial.println(P_Output);
-        Thruster::Left(P_Output);
+        Thruster::Left(R, P_Output);
 
     } else if (direction == 1) {
         Serial.print("Pilot_Heading_Output_Right:");
         Serial.println(P_Output);
-        Thruster::Right(P_Output);
+        Thruster::Right(R, P_Output);
     } else {
-        Thruster::Stop();
+        Thruster::Stop(R);
         P_Output = 0;
     }
 }
@@ -129,7 +107,8 @@ void Pilot::Loop() {
 //
 // Setup
 //
-void Pilot::Setup() {
+void Pilot::Setup(Rov &R) {
+    R.Pilot = false;
     P_PID.SetMode(AUTOMATIC);
     P_PID.SetOutputLimits(0, 20);
 }

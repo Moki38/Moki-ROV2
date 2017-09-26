@@ -26,24 +26,24 @@
 //
 // Off
 //
-void Light::Off() {
+void Light::Off(Rov &R) {
 #ifdef LIGHT1_PWM
-    L1.writeMicroseconds(LIGHT1_OFF);
+    R.L1.writeMicroseconds(LIGHT1_OFF);
 #endif
     Serial.print("Light_1:");
     Serial.println(0);
 #ifdef LIGHT2_PWM
-    L2.writeMicroseconds(LIGHT2_OFF);
+    R.L2.writeMicroseconds(LIGHT2_OFF);
 #endif
     Serial.print("Light_2:");
     Serial.println(0);
 #ifdef LIGHT3_PWM
-    L3.writeMicroseconds(LIGHT3_OFF);
+    R.L3.writeMicroseconds(LIGHT3_OFF);
 #endif
     Serial.print("Light_3:");
     Serial.println(0);
 #ifdef LIGHT4_PWM
-    L4.writeMicroseconds(LIGHT4_OFF);
+    R.L4.writeMicroseconds(LIGHT4_OFF);
 #endif
     Serial.print("Light_4:");
     Serial.println(0);
@@ -52,24 +52,24 @@ void Light::Off() {
 //
 // On
 //
-void Light::On() {
+void Light::On(Rov &R) {
 #ifdef LIGHT1_PWM
-    L1.writeMicroseconds(LIGHT1_ON);
+    R.L1.writeMicroseconds(LIGHT1_ON);
 #endif
     Serial.print("Light_1:");
     Serial.println(1);
 #ifdef LIGHT2_PWM
-    L2.writeMicroseconds(LIGHT2_ON);
+    R.L2.writeMicroseconds(LIGHT2_ON);
 #endif
     Serial.print("Light_2:");
     Serial.println(1);
 #ifdef LIGHT3_PWM
-    L3.writeMicroseconds(LIGHT3_ON);
+    R.L3.writeMicroseconds(LIGHT3_ON);
 #endif
     Serial.print("Light_3:");
     Serial.println(1);
 #ifdef LIGHT4_PWM
-    L4.writeMicroseconds(LIGHT4_ON);
+    R.L4.writeMicroseconds(LIGHT4_ON);
 #endif
     Serial.print("Light_4:");
     Serial.println(1);
@@ -78,28 +78,28 @@ void Light::On() {
 //
 // Setup
 //
-void Light::Setup() {
+void Light::Setup(Rov &R) {
 #ifdef LIGHT1_PWM
-    L1.attach(LIGHT1_PIN);
-    L1.writeMicroseconds(LIGHT1_OFF);
+    R.L1.attach(LIGHT1_PIN);
+    R.L1.writeMicroseconds(LIGHT1_OFF);
 #endif
     Serial.print("Light_1:");
     Serial.println(0);
 #ifdef LIGHT2_PWM
-    L2.attach(LIGHT2_PIN);
-    L2.writeMicroseconds(LIGHT2_OFF);
+    R.L2.attach(LIGHT2_PIN);
+    R.L2.writeMicroseconds(LIGHT2_OFF);
 #endif
     Serial.print("Light_2:");
     Serial.println(0);
 #ifdef LIGHT3_PWM
-    L3.attach(LIGHT3_PIN);
-    L3.writeMicroseconds(LIGHT3_OFF);
+    R.L3.attach(LIGHT3_PIN);
+    R.L3.writeMicroseconds(LIGHT3_OFF);
 #endif
     Serial.print("Light_3:");
     Serial.println(0);
 #ifdef LIGHT4_PWM
-    L4.attach(LIGHT4_PIN);
-    L4.writeMicroseconds(LIGHT4_OFF);
+    R.L4.attach(LIGHT4_PIN);
+    R.L4.writeMicroseconds(LIGHT4_OFF);
 #endif
     Serial.print("Light_4:");
     Serial.println(0);

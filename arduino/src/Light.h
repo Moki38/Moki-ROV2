@@ -29,17 +29,14 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "Config.h"
+#include "Rov.h"
 
 class Light {
     public:
-        void Off();
-        void On();
-        void Setup();
+        void Off(Rov&);
+        void On(Rov&);
+        void Setup(Rov&);
     private:
-        Servo L1;
-        Servo L2;
-        Servo L3;
-        Servo L4;
 };
 #endif
 

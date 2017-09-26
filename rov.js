@@ -98,6 +98,29 @@ if (shell.test('-c', config.serial.device)) {
     arduino = 1;
 }
 
+
+//
+// Write Arduino
+//
+function arduino_write(line) {
+    arduino = port.isOpen();
+//    console.log("Gamepad arduino: "+arduino);;
+
+    if (arduino) {
+//        console.log("Gamepad arduino: before write");;
+        port.write(line, function(err) {
+            if (err) {
+//                console.log("Gamepad arduino write err: ", err);;
+                return console.log('Error on write: ', err.message);
+            }
+        });
+//        console.log("Gamepad arduino: before drain");;
+        port.drain();
+//        console.log("Gamepad arduino: after drain");;
+//        console.log("Gamepad arduino: after write");;
+    }
+}
+
 //
 // Parse the data from the serialline, from arduino
 //
@@ -336,6 +359,7 @@ var buttonctrl = function(button_data) {
 //
 var gamepadctrl = function(gamepad) {
     var res = gamepad.split(" ");
+
     if (res[0] == "button") {
 // A Button
         if ((res[1] == 0) && (res[3] == 1)) {
@@ -401,21 +425,9 @@ var gamepadctrl = function(gamepad) {
         if ((res[1] == 6) && (res[3] > 50)) {
             event = 'Left';
         }
-        if (arduino) {
-            if (event != last_event) {
-                port.write(event+':'+res[3]+'\n');
-                last_event = event;
-            }
-        }
 // 7 Right trigger (0-100)
         if ((res[1] == 7) && (res[3] > 50)) {
            event = 'Right';
-        }
-        if (arduino) {
-            if (event != last_event) {
-                port.write(event+':'+res[3]+'\n');
-                last_event = event;
-            }
         }
 // 12 Pad up
         if ((res[1] == 12) && (res[3] == 1)) {
@@ -498,6 +510,7 @@ var gamepadctrl = function(gamepad) {
     };
 
     if (res[0] == "axis") {
+    console.log("Gamepad axis");;
         event = 'Stop';
 // Axis 0 (LS hor)
         if ((res[1] == 0) && (res[3] > 50)) {
@@ -527,15 +540,14 @@ var gamepadctrl = function(gamepad) {
         if ((res[1] == 3) && (res[3] < -50)) {
             event = 'Up';
         };
-  
-        if (arduino) {
-            if (event != last_event) {
-                port.write(event+':'+res[3]+'\n');
-                rovdata.event = event;
-                last_event = event;
-            }
-        }
+    
     };
+
+    if (event != last_event) {
+        arduino_write(event+':'+res[3]+'\n');
+        rovdata.event = event;
+        last_event = event;
+    }
 }
 
 //  

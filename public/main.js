@@ -33,6 +33,13 @@ rov_canvas.height = window.innerHeight;
 var constatus = "Not connected";
 var connected = false;
 
+var d = new Date();
+var timeout_last = d.getTime();
+var timeout_now = d.getTime();
+
+var timeout_pi = 0;
+var timeout = 0;
+
 var x = 80;
 var y = 30;
 
@@ -53,7 +60,6 @@ var lights = false;
 var hover = false;
 var pilot = false;
 var pilotset = 0;
-var timeout = 0;
 
 var power = 0;
 var armed = 0;
@@ -173,7 +179,12 @@ function update(rovdata) {
   armed = rovdata.Armed;
   camx = rovdata.Camx_pos-1500;
   timeout = rovdata.Timeout;
-
+  if ((timeout_last - 2500) > timeout_now) {
+      timeout_pi = 1;
+  } else {
+      timeout_pi = 0;
+      timeout_now = timeout_last;
+  }
   thruster_1 = rovdata.Thruster_1;
   thruster_2 = rovdata.Thruster_2;
   thruster_3 = rovdata.Thruster_3;
@@ -205,6 +216,14 @@ function display(rovdata) {
     rov_context.fillStyle = "#aa0000";
     rov_context.font = '20pt Verdana';
     rov_context.fillText("TIMEOUT", (rov_canvas.width/2-60), rov_canvas.height/2-110);
+    rov_context.fill();
+  }
+
+  if (timeout_pi == 1) {
+    rov_context.beginPath();
+    rov_context.fillStyle = "#aa0000";
+    rov_context.font = '20pt Verdana';
+    rov_context.fillText("TIMEOUT PI", (rov_canvas.width/2-90), rov_canvas.height/2-170);
     rov_context.fill();
   }
 
@@ -606,6 +625,8 @@ socket.on("disconnect", function () {
 });
 
 socket.on("rovdata", function(rovdata) {
+  var d = new Date();
+  timeout_last = d.getTime();
   update(rovdata); 
 })
 

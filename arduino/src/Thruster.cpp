@@ -24,29 +24,11 @@
 
 #include "Thruster.h"
 
-void Thruster::Power(int p) {
-    POWER=p;
-    Serial.print("Power:");
-    Serial.println(POWER);
-}
-
-int Thruster::Power() {
-    return POWER;
-}
-
-void Thruster::Arm(bool b) {
-    ARMED=b;
-}
-
-bool Thruster::Arm() {
-    return ARMED;
-}
-
-void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
+void Thruster::Run(Rov &R, int DIRECTION, int THRUSTER_POWER) {
 //
-// Armed
+// Are we Armed?
 //
-     if (ARMED) {
+     if (R.Armed) {
 
 //
 // Thruster 1
@@ -54,13 +36,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER1_DIR) {
              if (DIRECTION & THRUSTER1_REVERSE) {
 #if defined THRUSTER1_PWM 
-                T1.writeMicroseconds(THRUSTER1_NEUTRAL-(4*THRUSTER_POWER));
+                R.T1.writeMicroseconds(THRUSTER1_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_1: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER1_PWM 
-                T1.writeMicroseconds(THRUSTER1_NEUTRAL+(4*THRUSTER_POWER));
+                R.T1.writeMicroseconds(THRUSTER1_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_1: ");
                 Serial.println(THRUSTER_POWER);
@@ -73,13 +55,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER2_DIR) {
              if (DIRECTION & THRUSTER2_REVERSE) {
 #if defined THRUSTER2_PWM 
-                T2.writeMicroseconds(THRUSTER2_NEUTRAL-(4*THRUSTER_POWER));
+                R.T2.writeMicroseconds(THRUSTER2_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_2: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER2_PWM 
-                T2.writeMicroseconds(THRUSTER2_NEUTRAL+(4*THRUSTER_POWER));
+                R.T2.writeMicroseconds(THRUSTER2_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_2: ");
                 Serial.println(THRUSTER_POWER);
@@ -92,13 +74,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER3_DIR) {
              if (DIRECTION & THRUSTER3_REVERSE) {
 #if defined THRUSTER3_PWM 
-                T3.writeMicroseconds(THRUSTER3_NEUTRAL-(4*THRUSTER_POWER));
+                R.T3.writeMicroseconds(THRUSTER3_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_3: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER3_PWM 
-                T3.writeMicroseconds(THRUSTER3_NEUTRAL+(4*THRUSTER_POWER));
+                R.T3.writeMicroseconds(THRUSTER3_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_3: ");
                 Serial.println(THRUSTER_POWER);
@@ -111,13 +93,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER4_DIR) {
              if (DIRECTION & THRUSTER4_REVERSE) {
 #if defined THRUSTER4_PWM 
-                T4.writeMicroseconds(THRUSTER4_NEUTRAL-(4*THRUSTER_POWER));
+                R.T4.writeMicroseconds(THRUSTER4_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_4: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER4_PWM 
-                T4.writeMicroseconds(THRUSTER4_NEUTRAL+(4*THRUSTER_POWER));
+                R.T4.writeMicroseconds(THRUSTER4_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_4: ");
                 Serial.println(THRUSTER_POWER);
@@ -130,13 +112,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER5_DIR) {
              if (DIRECTION & THRUSTER5_REVERSE) {
 #if defined THRUSTER5_PWM 
-                T5.writeMicroseconds(THRUSTER5_NEUTRAL-(4*THRUSTER_POWER));
+                R.T5.writeMicroseconds(THRUSTER5_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_5: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER5_PWM 
-                T5.writeMicroseconds(THRUSTER5_NEUTRAL+(4*THRUSTER_POWER));
+                R.T5.writeMicroseconds(THRUSTER5_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_5: ");
                 Serial.println(THRUSTER_POWER);
@@ -149,13 +131,13 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
          if (DIRECTION & THRUSTER6_DIR) {
              if (DIRECTION & THRUSTER6_REVERSE) {
 #if defined THRUSTER6_PWM 
-                T6.writeMicroseconds(THRUSTER6_NEUTRAL-(4*THRUSTER_POWER));
+                R.T6.writeMicroseconds(THRUSTER6_NEUTRAL-(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_6: ");
                 Serial.println(-THRUSTER_POWER);
              } else {
 #if defined THRUSTER6_PWM 
-                T6.writeMicroseconds(THRUSTER6_NEUTRAL+(4*THRUSTER_POWER));
+                R.T6.writeMicroseconds(THRUSTER6_NEUTRAL+(4*THRUSTER_POWER));
 #endif
                 Serial.print("Thruster_6: ");
                 Serial.println(THRUSTER_POWER);
@@ -169,135 +151,136 @@ void Thruster::Run(int DIRECTION, int THRUSTER_POWER) {
 //
 // Forward
 //
-void Thruster::Forward(int P) {
-    Run(THRUSTER_FORWARD,P);
+void Thruster::Forward(Rov &R) {
+    Run(R, THRUSTER_FORWARD, R.Power);
 }
-void Thruster::Forward() {
-    Run(THRUSTER_FORWARD,POWER);
+void Thruster::Forward(Rov &R, int Power) {
+    Run(R, THRUSTER_FORWARD, Power);
 }
 
 //
 // Reverse
 //
-void Thruster::Reverse(int P) {
-    Run(THRUSTER_REVERSE,P);
+void Thruster::Reverse(Rov &R) {
+    Run(R, THRUSTER_REVERSE, R.Power);
 }
-void Thruster::Reverse() {
-    Run(THRUSTER_REVERSE,POWER);
+void Thruster::Reverse(Rov &R, int Power) {
+    Run(R, THRUSTER_REVERSE, Power);
 }
 
 //
 // Right
 //
-void Thruster::Right(int P) {
-    Run(THRUSTER_RIGHT,P);
+void Thruster::Right(Rov &R) {
+    Run(R, THRUSTER_RIGHT, R.Power);
 }
-void Thruster::Right() {
-    Run(THRUSTER_RIGHT,POWER);
+void Thruster::Right(Rov &R, int Power) {
+    Run(R, THRUSTER_RIGHT, Power);
 }
 
 //
 // Left
 //
-void Thruster::Left(int P) {
-    Run(THRUSTER_LEFT,P);
+void Thruster::Left(Rov &R) {
+    Run(R, THRUSTER_LEFT, R.Power);
 }
-void Thruster::Left() {
-    Run(THRUSTER_LEFT,POWER);
+void Thruster::Left(Rov &R, int Power) {
+    Run(R, THRUSTER_LEFT, Power);
 }
 
 //
 // Up
 //
-void Thruster::Up(int P) {
-    Run(THRUSTER_UP,P);
+void Thruster::Up(Rov &R) {
+    Run(R, THRUSTER_UP, R.Power);
 }
-void Thruster::Up() {
-    Run(THRUSTER_UP,POWER);
+void Thruster::Up(Rov &R, int Power) {
+    Run(R, THRUSTER_UP, Power);
 }
 
 //
 // Dive
 //
-void Thruster::Dive(int P) {
-    Run(THRUSTER_DIVE,P);
+void Thruster::Dive(Rov &R) {
+    Run(R, THRUSTER_DIVE, R.Power);
 }
-void Thruster::Dive() {
-    Run(THRUSTER_DIVE,POWER);
+void Thruster::Dive(Rov &R, int Power) {
+    Run(R, THRUSTER_DIVE, Power);
 }
 
 //
 // Strafe_Right
 //
-void Thruster::Strafe_Right(int P) {
-    Run(THRUSTER_STRAFE_RIGHT,P);
+void Thruster::Strafe_Right(Rov &R) {
+    Run(R, THRUSTER_STRAFE_RIGHT, R.Power);
 }
-void Thruster::Strafe_Right() {
-    Run(THRUSTER_STRAFE_RIGHT,POWER);
+void Thruster::Strafe_Right(Rov &R, int Power) {
+    Run(R, THRUSTER_STRAFE_RIGHT, Power);
 }
 
 //
 // Strafe_Left
 //
-void Thruster::Strafe_Left(int P) {
-    Run(THRUSTER_STRAFE_LEFT,P);
+void Thruster::Strafe_Left(Rov &R) {
+    Run(R, THRUSTER_STRAFE_LEFT, R.Power);
 }
-void Thruster::Strafe_Left() {
-    Run(THRUSTER_STRAFE_LEFT,POWER);
+void Thruster::Strafe_Left(Rov &R, int Power) {
+    Run(R, THRUSTER_STRAFE_LEFT, Power);
 }
 
 //
 // Roll_Right
 //
-void Thruster::Roll_Right(int P) {
-    Run(THRUSTER_ROLL_RIGHT,P);
+void Thruster::Roll_Right(Rov &R) {
+    Run(R, THRUSTER_ROLL_RIGHT, R.Power);
 }
-void Thruster::Roll_Right() {
-    Run(THRUSTER_ROLL_RIGHT,POWER);
+void Thruster::Roll_Right(Rov &R, int Power) {
+    Run(R, THRUSTER_ROLL_RIGHT, Power);
 }
 
 //
 // Roll_Left
 //
-void Thruster::Roll_Left(int P) {
-    Run(THRUSTER_ROLL_LEFT,P);
+void Thruster::Roll_Left(Rov &R) {
+    Run(R, THRUSTER_ROLL_LEFT, R.Power);
 }
-void Thruster::Roll_Left() {
-    Run(THRUSTER_ROLL_LEFT,POWER);
+void Thruster::Roll_Left(Rov &R, int Power) {
+    Run(R, THRUSTER_ROLL_LEFT, Power);
 }
 
 //
 // Thruster::Stop
 // 
-void Thruster::Stop()
+void Thruster::Stop(Rov &R)
 {
+    R.Power = 0;
 #ifdef THRUSTER1_PWM    
-    T1.writeMicroseconds(THRUSTER1_NEUTRAL);
+    R.T1.writeMicroseconds(THRUSTER1_NEUTRAL);
 #endif
     Serial.print("Thruster_1:");
     Serial.println(0);
 #ifdef THRUSTER2_PWM    
-    T2.writeMicroseconds(THRUSTER2_NEUTRAL);
+    R.T2.writeMicroseconds(THRUSTER2_NEUTRAL);
 #endif
     Serial.print("Thruster_2:");
     Serial.println(0);
 #ifdef THRUSTER3_PWM    
-    T3.writeMicroseconds(THRUSTER3_NEUTRAL);
+    R.T3.writeMicroseconds(THRUSTER3_NEUTRAL);
 #endif
     Serial.print("Thruster_3:");
     Serial.println(0);
 #ifdef THRUSTER4_PWM    
-    T4.writeMicroseconds(THRUSTER4_NEUTRAL);
+    R.T4.writeMicroseconds(THRUSTER4_NEUTRAL);
 #endif
     Serial.print("Thruster_4:");
     Serial.println(0);
 #ifdef THRUSTER5_PWM    
-    T5.writeMicroseconds(THRUSTER5_NEUTRAL);
+    R.T5.writeMicroseconds(THRUSTER5_NEUTRAL);
 #endif
     Serial.print("Thruster_5:");
     Serial.println(0);
 #ifdef THRUSTER6_PWM    
-    T6.writeMicroseconds(THRUSTER6_NEUTRAL);
+    R.T6.writeMicroseconds(THRUSTER6_NEUTRAL);
 #endif
     Serial.print("Thruster_6:");
     Serial.println(0);
@@ -306,41 +289,43 @@ void Thruster::Stop()
 //
 // Thruster::Setup
 //
-void Thruster::Setup()
+void Thruster::Setup(Rov &R)
 {
+    R.Power = 0;
+
 #ifdef THRUSTER1_PWM    
-    T1.attach(THRUSTER1_PIN);
-    T1.writeMicroseconds(THRUSTER1_NEUTRAL);
+    R.T1.attach(THRUSTER1_PIN);
+    R.T1.writeMicroseconds(THRUSTER1_NEUTRAL);
 #endif
     Serial.print("Thruster_1:");
     Serial.println(0);
 #ifdef THRUSTER2_PWM    
-    T2.attach(THRUSTER2_PIN);
-    T2.writeMicroseconds(THRUSTER2_NEUTRAL);
+    R.T2.attach(THRUSTER2_PIN);
+    R.T2.writeMicroseconds(THRUSTER2_NEUTRAL);
 #endif
     Serial.print("Thruster_2:");
     Serial.println(0);
 #ifdef THRUSTER3_PWM    
-    T3.attach(THRUSTER3_PIN);
-    T3.writeMicroseconds(THRUSTER3_NEUTRAL);
+    R.T3.attach(THRUSTER3_PIN);
+    R.T3.writeMicroseconds(THRUSTER3_NEUTRAL);
 #endif
     Serial.print("Thruster_3:");
     Serial.println(0);
 #ifdef THRUSTER4_PWM    
-    T4.attach(THRUSTER4_PIN);
-    T4.writeMicroseconds(THRUSTER4_NEUTRAL);
+    R.T4.attach(THRUSTER4_PIN);
+    R.T4.writeMicroseconds(THRUSTER4_NEUTRAL);
 #endif
     Serial.print("Thruster_4:");
     Serial.println(0);
 #ifdef THRUSTER5_PWM    
-    T5.attach(THRUSTER5_PIN);
-    T5.writeMicroseconds(THRUSTER5_NEUTRAL);
+    R.T5.attach(THRUSTER5_PIN);
+    R.T5.writeMicroseconds(THRUSTER5_NEUTRAL);
 #endif
     Serial.print("Thruster_5:");
     Serial.println(0);
 #ifdef THRUSTER6_PWM    
-    T6.attach(THRUSTER6_PIN);
-    T6.writeMicroseconds(THRUSTER6_NEUTRAL);
+    R.T6.attach(THRUSTER6_PIN);
+    R.T6.writeMicroseconds(THRUSTER6_NEUTRAL);
 #endif
     Serial.print("Thruster_6:");
     Serial.println(0);

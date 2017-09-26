@@ -23,23 +23,37 @@
 */
 
 #pragma once
-#ifndef _PILOT_H
-#define _PILOT_H
+#ifndef _ROV_H
+#define _ROV_H
 
-#include <Arduino.h>
-#include <Servo.h>
-#include <PID_v1.h>
-#include "Config.h"
-#include "Rov.h"
-#include "Thruster.h"
-
-class Pilot : public Thruster {
+class Rov {
     public:
-        void Heading(int);
-        void Loop(Rov&);
-        void Setup(Rov&);
-    private:
-        float pilot_heading = 0;
+        Servo T1;
+        Servo T2;
+        Servo T3;
+        Servo T4;
+        Servo T5;
+        Servo T6;
+        Servo L1;
+        Servo L2;
+        Servo L3;
+        Servo L4;
+        Servo CX;
+        Servo CY;
+        float Heading;
+        float Roll;
+        float Pitch;
+        float Current;
+        float Amps;
+        float Depth;
+        float Altitude;
+        float Pressure;
+        float Temp_IN;
+        float Temp_OUT;
+        bool Armed;
+        bool Hover;
+        bool Pilot;
+        int Power;
 };
-#endif
 
+#endif

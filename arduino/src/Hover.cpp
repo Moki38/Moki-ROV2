@@ -36,29 +36,7 @@ double H_consKd=0.25;
 PID H_PID(&H_Input, &H_Output, &H_Setpoint, H_consKp, H_consKi, H_consKd, DIRECT);
 
 //
-// On
-//
-void Hover::On() {
-     active = true;
-}
-
-//
-// Off
-//
-void Hover::Off() {
-     active = false;
-}
-
-
-//
-// Active
-//
-bool Hover::Active() {
-    return active;
-}
-
-//
-// Depth
+// Set Hover Depth
 //
 void Hover::Depth(int d) {
      hover_depth = d;
@@ -67,11 +45,11 @@ void Hover::Depth(int d) {
 //
 // Loop
 //
-void Hover::Loop() {
+void Hover::Loop(Rov &R) {
     //
     // Hover
     //
-    H_Input = Sensor::Depth();
+    H_Input = R.Depth;
     H_Setpoint = hover_depth;
 
     double gap = abs(H_Setpoint - H_Input);
@@ -93,16 +71,16 @@ void Hover::Loop() {
     Serial.println(H_Setpoint);
     Serial.print("Hover_Output:");
     Serial.println(H_Output);
-    if (Sensor::Depth() > hover_depth) {
+    if (R.Depth > hover_depth) {
         Serial.println("Hover_Up:");
         Serial.println(H_Output);
-        Thruster::Up(H_Output);
-    } else if (Sensor::Depth() < hover_depth) {
+        Thruster::Up(R, H_Output);
+    } else if (R.Depth < hover_depth) {
         Serial.println("Hover_Dive:");
         Serial.println(H_Output);
-        Thruster::Dive(H_Output);
+        Thruster::Dive(R, H_Output);
     } else {
-        Thruster::Stop();
+        Thruster::Stop(R);
         H_Output = 0;
         Serial.print("Hover_Output:");
         Serial.println(H_Output);
@@ -112,7 +90,8 @@ void Hover::Loop() {
 //
 // Setup
 //
-void Hover::Setup() {
+void Hover::Setup(Rov &R) {
+    R.Hover = false;
     H_PID.SetMode(AUTOMATIC);
     H_PID.SetOutputLimits(0, 30);
 }
