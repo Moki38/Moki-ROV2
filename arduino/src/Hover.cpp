@@ -43,7 +43,7 @@ void Hover::Depth(int d) {
 }
  
 //
-// Loop
+// Loop, runs every 250us, if Hover=True 
 //
 void Hover::Loop(Rov &R) {
     //
@@ -51,6 +51,7 @@ void Hover::Loop(Rov &R) {
     //
     Serial.print("Hover:");
     Serial.println(R.Hover);
+
     if (R.Hover) {
 
         H_Input = R.Depth;
@@ -75,12 +76,14 @@ void Hover::Loop(Rov &R) {
         Serial.println(H_Setpoint);
         Serial.print("Hover_Output:");
         Serial.println(H_Output);
+
+
         if (R.Depth > hover_depth) {
-            Serial.println("Hover_Up:");
+            Serial.print("Hover_Up:");
             Serial.println(H_Output);
             Thruster::Up(R, H_Output);
         } else if (R.Depth < hover_depth) {
-            Serial.println("Hover_Dive:");
+            Serial.print("Hover_Dive:");
             Serial.println(H_Output);
             Thruster::Dive(R, H_Output);
         }
