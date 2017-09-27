@@ -253,7 +253,7 @@ void Thruster::Roll_Left(Rov &R, int Power) {
 // 
 void Thruster::Stop(Rov &R)
 {
-    R.Power = 0;
+//    R.Power = 0;
 #ifdef THRUSTER1_PWM    
     R.T1.writeMicroseconds(THRUSTER1_NEUTRAL);
 #endif
