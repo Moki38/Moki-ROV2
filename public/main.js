@@ -201,7 +201,7 @@ function display(rovdata) {
   rov_context.fillStyle = "#aaaa55";
   rov_context.fillText( today.toLocaleDateString()+" "+today.toLocaleTimeString(), 10, 20);
   rov_context.fillText( "Site : "+site, 10, 40);
-  rov_context.fillText( "MokiROV2 (RaspPI/Arduino)", 10, 60);
+  rov_context.fillText( "MokiROV2 (RasPI/Arduino)", 10, 60);
 
   if (constatus == 'Disonnected') {
     rov_context.beginPath();
