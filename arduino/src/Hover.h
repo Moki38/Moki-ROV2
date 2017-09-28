@@ -31,9 +31,9 @@
 #include <PID_v1.h>
 #include "Config.h"
 #include "Rov.h"
-#include "Thruster.h"
+#include "Movement.h"
 
-class Hover : public Thruster {
+class Hover : public Movement {
     public:
         void Depth(int);
         void Loop(Rov&);

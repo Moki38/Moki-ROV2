@@ -26,14 +26,23 @@
 #ifndef _ROV_H
 #define _ROV_H
 
+class T100 {
+    public:
+        Servo esc;
+        bool once;        // Run only once
+        int step = 1;     // Number of step to take before we reach the new current.
+        int current;      // Current power (0-100)
+        int target;       // Target power (0-100)
+};
+
 class Rov {
     public:
-        Servo T1;
-        Servo T2;
-        Servo T3;
-        Servo T4;
-        Servo T5;
-        Servo T6;
+        T100 T1;
+        T100 T2;
+        T100 T3;
+        T100 T4;
+        T100 T5;
+        T100 T6;
         Servo L1;
         Servo L2;
         Servo L3;

@@ -94,16 +94,16 @@ void Pilot::Loop(Rov &R) {
         if (direction == 2) {
             Serial.print("Pilot_Heading_Output_Left:");
             Serial.println(P_Output);
-            Thruster::Left(R, P_Output);
+            Movement::Left(R, P_Output);
 
         } else if (direction == 1) {
             Serial.print("Pilot_Heading_Output_Right:");
             Serial.println(P_Output);
-            Thruster::Right(R, P_Output);
+            Movement::Right(R, P_Output);
         }
 
     } else {
-        Thruster::Stop(R);
+        Movement::Stop(R);
         P_Output = 0;
     }
 }

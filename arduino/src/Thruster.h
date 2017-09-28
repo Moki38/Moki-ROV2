@@ -44,27 +44,7 @@
 
 class Thruster {
     public:
-        void Run(Rov&, int, int);
-        void Forward(Rov&);
-        void Forward(Rov&, int);
-        void Reverse(Rov&);
-        void Reverse(Rov&, int);
-        void Right(Rov&);
-        void Right(Rov&, int);
-        void Left(Rov&);
-        void Left(Rov&, int);
-        void Up(Rov&);
-        void Up(Rov&, int);
-        void Dive(Rov&);
-        void Dive(Rov&, int);
-        void Strafe_Right(Rov&);
-        void Strafe_Right(Rov&, int);
-        void Strafe_Left(Rov&);
-        void Strafe_Left(Rov&, int);
-        void Roll_Right(Rov&);
-        void Roll_Right(Rov&, int);
-        void Roll_Left(Rov&);
-        void Roll_Left(Rov&, int);
+        void Loop(Rov&);
 
         void Stop(Rov&);
         void Setup(Rov&);

@@ -34,6 +34,7 @@ int value = 0;
 boolean command_complete = false;
 
 Rov R;
+Movement M;
 Thruster T;
 Light L;
 Camera C;
@@ -52,6 +53,7 @@ void setup()
 {
     unsigned int timeout = millis();
 
+    M.Setup(R);
     T.Setup(R);
     L.Setup(R);
     C.Setup(R);
@@ -123,6 +125,7 @@ void loop()
             H.Loop(R);
         }
         thruster_time = millis();
+        T.Loop(R);
     }
 
     //
@@ -155,7 +158,7 @@ void loop()
             R.Armed = false;
 
         } else if (command == "Stop") {
-            T.Stop(R);
+            M.Stop(R);
 
         } else if (command == "Pilot") {
             if (value >= 400) {
@@ -178,25 +181,25 @@ void loop()
 
             // Right Left Reverse Forward Strafe_r Strafe_l Dive Up
         } else if (command == "Forward") {
-            T.Forward(R);
+            M.Forward(R);
         } else if (command == "Reverse") {
-            T.Reverse(R);
+            M.Reverse(R);
         } else if (command == "Right") {
-            T.Right(R);
+            M.Right(R);
         } else if (command == "Left") {
-            T.Left(R);
+            M.Left(R);
         } else if (command == "Dive") {
-            T.Dive(R);
+            M.Dive(R);
         } else if (command == "Up") {
-            T.Up(R);
+            M.Up(R);
         } else if (command == "Strafe_r") {
-            T.Strafe_Right(R);
+            M.Strafe_Right(R);
         } else if (command == "Strafe_l") {
-            T.Strafe_Left(R);
+            M.Strafe_Left(R);
         } else if (command == "Roll_r") {
-            T.Roll_Right(R);
+            M.Roll_Right(R);
         } else if (command == "Roll_l") {
-            T.Roll_Left(R);
+            M.Roll_Left(R);
         } else if (command == "Light_1") {
             if (value == 0) {
                 L.Off(R);

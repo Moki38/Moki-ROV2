@@ -81,14 +81,14 @@ void Hover::Loop(Rov &R) {
         if (R.Depth > hover_depth) {
             Serial.print("Hover_Up:");
             Serial.println(H_Output);
-            Thruster::Up(R, H_Output);
+            Movement::Up(R, H_Output);
         } else if (R.Depth < hover_depth) {
             Serial.print("Hover_Dive:");
             Serial.println(H_Output);
-            Thruster::Dive(R, H_Output);
+            Movement::Dive(R, H_Output);
         }
     } else {
-        Thruster::Stop(R);
+        Movement::Stop(R);
         H_Output = 0;
         Serial.print("Hover_Output:");
         Serial.println(H_Output);

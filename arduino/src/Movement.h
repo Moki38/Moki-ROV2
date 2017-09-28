@@ -23,23 +23,56 @@
 */
 
 #pragma once
-#ifndef _PILOT_H
-#define _PILOT_H
+#ifndef _MOVEMENT_H
+#define _MOVEMENT_H
 
 #include <Arduino.h>
 #include <Servo.h>
-#include <PID_v1.h>
 #include "Config.h"
 #include "Rov.h"
-#include "Movement.h"
+#include "Thruster.h"
 
-class Pilot : public Movement {
+#define MOVEMENT_STEPS          5
+
+#define MOVEMENT_FORWARD	0b0000000001
+#define MOVEMENT_REVERSE	0b0000000010
+#define MOVEMENT_RIGHT		0b0000000100
+#define MOVEMENT_LEFT		0b0000001000
+#define MOVEMENT_DIVE		0b0000010000
+#define MOVEMENT_UP		0b0000100000
+#define MOVEMENT_STRAFE_RIGHT	0b0001000000
+#define MOVEMENT_STRAFE_LEFT	0b0010000000
+#define MOVEMENT_ROLL_RIGHT	0b0100000000
+#define MOVEMENT_ROLL_LEFT	0b1000000000
+
+class Movement : public Thruster {
     public:
-        void Heading(int);
-        void Loop(Rov&);
+        void Compute(Rov&);
+        void Run(Rov&, int, int);
+        void Forward(Rov&);
+        void Forward(Rov&, int);
+        void Reverse(Rov&);
+        void Reverse(Rov&, int);
+        void Right(Rov&);
+        void Right(Rov&, int);
+        void Left(Rov&);
+        void Left(Rov&, int);
+        void Up(Rov&);
+        void Up(Rov&, int);
+        void Dive(Rov&);
+        void Dive(Rov&, int);
+        void Strafe_Right(Rov&);
+        void Strafe_Right(Rov&, int);
+        void Strafe_Left(Rov&);
+        void Strafe_Left(Rov&, int);
+        void Roll_Right(Rov&);
+        void Roll_Right(Rov&, int);
+        void Roll_Left(Rov&);
+        void Roll_Left(Rov&, int);
+
+        void Stop(Rov&);
         void Setup(Rov&);
     private:
-        float pilot_heading = 0;
 };
 #endif
 

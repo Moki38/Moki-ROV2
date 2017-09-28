@@ -38,6 +38,7 @@
 #include "Config.h"
 #include "Rov.h"
 
+#include "Movement.h"
 #include "Thruster.h"
 #include "Light.h"
 #include "Camera.h"
