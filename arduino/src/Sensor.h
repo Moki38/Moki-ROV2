@@ -64,9 +64,9 @@ class Sensor {
         void Depth_Loop();
         void Depth_Setup();
         // Current/Amps
-        float Current();
+        float Volts();
         float Amps();
-        void Current_Setup();
+        void Volts_Setup();
         void Amps_Setup();
         // Overall Setup All
         void Loop(Rov&);
@@ -92,9 +92,10 @@ class Sensor {
         // Depth
         MS5837 MS5837_sensor;
         bool MS5837_status;
-        // Current/Amps
+        // Volts
         int VRaw; //This will store our raw ADC data
         float VFinal; //This will store the converted data
+        // Current/Amps
         int IRaw;
         float IFinal;
         int sensor_time = 0;

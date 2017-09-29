@@ -95,14 +95,28 @@
 #define THRUSTER6_REVERSE	0b1000011111	// if bit is set, thruster will reverse
 
 #define LIGHT1_PWM
+#undef  LIGHT1_RELAY
 #define LIGHT1_PIN	3
 #define LIGHT1_ON	1900
 #define	LIGHT1_OFF	1100
 
 #define LIGHT2_PWM
+#undef  LIGHT2_RELAY
 #define LIGHT2_PIN	4
 #define LIGHT2_ON	1900
 #define	LIGHT2_OFF	1100
+
+#define LIGHT3_PWM
+#undef  LIGHT3_RELAY
+#define LIGHT3_PIN	5
+#define LIGHT3_ON	1900
+#define	LIGHT3_OFF	1100
+
+#define LIGHT4_PWM
+#undef  LIGHT4_RELAY
+#define LIGHT4_PIN	6
+#define LIGHT4_ON	1900
+#define	LIGHT4_OFF	1100
 
 #define CAMERAX_PWM
 #define CAMERAX_PIN	5
@@ -121,12 +135,14 @@
 #define DEPTH_WATER	1	// 1 = fresh, 2 = salt
 #define DEPTH_ADDR	0x76
 
-#define	CURRENT_ANALOG
-#define CURRENT_TYPE	1	// 1 = ATTOPILOT_A180
-#define CURRENT_PIN	0	// A0
+#define	VOLT_ANALOG
+#define VOLT_TYPE	2	// 1 = ATTOPILOT_A180
+                                // 2 = HKPilot 10S Power module
+#define VOLT_PIN	0	// A0
 
 #define AMP_ANALOG
-#define	AMP_TYPE	1	// 1 ATTOPILOT_A180
+#define	AMP_TYPE	2	// 1 ATTOPILOT_A180 
+                                // 2 = HKPilot 10S Power module
 #define AMP_PIN		1	// A1
 
 #endif
