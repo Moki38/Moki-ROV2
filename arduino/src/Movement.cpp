@@ -25,7 +25,7 @@
 #include "Movement.h"
 
 //
-// Forward
+// Compute
 //
 void Movement::Compute(Rov &R) {
 
@@ -103,9 +103,9 @@ void Movement::Compute(Rov &R) {
         } else {
             R.T5.step--;
             if (R.T5.current > R.T5.target) {
-                R.T5.current = R.T5.target - (R.T5.target - R.T5.current)/R.T5.step;
+                R.T5.current = R.T5.target - abs(R.T5.target - R.T5.current)/R.T5.step;
             } else {
-                R.T5.current = R.T5.target + (R.T5.target - R.T5.current)/R.T5.step;
+                R.T5.current = R.T5.target + abs(R.T5.target - R.T5.current)/R.T5.step;
             }
         }
     }
@@ -119,9 +119,9 @@ void Movement::Compute(Rov &R) {
         } else {
             R.T6.step--;
             if (R.T6.current > R.T6.target) {
-                R.T6.current = R.T6.target - (R.T6.target - R.T6.current)/R.T6.step;
+                R.T6.current = R.T6.target - abs(R.T6.target - R.T6.current)/R.T6.step;
             } else {
-                R.T6.current = R.T6.target + (R.T6.target - R.T6.current)/R.T6.step;
+                R.T6.current = R.T6.target + abs(R.T6.target - R.T6.current)/R.T6.step;
             }
         }
     }
@@ -138,9 +138,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER1_DIR) {
         if (DIRECTION & THRUSTER1_REVERSE) {
-            R.T1.target = R.T1.current - POWER;
+            R.T1.target = -POWER;
         } else {
-            R.T1.target = R.T1.current + POWER;
+            R.T1.target = POWER;
         }
         R.T1.once = false;
         R.T1.step = MOVEMENT_STEPS;
@@ -150,9 +150,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER2_DIR) {
         if (DIRECTION & THRUSTER2_REVERSE) {
-            R.T2.target = R.T2.current - POWER;
+            R.T2.target = -POWER;
         } else {
-            R.T2.target = R.T2.current + POWER;
+            R.T2.target = POWER;
         }
         R.T2.once = false;
         R.T2.step = MOVEMENT_STEPS;
@@ -162,9 +162,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER3_DIR) {
         if (DIRECTION & THRUSTER3_REVERSE) {
-            R.T3.target = R.T3.current - POWER;
+            R.T3.target = -POWER;
         } else {
-            R.T3.target = R.T3.current + POWER;
+            R.T3.target = POWER;
         }
         R.T3.once = false;
         R.T3.step = MOVEMENT_STEPS;
@@ -174,9 +174,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER4_DIR) {
         if (DIRECTION & THRUSTER4_REVERSE) {
-            R.T4.target = R.T4.current - POWER;
+            R.T4.target = -POWER;
         } else {
-            R.T4.target = R.T4.current + POWER;
+            R.T4.target = POWER;
         }
         R.T4.once = false;
         R.T4.step = MOVEMENT_STEPS;
@@ -186,9 +186,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER5_DIR) {
         if (DIRECTION & THRUSTER5_REVERSE) {
-            R.T5.target = R.T5.current - POWER;
+            R.T5.target = -POWER;
         } else {
-            R.T5.target = R.T5.current + POWER;
+            R.T5.target = POWER;
         }
         R.T5.once = false;
         R.T5.step = MOVEMENT_STEPS;
@@ -198,9 +198,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER6_DIR) {
         if (DIRECTION & THRUSTER6_REVERSE) {
-            R.T6.target = R.T6.current - POWER;
+            R.T6.target = -POWER;
         } else {
-            R.T6.target = R.T6.current + POWER;
+            R.T6.target = +POWER;
         }
         R.T6.once = false;
         R.T6.step = MOVEMENT_STEPS;

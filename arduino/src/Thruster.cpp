@@ -80,6 +80,8 @@ void Thruster::Loop(Rov &R) {
          Serial.println(R.T6.current);
 #endif
 
+    } else {
+        Stop(R);
     } // ARMED
 } // Thruster::Loop
 

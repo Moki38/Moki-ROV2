@@ -53,6 +53,8 @@ void setup()
 {
     unsigned int timeout = millis();
 
+    R.Armed = false;
+
     M.Setup(R);
     T.Setup(R);
     L.Setup(R);
@@ -121,7 +123,7 @@ void loop()
         if (R.Pilot == true) {
             P.Loop(R);
         }
-        if (R.Hover == true) {
+        if ((R.Hover == true) && (R.Armed == true)) {
             H.Loop(R);
         }
         thruster_time = millis();
@@ -152,6 +154,9 @@ void loop()
             ping_time = millis();
 
         } else if (command == "Disarm") {
+            M.Stop(R);
+            R.Hover = false;
+            R.Pilot = false;
             T.Stop(R);
             L.Off(R);
             R.Power = 0;
@@ -163,6 +168,7 @@ void loop()
         } else if (command == "Pilot") {
             if (value >= 400) {
                 R.Pilot = false;
+                M.Stop(R);
             } else {
                 R.Pilot = true;
                 P.Heading(value);
@@ -174,6 +180,7 @@ void loop()
                 H.Depth(value);
             } else {
                 R.Hover = false;
+                M.Stop(R);
             }
 
         } else if (command == "Power") {
