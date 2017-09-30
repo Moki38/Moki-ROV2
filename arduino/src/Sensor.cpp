@@ -171,12 +171,21 @@ void Sensor::Depth_Setup() {
     }
 }
 
-float Sensor::Current() {
+float Sensor::Volts() {
     VFinal = -1;
-    VRaw = analogRead(CURRENT_PIN);
-    if (VRaw < 400) {
+    VRaw = analogRead(VOLT_PIN);
+
+    if (VOLT_TYPE == 1) {
+        if (VRaw < 400) {
         //Conversion
-        VFinal = VRaw/12.99; //180 Amp board
+            VFinal = VRaw/12.99; //180 Amp board
+        }
+    }
+    if (VOLT_TYPE == 2) {
+        if (VRaw < 400) {
+        //Conversion
+            VFinal = VRaw/12.99; //180 Amp board
+        }
     }
     return (VFinal);
 }
@@ -184,20 +193,29 @@ float Sensor::Current() {
 float Sensor::Amps() {
     IFinal = -1;
     IRaw = analogRead(AMP_PIN);
-//    Serial.print("Amps_RAW:");
-//    Serial.println(IRaw);
-    if (IRaw < 400) {
-        //Conversion
-        //      IFinal = IRaw/7.4; //180 Amp board
-        IFinal = IRaw/3.7; //180 Amp board
+    if (VOLT_TYPE == 1) {
+        if (IRaw < 400) {
+            //Conversion
+            //      IFinal = IRaw/7.4; //180 Amp board
+            IFinal = IRaw/3.7; //180 Amp board
+        }
+    }
+    if (VOLT_TYPE == 2) {
+        if (IRaw < 400) {
+            //Conversion
+            //      IFinal = IRaw/7.4; //180 Amp board
+            IFinal = IRaw/3.7; //180 Amp board
+        }
     }
     return (IFinal);
 }
 
-void Sensor::Current_Setup() {
+void Sensor::Volts_Setup() {
+    analogRead(VOLT_PIN);
 }
 
 void Sensor::Amps_Setup() {
+    analogRead(AMP_PIN);
 }
 
 int Sensor::Time() {
@@ -211,7 +229,7 @@ void Sensor::Time(int time) {
 void Sensor::Setup(Rov &R) {
     Imu_Setup();
     Depth_Setup();
-    Current_Setup();
+    Volts_Setup();
     Amps_Setup();
 }
 
@@ -220,9 +238,9 @@ void Sensor::Loop(Rov &R) {
     sensor_time = millis();
     Serial.println(sensor_time);
 
-    R.Current = Current();
+    R.Volts = Volts();
     Serial.print("Volt:");
-    Serial.println(R.Current,4);
+    Serial.println(R.Volts,4);
     R.Amps = Amps();
     Serial.print("Amps:");
     Serial.println(R.Amps,4);

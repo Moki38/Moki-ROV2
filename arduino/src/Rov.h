@@ -52,7 +52,7 @@ class Rov {
         float Heading;
         float Roll;
         float Pitch;
-        float Current;
+        float Volts;
         float Amps;
         float Depth;
         float Altitude;
