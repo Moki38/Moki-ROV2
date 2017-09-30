@@ -32,7 +32,7 @@
 #include "Rov.h"
 #include "Thruster.h"
 
-#define MOVEMENT_STEPS          5
+#define MOVEMENT_STEPS          1
 
 #define MOVEMENT_FORWARD	0b0000000001
 #define MOVEMENT_REVERSE	0b0000000010

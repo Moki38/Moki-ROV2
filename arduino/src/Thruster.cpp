@@ -35,7 +35,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 1
 //
 #if defined THRUSTER1_PWM 
-         R.T1.esc.writeMicroseconds(R.T1.current * R.Power);
+         R.T1.esc.writeMicroseconds(THRUSTER1_NEUTRAL + (R.T1.current * 4));
          Serial.print("Thruster_1: ");
          Serial.println(R.T1.current);
 #endif
@@ -43,7 +43,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 2
 //
 #if defined THRUSTER2_PWM 
-         R.T2.esc.writeMicroseconds(R.T2.current * R.Power);
+         R.T2.esc.writeMicroseconds(THRUSTER2_NEUTRAL + (R.T2.current * 4));
          Serial.print("Thruster_2: ");
          Serial.println(R.T2.current);
 #endif
@@ -51,7 +51,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 3
 //
 #if defined THRUSTER3_PWM 
-         R.T3.esc.writeMicroseconds(R.T3.current * R.Power);
+         R.T3.esc.writeMicroseconds(THRUSTER3_NEUTRAL + (R.T3.current * 4));
          Serial.print("Thruster_3: ");
          Serial.println(R.T3.current);
 #endif
@@ -59,7 +59,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 4
 //
 #if defined THRUSTER4_PWM 
-         R.T4.esc.writeMicroseconds(R.T4.current * R.Power);
+         R.T4.esc.writeMicroseconds(THRUSTER4_NEUTRAL + (R.T4.current * 4));
          Serial.print("Thruster_4: ");
          Serial.println(R.T4.current);
 #endif
@@ -67,7 +67,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 5
 //
 #if defined THRUSTER5_PWM 
-         R.T5.esc.writeMicroseconds(R.T5.current * R.Power);
+         R.T5.esc.writeMicroseconds(THRUSTER5_NEUTRAL + (R.T5.current * 4));
          Serial.print("Thruster_5: ");
          Serial.println(R.T5.current);
 #endif
@@ -75,7 +75,7 @@ void Thruster::Loop(Rov &R) {
 // Thruster 6
 //
 #if defined THRUSTER6_PWM 
-         R.T6.esc.writeMicroseconds(R.T6.current * R.Power);
+         R.T6.esc.writeMicroseconds(THRUSTER6_NEUTRAL + (R.T6.current * 4));
          Serial.print("Thruster_6: ");
          Serial.println(R.T6.current);
 #endif
@@ -90,36 +90,48 @@ void Thruster::Loop(Rov &R) {
 void Thruster::Stop(Rov &R)
 {
 
+    R.T1.target = 0;
+    R.T1.current = 0;
 #ifdef THRUSTER1_PWM    
     R.T1.esc.writeMicroseconds(THRUSTER1_NEUTRAL);
     Serial.print("Thruster_1:");
     Serial.println(0);
 #endif
 
+    R.T2.target = 0;
+    R.T2.current = 0;
 #ifdef THRUSTER2_PWM    
     R.T2.esc.writeMicroseconds(THRUSTER2_NEUTRAL);
     Serial.print("Thruster_2:");
     Serial.println(0);
 #endif
 
+    R.T3.target = 0;
+    R.T3.current = 0;
 #ifdef THRUSTER3_PWM    
     R.T3.esc.writeMicroseconds(THRUSTER3_NEUTRAL);
     Serial.print("Thruster_3:");
     Serial.println(0);
 #endif
 
+    R.T4.target = 0;
+    R.T4.current = 0;
 #ifdef THRUSTER4_PWM    
     R.T4.esc.writeMicroseconds(THRUSTER4_NEUTRAL);
     Serial.print("Thruster_4:");
     Serial.println(0);
 #endif
 
+    R.T5.target = 0;
+    R.T5.current = 0;
 #ifdef THRUSTER5_PWM    
     R.T5.esc.writeMicroseconds(THRUSTER5_NEUTRAL);
     Serial.print("Thruster_5:");
     Serial.println(0);
 #endif
 
+    R.T6.target = 0;
+    R.T6.current = 0;
 #ifdef THRUSTER6_PWM    
     R.T6.esc.writeMicroseconds(THRUSTER6_NEUTRAL);
     Serial.print("Thruster_6:");
@@ -135,6 +147,8 @@ void Thruster::Setup(Rov &R)
 {
     R.Power = 0;
 
+    R.T1.target = 0;
+    R.T1.current = 0;
 #ifdef THRUSTER1_PWM    
     R.T1.esc.attach(THRUSTER1_PIN);
     R.T1.esc.writeMicroseconds(THRUSTER1_NEUTRAL);
@@ -142,6 +156,8 @@ void Thruster::Setup(Rov &R)
     Serial.println(0);
 #endif
 
+    R.T2.target = 0;
+    R.T2.current = 0;
 #ifdef THRUSTER2_PWM    
     R.T2.esc.attach(THRUSTER2_PIN);
     R.T2.esc.writeMicroseconds(THRUSTER2_NEUTRAL);
@@ -149,6 +165,8 @@ void Thruster::Setup(Rov &R)
     Serial.println(0);
 #endif
 
+    R.T3.target = 0;
+    R.T3.current = 0;
 #ifdef THRUSTER3_PWM    
     R.T3.esc.attach(THRUSTER3_PIN);
     R.T3.esc.writeMicroseconds(THRUSTER3_NEUTRAL);
@@ -156,6 +174,8 @@ void Thruster::Setup(Rov &R)
     Serial.println(0);
 #endif
 
+    R.T4.target = 0;
+    R.T4.current = 0;
 #ifdef THRUSTER4_PWM    
     R.T4.esc.attach(THRUSTER4_PIN);
     R.T4.esc.writeMicroseconds(THRUSTER4_NEUTRAL);
@@ -163,6 +183,8 @@ void Thruster::Setup(Rov &R)
     Serial.println(0);
 #endif
 
+    R.T5.target = 0;
+    R.T5.current = 0;
 #ifdef THRUSTER5_PWM    
     R.T5.esc.attach(THRUSTER5_PIN);
     R.T5.esc.writeMicroseconds(THRUSTER5_NEUTRAL);
@@ -170,6 +192,8 @@ void Thruster::Setup(Rov &R)
     Serial.println(0);
 #endif
 
+    R.T6.target = 0;
+    R.T6.current = 0;
 #ifdef THRUSTER6_PWM    
     R.T6.esc.attach(THRUSTER6_PIN);
     R.T6.esc.writeMicroseconds(THRUSTER6_NEUTRAL);

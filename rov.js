@@ -293,6 +293,10 @@ function parse_serial(line) {
     } else {
         rovdata.Calibrated = 1; 
     }
+//
+// Debug
+//          
+//    console.log('Serial data: '+line);
 
 // 
 // Write logdata to logger

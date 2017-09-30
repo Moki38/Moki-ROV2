@@ -138,9 +138,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER1_DIR) {
         if (DIRECTION & THRUSTER1_REVERSE) {
-            R.T1.target = THRUSTER1_NEUTRAL-(4 * POWER);
+            R.T1.target = R.T1.current - POWER;
         } else {
-            R.T1.target = THRUSTER1_NEUTRAL+(4 * POWER);
+            R.T1.target = R.T1.current + POWER;
         }
         R.T1.once = false;
         R.T1.step = MOVEMENT_STEPS;
@@ -150,9 +150,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER2_DIR) {
         if (DIRECTION & THRUSTER2_REVERSE) {
-            R.T2.target = THRUSTER2_NEUTRAL-(4 * POWER);
+            R.T2.target = R.T2.current - POWER;
         } else {
-            R.T2.target = THRUSTER2_NEUTRAL+(4 * POWER);
+            R.T2.target = R.T2.current + POWER;
         }
         R.T2.once = false;
         R.T2.step = MOVEMENT_STEPS;
@@ -162,9 +162,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER3_DIR) {
         if (DIRECTION & THRUSTER3_REVERSE) {
-            R.T3.target = THRUSTER3_NEUTRAL-(4 * POWER);
+            R.T3.target = R.T3.current - POWER;
         } else {
-            R.T3.target = THRUSTER3_NEUTRAL+(4 * POWER);
+            R.T3.target = R.T3.current + POWER;
         }
         R.T3.once = false;
         R.T3.step = MOVEMENT_STEPS;
@@ -174,9 +174,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER4_DIR) {
         if (DIRECTION & THRUSTER4_REVERSE) {
-            R.T4.target = THRUSTER4_NEUTRAL-(4 * POWER);
+            R.T4.target = R.T4.current - POWER;
         } else {
-            R.T4.target = THRUSTER4_NEUTRAL+(4 * POWER);
+            R.T4.target = R.T4.current + POWER;
         }
         R.T4.once = false;
         R.T4.step = MOVEMENT_STEPS;
@@ -186,9 +186,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER5_DIR) {
         if (DIRECTION & THRUSTER5_REVERSE) {
-            R.T5.target = THRUSTER5_NEUTRAL-(4 * POWER);
+            R.T5.target = R.T5.current - POWER;
         } else {
-            R.T5.target = THRUSTER5_NEUTRAL+(4 * POWER);
+            R.T5.target = R.T5.current + POWER;
         }
         R.T5.once = false;
         R.T5.step = MOVEMENT_STEPS;
@@ -198,9 +198,9 @@ void Movement::Run(Rov &R, int DIRECTION, int POWER) {
 //
     if (DIRECTION & THRUSTER6_DIR) {
         if (DIRECTION & THRUSTER6_REVERSE) {
-            R.T6.target = THRUSTER6_NEUTRAL-(4 * POWER);
+            R.T6.target = R.T6.current - POWER;
         } else {
-            R.T6.target = THRUSTER6_NEUTRAL+(4 * POWER);
+            R.T6.target = R.T6.current + POWER;
         }
         R.T6.once = false;
         R.T6.step = MOVEMENT_STEPS;
@@ -316,30 +316,18 @@ void Movement::Roll_Left(Rov &R, int Power) {
 // 
 void Movement::Stop(Rov &R)
 {
-#if defined THRUSTER1_PWM
-    R.T1.current = THRUSTER1_NEUTRAL;
-    R.T1.target = THRUSTER1_NEUTRAL;
-#endif
-#if defined THRUSTER2_PWM
-    R.T2.current = THRUSTER2_NEUTRAL;
-    R.T2.target = THRUSTER2_NEUTRAL;
-#endif
-#if defined THRUSTER3_PWM
-    R.T3.current = THRUSTER3_NEUTRAL;
-    R.T3.target = THRUSTER3_NEUTRAL;
-#endif
-#if defined THRUSTER4_PWM
-    R.T4.current = THRUSTER4_NEUTRAL;
-    R.T4.target = THRUSTER4_NEUTRAL;
-#endif
-#if defined THRUSTER5_PWM
-    R.T5.current = THRUSTER5_NEUTRAL;
-    R.T5.target = THRUSTER5_NEUTRAL;
-#endif
-#if defined THRUSTER6_PWM
-    R.T6.current = THRUSTER6_NEUTRAL;
-    R.T6.target = THRUSTER6_NEUTRAL;
-#endif
+    R.T1.current = 0;
+    R.T1.target = 0;
+    R.T2.current = 0;
+    R.T2.target = 0;
+    R.T3.current = 0;
+    R.T3.target = 0;
+    R.T4.current = 0;
+    R.T4.target = 0;
+    R.T5.current = 0;
+    R.T5.target = 0;
+    R.T6.current = 0;
+    R.T6.target = 0;
 
     Thruster::Loop(R);
 }
@@ -351,30 +339,18 @@ void Movement::Setup(Rov &R)
 {
     R.Power = 0;
 
-#if defined THRUSTER1_PWM
-    R.T1.current = THRUSTER1_NEUTRAL;
-    R.T1.target = THRUSTER1_NEUTRAL;
-#endif
-#if defined THRUSTER2_PWM
-    R.T2.current = THRUSTER2_NEUTRAL;
-    R.T2.target = THRUSTER2_NEUTRAL;
-#endif
-#if defined THRUSTER3_PWM
-    R.T3.current = THRUSTER3_NEUTRAL;
-    R.T3.target = THRUSTER3_NEUTRAL;
-#endif
-#if defined THRUSTER4_PWM
-    R.T4.current = THRUSTER4_NEUTRAL;
-    R.T4.target = THRUSTER4_NEUTRAL;
-#endif
-#if defined THRUSTER5_PWM
-    R.T5.current = THRUSTER5_NEUTRAL;
-    R.T5.target = THRUSTER5_NEUTRAL;
-#endif
-#if defined THRUSTER6_PWM
-    R.T6.current = THRUSTER6_NEUTRAL;
-    R.T6.target = THRUSTER6_NEUTRAL;
-#endif
+    R.T1.current = 0;
+    R.T1.target = 0;
+    R.T2.current = 0;
+    R.T2.target = 0;
+    R.T3.current = 0;
+    R.T3.target = 0;
+    R.T4.current = 0;
+    R.T4.target = 0;
+    R.T5.current = 0;
+    R.T5.target = 0;
+    R.T6.current = 0;
+    R.T6.target = 0;
 
     Thruster::Loop(R);
 }
