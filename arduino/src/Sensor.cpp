@@ -172,7 +172,8 @@ void Sensor::Depth_Setup() {
 }
 
 float Sensor::Volts() {
-    VFinal = -1;
+    float VFinal = -1;
+    float VRaw;
     VRaw = analogRead(VOLT_PIN);
 
     if (VOLT_TYPE == 1) {
@@ -182,40 +183,33 @@ float Sensor::Volts() {
         }
     }
     if (VOLT_TYPE == 2) {
-        if (VRaw < 400) {
-        //Conversion
-            VFinal = VRaw/12.99; //180 Amp board
-        }
+        VFinal = VRaw * 0.03306233; //HKPilot S10 power
     }
+
     return (VFinal);
 }
 
 float Sensor::Amps() {
-    IFinal = -1;
+    float IFinal = -1;
+    float IRaw = -1;
     IRaw = analogRead(AMP_PIN);
-    if (VOLT_TYPE == 1) {
+    if (AMP_TYPE == 1) {
         if (IRaw < 400) {
             //Conversion
-            //      IFinal = IRaw/7.4; //180 Amp board
             IFinal = IRaw/3.7; //180 Amp board
         }
     }
-    if (VOLT_TYPE == 2) {
-        if (IRaw < 400) {
-            //Conversion
-            //      IFinal = IRaw/7.4; //180 Amp board
-            IFinal = IRaw/3.7; //180 Amp board
-        }
+    if (AMP_TYPE == 2) {
+        IFinal = IRaw / 10; //HKPilot S10 power
     }
+    
     return (IFinal);
 }
 
 void Sensor::Volts_Setup() {
-    analogRead(VOLT_PIN);
 }
 
 void Sensor::Amps_Setup() {
-    analogRead(AMP_PIN);
 }
 
 int Sensor::Time() {

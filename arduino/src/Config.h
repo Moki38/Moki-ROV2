@@ -44,7 +44,7 @@
 //#define THRUSTERX_DIR           0b0011001111	// if bit is set, thruster will run (see thruster.h) 
 
 #define THRUSTER1_PWM
-#define THRUSTER1_PIN		9
+#define THRUSTER1_PIN		3
 #undef  THRUSTER1_I2C
 #undef  THRUSTER1_ADDR	        //0x29
 #undef  THRUSTER1_POLE	        //6
@@ -55,7 +55,7 @@
 #define THRUSTER1_REVERSE       0b0001000110	// if bit is set, thruster will reverse
 
 #define THRUSTER2_PWM
-#define THRUSTER2_PIN	        10
+#define THRUSTER2_PIN	        22
 #define THRUSTER2_NEUTRAL	1500
 #define THRUSTER2_MIN	        1100
 #define THRUSTER2_MAX	        1900
@@ -63,7 +63,7 @@
 #define THRUSTER2_REVERSE       0b0001000101	// if bit is set, thruster will reverse
 
 #define THRUSTER3_PWM
-#define THRUSTER3_PIN	        20
+#define THRUSTER3_PIN	        4
 #define THRUSTER3_NEUTRAL	1500
 #define THRUSTER3_MIN	        1100
 #define THRUSTER3_MAX	        1900
@@ -79,7 +79,7 @@
 #define THRUSTER4_REVERSE	0b0010100110	// if bit is set, thruster will reverse
 
 #define THRUSTER5_PWM
-#define THRUSTER5_PIN	        22
+#define THRUSTER5_PIN	        20
 #define THRUSTER5_NEUTRAL	1500
 #define THRUSTER5_MIN	        1100
 #define THRUSTER5_MAX	        1900
@@ -96,13 +96,13 @@
 
 #define LIGHT1_PWM
 #undef  LIGHT1_RELAY
-#define LIGHT1_PIN	3
+#define LIGHT1_PIN	9
 #define LIGHT1_ON	1900
 #define	LIGHT1_OFF	1100
 
 #define LIGHT2_PWM
 #undef  LIGHT2_RELAY
-#define LIGHT2_PIN	4
+#define LIGHT2_PIN	10
 #define LIGHT2_ON	1900
 #define	LIGHT2_OFF	1100
 
@@ -138,12 +138,12 @@
 #define	VOLT_ANALOG
 #define VOLT_TYPE	2	// 1 = ATTOPILOT_A180
                                 // 2 = HKPilot 10S Power module
-#define VOLT_PIN	0	// A0
+#define VOLT_PIN	1	// A0
 
 #define AMP_ANALOG
 #define	AMP_TYPE	2	// 1 ATTOPILOT_A180 
                                 // 2 = HKPilot 10S Power module
-#define AMP_PIN		1	// A1
+#define AMP_PIN		0	// A1
 
 #endif
 
