@@ -58,9 +58,9 @@ platformio init -b teensy31
 platformio lib install git+https://github.com/bluerobotics/BlueRobotics_MS5837_Library.git
 platformio lib install git+https://github.com/adafruit/Adafruit_Sensor.git
 platformio lib install git+https://github.com/adafruit/Adafruit_BNO055.git
-platformio lib install git+https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library.git
 platformio lib install git+https://github.com/bluerobotics/Arduino_I2C_ESC.git
 platformio lib install git+https://github.com/br3ttb/Arduino-PID-Library.git
+platformio lib install git+https://github.com/denyssene/SimpleKalmanFilter.git
 
 platformio run
 platformio run --target upload

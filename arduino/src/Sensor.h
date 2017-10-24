@@ -33,6 +33,7 @@
 #include <Adafruit_BNO055.h>
 #include <Arduino_I2C_ESC.h>
 #include <utility/imumaths.h>
+#include <SimpleKalmanFilter.h>
 #include <MS5837.h>
 #include "Config.h"
 #include "Rov.h"
@@ -92,6 +93,7 @@ class Sensor {
         // Depth
         MS5837 MS5837_sensor;
         bool MS5837_status;
+        float estimated_depth;
         // Volts
         int VRaw; //This will store our raw ADC data
         float VFinal; //This will store the converted data

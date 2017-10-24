@@ -2,17 +2,18 @@
 All notable changes to MokiROV2 will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
-html).
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## ToDo
 Fix HOVER PID
 Fix PILOT PID
 Add Kalman filter for IMU
-Add Kalman filter for DEPTH
 BUG: Fast switching gamepad directions, crashes rov.js
 
 ## [Unreleased]
+
+## [2.0.3] - 2017-10-24
+Added Kalman filter for DEPTH
 Fixed PONG Timeout
 
 ## [2.0.2] - 2017-09-26
@@ -28,7 +29,7 @@ Got rid of the dutch/english mixup of motor and thruster :)
 Fixed HOVER PID
 Added winston-logstash logging for data analysis
 Expanded logfile analysis
-Fix logfile creation fills filesystem to 100%
+Fixed logfile creation fills filesystem to 100%
 
 ## [1.0.2] - 2017-09-08
 Added version on display

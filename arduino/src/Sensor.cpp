@@ -24,6 +24,8 @@
 
 #include "Sensor.h"
 
+SimpleKalmanFilter depthKalmanFilter(1, 1, 0.01);
+
 uint8_t Sensor::Imu_System() {
     return system_imu;
 }
@@ -133,7 +135,9 @@ int Sensor::Temp() {
 
 float Sensor::Depth() {
     if (MS5837_status) {
-        return (MS5837_sensor.depth()*100);
+        estimated_depth = depthKalmanFilter.updateEstimate(MS5837_sensor.depth()*100);
+        return (estimated_depth);
+//        return (MS5837_sensor.depth()*100);
     } else {
         return -1;
     }
@@ -152,12 +156,11 @@ void Sensor::Depth_Loop() {
 }
 
 void Sensor::Depth_Setup() {
-    MS5837_status = MS5837_sensor.init();
-
 //
 // Blue Robotics Bar30 / MS5837_30BA
 //
     if (DEPTH_TYPE == 1) {
+        MS5837_status = MS5837_sensor.init();
         MS5837_sensor.setModel(MS5837::MS5837_30BA);
     }
 
