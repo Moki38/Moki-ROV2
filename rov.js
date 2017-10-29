@@ -285,7 +285,7 @@ function parse_serial(line) {
           rovdata.Thruster_6 = 0;
           break;
       default:
-          console.log('Serial data: '+line);
+//          console.log('Serial data: '+line);
     }
 // Check IMU calibration 
     if (rovdata.Sys != 3 && rovdata.Gyro != 3 && rovdata.Accel != 3 && rovdata.Mag != 3) {
@@ -520,7 +520,7 @@ var gamepadctrl = function(gamepad) {
     };
 
     if (res[0] == "axis") {
-    console.log("Gamepad axis");;
+//    console.log("Gamepad axis");;
         event = 'Stop';
 // Axis 0 (LS hor)
         if ((res[1] == 0) && (res[3] > 50)) {

@@ -29,7 +29,7 @@ double P_Output;
 double P_aggKp=2;
 double P_aggKi=0.1;
 double P_aggKd=.5;
-double P_consKp=4;
+double P_consKp=1;
 double P_consKi=0.05;
 double P_consKd=0.25;
     
@@ -66,8 +66,7 @@ void Pilot::Loop(Rov &R) {
             direction = 2;
             P_Input = pilot_heading + 360;
             P_Setpoint = R.Heading + 360;
-        }
-        if (P_Input < P_Setpoint) {
+        } else {
             direction = 1;
         }
 

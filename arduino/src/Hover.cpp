@@ -29,7 +29,7 @@ double H_Output;
 double H_aggKp=2;
 double H_aggKi=0.1;
 double H_aggKd=.5;
-double H_consKp=4;
+double H_consKp=1;
 double H_consKi=0.05;
 double H_consKd=0.25;
     
@@ -62,11 +62,11 @@ void Hover::Loop(Rov &R) {
         Serial.print("Hover_Gap:");
         Serial.println(gap);
 
-        if (gap < 10) {
+//        if (gap < 10) {
             H_PID.SetTunings(H_consKp, H_consKi, H_consKd);
-        } else {
-            H_PID.SetTunings(H_aggKp, H_aggKi, H_aggKd);
-        }
+//        } else {
+//            H_PID.SetTunings(H_aggKp, H_aggKi, H_aggKd);
+//        }
 
         H_PID.Compute();
 
