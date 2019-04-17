@@ -1,10 +1,15 @@
+#
+# This code is no longer maintained, use at your own risk and support.
+#
+
+
 # Moki-ROV2 (Pilot your ROV directly from your PC)
 
 If you gonna use this code, please let me know by email!
 
 Warning: This is NOT out-of-the-box software, it will need advanced linux/arduino/hardware skills to get it working!
 
-If you encounter an issue; please mail details to <rov-pi@team-moki.nl>
+If you encounter an issue, good luck.
 
 This software was build on a Raspberry PI (Model B+)
 
