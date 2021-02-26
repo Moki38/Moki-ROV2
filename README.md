@@ -15,6 +15,8 @@ This software was build on a Raspberry PI (Model B+)
 
 Wiki can be found at: http://wiki.team-moki.nl/display/MOK (No longer available)
 
+A video of the software in use, check out: https://youtu.be/w8op5mMCQlw
+
 ## Currenty supported/tested (aka, my setup)
 
 ```
