@@ -13,7 +13,7 @@ If you encounter an issue, good luck.
 
 This software was build on a Raspberry PI (Model B+)
 
-Wiki can be found at: http://wiki.team-moki.nl/display/MOK
+Wiki can be found at: http://wiki.team-moki.nl/display/MOK (No longer available)
 
 ## Currenty supported/tested (aka, my setup)
 
